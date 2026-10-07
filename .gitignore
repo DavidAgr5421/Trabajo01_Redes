@@ -1,0 +1,8 @@
+# Entornos virtuales
+.venv/
+env/
+venv/
+
+# Carpetas de IDEs o editores
+.vscode/
+.idea/
