@@ -1,0 +1,17 @@
+{
+    "seed": 42,
+    "database": {
+      "db_type": "sqlite",
+      "db_name": "tsp_espana.db"
+    },
+    "cost_parameters": {
+      "hourly_rate": 25.0
+    },
+    "ga_parameters": {
+      "population_size": 150,
+      "generations": 500,
+      "crossover_rate": 0.85,
+      "mutation_rate": 0.15,
+      "tournament_size": 5
+    }
+  }
