@@ -1,17 +1,8 @@
 {
-    "seed": 42,
-    "database": {
-      "db_type": "sqlite",
-      "db_name": "tsp_espana.db"
-    },
-    "cost_parameters": {
-      "hourly_rate": 25.0
-    },
-    "ga_parameters": {
-      "population_size": 150,
-      "generations": 500,
-      "crossover_rate": 0.85,
-      "mutation_rate": 0.15,
-      "tournament_size": 5
-    }
-  }
+  "VALOR_HORA_VENDEDOR": 50.0,
+  "ARCHIVO_CSV": "tus_datos.csv",
+  "POBLACION": 150,
+  "GENERACIONES": 100,
+  "PROBABILIDAD_CRUCE": 0.8,
+  "PROBABILIDAD_MUTACION": 0.2
+}
