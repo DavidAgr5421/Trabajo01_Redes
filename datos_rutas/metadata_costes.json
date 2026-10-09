@@ -1,0 +1,23 @@
+{
+  "fecha_generacion_utc": "2026-10-09T17:08:38.675232+00:00",
+  "metodo": "official_inventory_reference_B",
+  "vehiculo": "Toyota Corolla 140H e-CVT 1.8",
+  "combustible": "Gasolina 95 E5",
+  "consumo_L_100km": 4.5,
+  "precio_litro_eur": 1.785,
+  "precio_fecha": "2026-10-09",
+  "precio_fuente": "MITECO Geoportal (media nacional G95 09/10/2026)",
+  "pares_totales": 2162,
+  "pares_con_peaje_valorado": 66,
+  "pares_sin_peaje_esperado": 2042,
+  "pares_peaje_posible_no_valorado": 54,
+  "formula_gas": "distance_km * 4.5/100 * 1.785",
+  "formula_coste": "C = valor_hora*time_h + tax_eur + gas_eur",
+  "entradas": [
+    "rutas.csv",
+    "tabla_peajes_2026.csv",
+    "fuentes.csv"
+  ],
+  "salida": "rutas_costes.csv",
+  "advertencia": "tax es la tarifa oficial del eje de referencia, no el cargo exacto puerta a puerta (depende de entradas, hora, Vía-T y descuentos)."
+}

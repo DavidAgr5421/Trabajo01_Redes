@@ -1,0 +1,37 @@
+1. Error al implementar loop de rutas
+2. Error al tratar de encontrar los datos, usar apis desactualizadas o de pago, 
+eso toco por cuenta propia y entender tambien la api por cuenta propia.
+3.Uso una parte de la api que no estaba autorizado a usar, necesitaba pasar a version de pago,
+trato de hacer una comparacion de geometrias de rutas entre las dos apis, en vez de usar una u otra directamente
+o simplemente obtener de una lo necesario y ver si concordaba con las rutas ya obtenidas en geoapify.
+
+---
+FUENTES DE DATOS — OPCIÓN B (inventario oficial). Fecha de consulta: 2026-10-09.
+Vehículo fijado: Toyota Corolla 140H e-CVT 1.8 (1798 cc), gasolina 95, 4,5 L/100km (centro del rango WLTP 4,4-4,7).
+Precio combustible: 1,785 EUR/L (media nacional gasolina 95 E5 MITECO del 09/10/2026).
+
+1. Red vigente de peajes:
+- MITMA, Autopistas de peaje en concesión + mapa RCE: https://www.transportes.gob.es/carreteras/nuestra-red/autopistas-peaje
+- MITMA, nota de prensa revisión tarifas 2026 (30/12/2025): https://www.transportes.gob.es/ministerio/comunicacion/sala-prensa/mar-30122025-1746
+- MITMA, PDF nota de prensa 2026: https://cdn.transportes.gob.es/portal-web-transportes/recursos-web/transportes/media/press_release/251230-np-nacional-revision-tarifas-autopistas-estatales-y-seitt.pdf
+- administracion.gob.es, mapa de peajes obligatorios 2026: https://administracion.gob.es/tu-espacio-europeo/derechos-obligaciones/ciudadanos/vehiculos/normas-trafico-viales/peajes-vinetas
+2. Tarifas SEITT (0,0927 EUR/km ligeros sin Tag 2025, +2% máx. 2026 = 0,094554; Circunvalación Alicante a 0):
+- BOE-A-2025-25961 (18/12/2025): https://www.boe.es/buscar/doc.php?id=BOE-A-2025-25961
+- BOE PDF: https://www.boe.es/boe/dias/2025/12/18/pdfs/BOE-A-2025-25961.pdf
+- SEITT actualización 2026: https://www.seitt.es/sala-comunicacion/actualizacion-los-peajes-las-autopistas-2026
+3. Tarifas de concesión usadas como referencia fija 2026 (ligeros, IVA incl.):
+- AP-6 Villalba-Adanero 15,70 (Villalba-San Rafael 5,65; Madrid-Avila comp. 11,85; Madrid-Segovia valle 7,60): https://www.autopistas.com/wp-content/uploads/2025/12/26_004-Castellana-AP6_AP51_AP61-T26.pdf y https://cdnfomento.blob.core.windows.net/portal-web-transportes/carreteras/nuestrared/autopistaspeaje/peajes-actuales/autopista-ap-6,-villalba---adanero-2026.pdf
+- AP-9 (A Coruña-Santiago 8,80; Santiago-Pontevedra 7,55; Pontevedra-Vigo 5,05; A Coruña-Pontevedra 16,35; A Coruña-Vigo 21,40; Ferrol-Tui 28,10): https://www.audasa.es/wp-content/uploads/pdf/tarifas/2026/Tarifas-20260101.pdf y https://www.audasa.es/la-autopista/tarifas-y-descuentos/
+- AP-66 Campomanes-León 16,20: https://www.aucalsa.com/la-autopista/tarifas-y-descuentos/ y https://cdnfomento.blob.core.windows.net/portal-web-transportes/carreteras/nuestrared/autopistaspeaje/peajes-actuales/autopista-ap-66,-campomanes---leon-2026.pdf
+- Túnel del Cadí 14,56 / Vallvidrera punta 4,12 (valle 3,66): https://tunels.cat/es/tuneles-de-vallvidrera/ y https://tunels.cat/wp-content/uploads/2025/12/Tunels_tarifes_2026.pdf
+4. Combustible:
+- Geoportal Hidrocarburos MITECO: https://geoportalgasolineras.es/geoportal-instalaciones/Inicio
+- MITECO info carburantes: https://www.miteco.gob.es/es/energia/servicios/consultas-de-carburantes.html
+- Dataset datos.gob.es + REST: https://datos.gob.es/es/catalogo/e05068001-precio-de-carburantes-en-las-gasolineras-espanolas
+- Media 09/10/2026 verificada en agregadores MITECO: https://repostaje.es/precios-miteco y https://misgasolineras.es/informe/2026-s41/ ; serie BDSICE: https://bdsice.mineco.gob.es/indeco/reports/verSerieGraf_limpio.aspx/?codigo=410200&frec=-1
+- Nota fiscalidad RD-ley 25/2026 (precios con tipos temporales hasta 31/12/2026): https://energia.serviciosmin.gob.es/shpCarburantes/
+5. Vehículo:
+- Catálogo Toyota España Corolla 140H (4,4-4,7 L/100km WLTP): https://www.toyota.es/content/dam/toyota/nmsc/spain/cross-model/new-cars/catalogos-precios/pdf/14737_COR_HB_52_ES_WEB_S.pdf
+- Ficha km77 (4,7 combinado, ECO): https://www.km77.com/coches/toyota/corolla/2023/5-puertas/estandar/corolla-140h-style-plus/datos
+6. Base distancias/tiempos: Geoapify Route Matrix (balanced, free_flow), datos_rutas/metadata.json, 2026-10-08.
+7. Contra-ejemplo de fuente desactualizada: tollguru_prueba_3.json (asigna 13,45 EUR a la A-2 Madrid-Barcelona, gratuita; AP-2 liberada 2021).

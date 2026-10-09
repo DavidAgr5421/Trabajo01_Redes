@@ -8,5 +8,9 @@
   "modo": "drive",
   "tipo_ruta": "balanced",
   "trafico": "free_flow",
-  "costes_peajes_y_combustible": "pendientes de investigar"
+  "costes_peajes_y_combustible": "completados 2026-10-09 (ver rutas_costes.csv y metadata_costes.json)",
+  "vehiculo": "Toyota Corolla 140H e-CVT 1.8, gasolina 95, 4.5 L/100km",
+  "precio_gasolina95_eur_l": 1.785,
+  "precio_fecha": "2026-10-09",
+  "fuentes": "fuentes.csv + tabla_peajes_2026.csv"
 }

@@ -1,0 +1,27 @@
+id,tema,fuente,url,fecha_consulta,uso_en_proyecto
+1,red_vigente,MITMA autopistas de peaje en concesión,https://www.transportes.gob.es/carreteras/nuestra-red/autopistas-peaje,2026-10-09,inventario de vías con peaje vigente 2026
+2,red_vigente,MITMA nota prensa revisión tarifas 2026,https://www.transportes.gob.es/ministerio/comunicacion/sala-prensa/mar-30122025-1746,2026-10-09,lista de autopistas con subida 2026 y SEITT +2%
+3,red_vigente,MITMA PDF nota prensa 2026,https://cdn.transportes.gob.es/portal-web-transportes/recursos-web/transportes/media/press_release/251230-np-nacional-revision-tarifas-autopistas-estatales-y-seitt.pdf,2026-10-09,respaldo documental de la nota
+4,red_vigente,administracion.gob.es mapa peajes obligatorios 2026,https://administracion.gob.es/tu-espacio-europeo/derechos-obligaciones/ciudadanos/vehiculos/normas-trafico-viales/peajes-vinetas,2026-10-09,mapa de tramos con pago obligatorio 2026
+5,tarifa_seitt,BOE-A-2025-25961,https://www.boe.es/buscar/doc.php?id=BOE-A-2025-25961,2026-10-09,"0.0927 EUR/km ligeros sin Tag 2025; +2% máx. 2026; Alicante a 0"
+6,tarifa_seitt,BOE PDF A-2025-25961,https://www.boe.es/boe/dias/2025/12/18/pdfs/BOE-A-2025-25961.pdf,2026-10-09,respaldo PDF del BOE
+7,tarifa_seitt,SEITT actualización peajes 2026,https://www.seitt.es/sala-comunicacion/actualizacion-los-peajes-las-autopistas-2026,2026-10-09,confirmación +2% y gratuidad 0-6h
+8,tarifa_ap6,autopistas.com tarifas AP-6/AP-51/AP-61 2026,https://www.autopistas.com/wp-content/uploads/2025/12/26_004-Castellana-AP6_AP51_AP61-T26.pdf,2026-10-09,"Villalba-Adanero 15.70; Madrid-Ávila 11.85; Madrid-Segovia valle 7.60"
+9,tarifa_ap6,MITMA PDF AP-6 2026,https://cdnfomento.blob.core.windows.net/portal-web-transportes/carreteras/nuestrared/autopistaspeaje/peajes-actuales/autopista-ap-6,-villalba---adanero-2026.pdf,2026-10-09,respaldo oficial AP-6
+10,tarifa_ap9,Audasa tarifas AP-9 2026,https://www.audasa.es/wp-content/uploads/pdf/tarifas/2026/Tarifas-20260101.pdf,2026-10-09,"A Coruña-Santiago 8.80; Santiago-Pontevedra 7.55; A Coruña-Pontevedra 16.35; A Coruña-Vigo 21.40"
+11,tarifa_ap9,Audasa tarifas y descuentos,https://www.audasa.es/la-autopista/tarifas-y-descuentos/,2026-10-09,página de tarifas AP-9
+12,tarifa_ap66,Aucalsa tarifas AP-66 2026,https://www.aucalsa.com/la-autopista/tarifas-y-descuentos/,2026-10-09,Campomanes-León 16.20 ligeros
+13,tarifa_ap66,MITMA PDF AP-66 2026,https://cdnfomento.blob.core.windows.net/portal-web-transportes/carreteras/nuestrared/autopistaspeaje/peajes-actuales/autopista-ap-66,-campomanes---leon-2026.pdf,2026-10-09,respaldo oficial AP-66
+14,tarifa_tuneles,tunels.cat Vallvidrera 2026,https://tunels.cat/es/tuneles-de-vallvidrera/,2026-10-09,Vallvidrera Cat.1 punta 4.12 / valle 3.66
+15,tarifa_tuneles,tunels.cat PDF 2026,https://tunels.cat/wp-content/uploads/2025/12/Tunels_tarifes_2026.pdf,2026-10-09,"Cadí 14.56; C-32 y Vallvidrera"
+16,combustible,Geoportal Hidrocarburos MITECO,https://geoportalgasolineras.es/geoportal-instalaciones/Inicio,2026-10-09,precio oficial por estación (media 1.785 EUR/L G95 el 09/10/2026)
+17,combustible,MITECO info carburantes,https://www.miteco.gob.es/es/energia/servicios/consultas-de-carburantes.html,2026-10-09,acceso oficial a precios
+18,combustible,datos.gob.es dataset + REST,https://datos.gob.es/es/catalogo/e05068001-precio-de-carburantes-en-las-gasolineras-espanolas,2026-10-09,descarga XLS/CSV/REST del Geoportal
+19,combustible,repostaje.es precios MITECO 09-10-2026,https://repostaje.es/precios-miteco,2026-10-09,"verificación media G95 1.785 sobre 11494 estaciones"
+20,combustible,misgasolineras informe semana 41 2026,https://misgasolineras.es/informe/2026-s41/,2026-10-09,verificación media G95 1.785 el 09/10/2026
+21,combustible,BDSICE serie gasolina 95,https://bdsice.mineco.gob.es/indeco/reports/verSerieGraf_limpio.aspx/?codigo=410200&frec=-1,2026-10-09,"serie oficial: 1.79 el 08/10/2026"
+22,combustible,MITECO histórico y aviso RD-ley 25/2026,https://energia.serviciosmin.gob.es/shpCarburantes/,2026-10-09,tipos temporales hasta 31/12/2026
+23,vehiculo,Toyota España catálogo Corolla 140H,https://www.toyota.es/content/dam/toyota/nmsc/spain/cross-model/new-cars/catalogos-precios/pdf/14737_COR_HB_52_ES_WEB_S.pdf,2026-10-09,"WLTP combinado 4.4-4.7 L/100km; gasolina 95; 140 CV"
+24,vehiculo,km77 ficha Corolla 140H,https://www.km77.com/coches/toyota/corolla/2023/5-puertas/estandar/corolla-140h-style-plus/datos,2026-10-09,"4.7 combinado; ECO; segunda fuente"
+25,base,Geoapify Route Matrix,https://www.geoapify.com/,2026-10-08,"distancias/tiempos balanced free_flow; ver metadata.json"
+26,contraejemplo,TollGuru (muestra local),tollguru_prueba_3.json,2026-10-08,"desactualizado: 13.45 EUR en A-2 gratuita; AP-2 liberada 2021"

@@ -1,0 +1,13 @@
+via,tramo_referencia,valor_ligeros_eur_2026,unidad,tipo,fuente,url,fecha_consulta,notas
+SEITT R-2/R-3/R-4/R-5/M-12/AP-36/AP-41/AP-7 Cartagena-Vera,red SEITT (tarifa por km sin Tag),0.094554,EUR/km,por_km,BOE-A-2025-25961 (0.0927 en 2025 +2% máx. 2026),https://www.boe.es/buscar/doc.php?id=BOE-A-2025-25961,2026-10-09,"En rutas_costes.csv la referencia rápida usa la autovía gratuita paralela (A-2/A-3/A-4/A-5/A-7); el peaje SEITT se documenta para el análisis de sensibilidad, no se suma por defecto"
+SEITT AP-7 Circunvalación Alicante,liberada,0,EUR,fijo,BOE-A-2025-25961 + SEITT,https://www.seitt.es/sala-comunicacion/actualizacion-los-peajes-las-autopistas-2026,2026-10-09,gratuita con carácter indefinido desde dic-2025
+AP-6,Villalba-Adanero (completo),15.70,EUR,fijo,autopistas.com + MITMA,https://www.autopistas.com/wp-content/uploads/2025/12/26_004-Castellana-AP6_AP51_AP61-T26.pdf,2026-10-09,IVA incluido; tabulado 01/01/2026
+AP-6/AP-51,Madrid-Ávila (Villalba-Villacastín + Villacastín-Ávila),11.85,EUR,fijo,autopistas.com,https://www.autopistas.com/wp-content/uploads/2025/12/26_004-Castellana-AP6_AP51_AP61-T26.pdf,2026-10-09,10.10 + 1.75; coherente con fila Ávila del PDF
+AP-6/AP-61,Madrid-Segovia (hora valle),7.60,EUR,fijo,autopistas.com,https://www.autopistas.com/wp-content/uploads/2025/12/26_004-Castellana-AP6_AP51_AP61-T26.pdf,2026-10-09,"tarifa valle Cat. ligeros; punta 10.45; se usa valle como referencia diurna no punta"
+AP-9,A Coruña-Santiago,8.80,EUR,fijo,Audasa,https://www.audasa.es/wp-content/uploads/pdf/tarifas/2026/Tarifas-20260101.pdf,2026-10-09,IVA incluido desde 01/01/2026
+AP-9,Santiago-Pontevedra,7.55,EUR,fijo,Audasa,https://www.audasa.es/wp-content/uploads/pdf/tarifas/2026/Tarifas-20260101.pdf,2026-10-09,ver tabla Santiago-Pontevedra
+AP-9,A Coruña-Pontevedra,16.35,EUR,fijo,Audasa,https://www.audasa.es/wp-content/uploads/pdf/tarifas/2026/Tarifas-20260101.pdf,2026-10-09,8.80 + 7.55; prensa confirma 16.35
+AP-9,A Coruña-Vigo (referencia, Vigo no es capital del TSP),21.40,EUR,fijo,Audasa/prensa,https://www.audasa.es/wp-content/uploads/pdf/tarifas/2026/Tarifas-20260101.pdf,2026-10-09,solo como validación externa
+AP-66,Campomanes-León (completo),16.20,EUR,fijo,Aucalsa + MITMA,https://www.aucalsa.com/la-autopista/tarifas-y-descuentos/,2026-10-09,bonificaciones habituales no aplicables a un vendedor ocasional
+Túnel del Cadí,travesía completa Cat.2 turismos,14.56,EUR,fijo,tunels.cat,https://tunels.cat/wp-content/uploads/2025/12/Tunels_tarifes_2026.pdf,2026-10-09,"documentado; no se asigna a pares del TSP porque la ruta rápida usa AP-2/A-2 gratuita"
+Vallvidrera,Cat.1 punta,4.12,EUR,fijo,tunels.cat,https://tunels.cat/es/tuneles-de-vallvidrera/,2026-10-09,"valle 3.66; documentado; no asignado (acceso local Barcelona)"
