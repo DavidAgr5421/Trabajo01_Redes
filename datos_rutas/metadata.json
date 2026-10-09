@@ -1,0 +1,12 @@
+{
+  "fuente_distancias_tiempos": "Geoapify Route Matrix API",
+  "fecha_generacion_utc": "2026-10-08T23:53:49.854027+00:00",
+  "numero_ciudades": 47,
+  "numero_rutas_dirigidas": 2162,
+  "unidad_distancia": "km",
+  "unidad_tiempo": "horas",
+  "modo": "drive",
+  "tipo_ruta": "balanced",
+  "trafico": "free_flow",
+  "costes_peajes_y_combustible": "pendientes de investigar"
+}
