@@ -1,47 +1,63 @@
+# Importar librerías.
+
 import json
 import random
 import numpy as np
 import pandas as pd
+from pathlib import Path
 from deap import base, creator, tools, algorithms
 
-# --- 1. CARGAR CONFIGURACIÓN DESDE EL ARCHIVO EXTERNO ---
+# 1. Cargar el archivo de configuración.
+ruta_script = Path(__file__).resolve()
+directorio_actual = ruta_script.parent
+ruta_config = directorio_actual / 'Configuracion.json'
+
 try:
-    with open('config.json', 'r', encoding='utf-8') as f:
-        config = json.load(f)
+    with open(ruta_config, 'r', encoding='utf-8') as f:
+        Configuracion = json.load(f)
 except FileNotFoundError:
-    print("❌ Error: No se encontró el archivo 'config.json'. Asegúrate de que esté en la misma carpeta.")
+    print(f"❌ Error: No se encontró el archivo 'Configuracion.json' en {ruta_config}")
     exit()
 
-# Asignación automática de parámetros
-VALOR_HORA_VENDEDOR = config["VALOR_HORA_VENDEDOR"]
-ARCHIVO_CSV = config["ARCHIVO_CSV"]
-TAMANO_POBLACION = config["POBLACION"]
-NUM_GENERACIONES = config["GENERACIONES"]
-CXPB = config["PROBABILIDAD_CRUCE"]
-MUTPB = config["PROBABILIDAD_MUTACION"]
+VALOR_HORA_VENDEDOR = Configuracion["VALOR_HORA_VENDEDOR"]
+SEMILLA = Configuracion["SEMILLA"]
+TAMANO_POBLACION = Configuracion["POBLACION"]
+NUM_GENERACIONES = Configuracion["GENERACIONES"]
+PROBABILIDAD_CRUCE = Configuracion["PROBABILIDAD_CRUCE"]
+PROBABILIDAD_MUTACION = Configuracion["PROBABILIDAD_MUTACION"]
 
-# --- 2. LEER CSV Y CALCULAR MATRIZ DE COSTOS ---
-df = pd.read_csv(ARCHIVO_CSV)
+# 2. Leer la base de datos de las rutas.
+carpeta_maestra = ruta_script.parent.parent
+ruta_csv = carpeta_maestra / 'Base_de_Datos' / 'rutas_costes.csv'
 
-# Tu regla de negocio basada en las 3 condiciones
-df['costo_total_tramo'] = (df['time'] * VALOR_HORA_VENDEDOR) + df['tax'] + df['gas']
+try:
+    df = pd.read_csv(ruta_csv)
+except FileNotFoundError:
+    print(f"❌ Error: No se encontró el CSV en {ruta_csv}")
+    exit()
 
-# Identificar ciudades únicas
-ciudades = sorted(list(set(df['route_origen'].astype(str)).union(set(df['route_destino'].astype(str)))))
+# 3. Calcular y crear la matriz de costos.
+df['costo_total_tramo'] = (df['time_h'] * VALOR_HORA_VENDEDOR) + df['tax_eur'] + df['gas_eur']
+
+ciudades = sorted(list(set(df['origin'].astype(str)).union(set(df['destination'].astype(str)))))
 num_ciudades = len(ciudades)
 ciudad_a_idx = {nombre: idx for idx, nombre in enumerate(ciudades)}
 
 matriz_costos = np.full((num_ciudades, num_ciudades), np.inf)
 
 for _, fila in df.iterrows():
-    orig_idx = ciudad_a_idx[str(fila['route_origen'])]
-    dest_idx = ciudad_a_idx[str(fila['route_destino'])]
+    orig_idx = ciudad_a_idx[str(fila['origin'])]
+    dest_idx = ciudad_a_idx[str(fila['destination'])]
     matriz_costos[orig_idx][dest_idx] = fila['costo_total_tramo']
     
 np.fill_diagonal(matriz_costos, 0)
 
+# 4. Configurar el algoritmo genético usando la librería DEAP.
+if hasattr(creator, "FitnessMin"):
+    del creator.FitnessMin
+if hasattr(creator, "Individual"):
+    del creator.Individual
 
-# --- 3. CONFIGURACIÓN DEL ALGORITMO GENÉTICO (DEAP) ---
 creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
 creator.create("Individual", list, fitness=creator.FitnessMin)
 
@@ -57,7 +73,7 @@ def evaluar_ruta(individual):
         destino = individual[i+1]
         costo_viaje += matriz_costos[origen][destino]
     
-    costo_viaje += matriz_costos[individual[-1]][individual]
+    costo_viaje += matriz_costos[individual[-1]][individual[0]]
     
     if np.isinf(costo_viaje):
         return (99999999,) 
@@ -69,26 +85,26 @@ toolbox.register("mate", tools.cxOrdered)
 toolbox.register("mutate", tools.mutShuffleIndexes, indpb=0.05)
 toolbox.register("select", tools.selTournament, tournsize=3)
 
-# --- 4. EJECUCIÓN ---
-def ejecutar_ag():
-    random.seed(42)
+# Definir la función para ejecutar el algoritmo genético e imprimir el resultado.
+def algoritmo_genetico():
+    random.seed(SEMILLA)
     poblacion = toolbox.population(n=TAMANO_POBLACION)
     
-    # Se ejecuta usando los parámetros dinámicos del JSON
     poblacion, logbook = algorithms.eaSimple(
-        poblacion, toolbox, 
-        cxpb=CXPB, 
-        mutpb=MUTPB, 
+        poblacion, 
+        toolbox, 
+        cxpb=PROBABILIDAD_CRUCE, 
+        mutpb=PROBABILIDAD_MUTACION, 
         ngen=NUM_GENERACIONES, 
         verbose=False
     )
     
-    mejor_individuo = tools.selBest(poblacion, k=1)
+    mejor_individuo = tools.selBest(poblacion, k=1)[0]
     ruta_nombres = [ciudades[idx] for idx in mejor_individuo]
+    costo_optimo = mejor_individuo.fitness.values[0]
     
-    print("🎯 ¡Optimización Completada usando parámetros externos!")
-    print(f"Mejor orden de recorrido: {' -> '.join(ruta_nombres)} -> {ruta_nombres}")
-    print(f"Costo total óptimo calculado: ${mejor_individuo.fitness.values:,.2f}")
+    print(f"Mejor orden de recorrido: {' -> '.join(ruta_nombres)} -> {ruta_nombres[0]}")
+    print(f"Costo total óptimo calculado: €{costo_optimo:,.2f}")
 
 if __name__ == "__main__":
-    ejecutar_ag()
+    algoritmo_genetico()
