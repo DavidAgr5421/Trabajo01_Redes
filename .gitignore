@@ -6,3 +6,5 @@ venv/
 # Carpetas de IDEs o editores
 .vscode/
 .idea/
+
+prueba_alpha.py
