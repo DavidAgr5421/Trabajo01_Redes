@@ -48,18 +48,33 @@ CONTORNO = np.array([
 ])
 
 
-def construir_animacion(datos, valor_hora, *, tam_poblacion, generaciones,
-                        semilla, cada, fps):
+def construir_animacion(datos, valor_hora, *, algoritmo="ga",
+                        tam_poblacion=100, generaciones=300,
+                        semilla=42, cada=4, fps=8,
+                        hormigas=30, iteraciones=120,
+                        alfa=1.0, beta=3.0, evaporacion=0.2):
     M = datos.matriz_coste(valor_hora)
     registro = []
-    resultado = ejecutar_ga(
-        M,
-        tam_poblacion=tam_poblacion,
-        generaciones=generaciones,
-        semilla=semilla,
-        registro=registro,
-        grabar_cada=cada,
-    )
+    if algoritmo == "aco":
+        from colonia_hormigas import ejecutar_aco
+        resultado = ejecutar_aco(
+            M, hormigas=hormigas, iteraciones=iteraciones,
+            alfa=alfa, beta=beta, evaporacion=evaporacion,
+            semilla=semilla, registro=registro, grabar_cada=cada,
+        )
+        total = iteraciones
+        etiqueta = "ACO"
+    else:
+        resultado = ejecutar_ga(
+            M,
+            tam_poblacion=tam_poblacion,
+            generaciones=generaciones,
+            semilla=semilla,
+            registro=registro,
+            grabar_cada=cada,
+        )
+        total = generaciones
+        etiqueta = "GA"
 
     lons = datos.coords.loc[datos.ciudades, "lon"].to_numpy(dtype=float)
     lats = datos.coords.loc[datos.ciudades, "lat"].to_numpy(dtype=float)
@@ -95,7 +110,7 @@ def construir_animacion(datos, valor_hora, *, tam_poblacion, generaciones,
         ys = np.concatenate([lats_tour, lats_tour[:1]])
         linea.set_data(xs, ys)
         titulo.set_text(
-            f"Mejor solucion del GA  |  generacion {gen}/{generaciones}  |  "
+            f"Mejor solucion {etiqueta}  |  iter {gen}/{total}  |  "
             f"coste {coste:,.2f} EUR  (valor hora {valor_hora:.0f} EUR/h)"
         )
         return linea, titulo
@@ -106,41 +121,57 @@ def construir_animacion(datos, valor_hora, *, tam_poblacion, generaciones,
 
 
 def _main():
-    parser = argparse.ArgumentParser(description="GIF de la evolucion del GA")
-    parser.add_argument("--valor-hora", type=float,
-                        default=VALOR_HORA_POR_DEFECTO)
-    parser.add_argument("--poblacion", type=int, default=100)
-    parser.add_argument("--generaciones", type=int, default=300)
-    parser.add_argument("--semilla", type=int, default=42)
-    parser.add_argument("--cada", type=int, default=4,
+    parser = argparse.ArgumentParser(description="GIF de la evolucion (GA o ACO)")
+    parser.add_argument("--config", type=Path, default=None)
+    parser.add_argument("--demo", action="store_true")
+    parser.add_argument("--algoritmo", choices=["ga", "aco"], default="ga")
+    parser.add_argument("--valor-hora", type=float, default=None)
+    parser.add_argument("--poblacion", type=int, default=None)
+    parser.add_argument("--generaciones", type=int, default=None)
+    parser.add_argument("--semilla", type=int, default=None)
+    parser.add_argument("--cada", type=int, default=None,
                         help="fotogramas: 1 por cada N generaciones")
-    parser.add_argument("--fps", type=int, default=8)
-    parser.add_argument("--salida", type=Path,
-                        default=DIR_RESULTADOS / "evolucion_ga.gif")
+    parser.add_argument("--fps", type=int, default=None)
+    parser.add_argument("--salida", type=Path, default=None)
     args = parser.parse_args()
+
+    from config import cargar_config
+    cfg = cargar_config(args.config, demo=args.demo)
+    ga, aco_c, gif_c = cfg.get("ga", {}), cfg.get("aco", {}), cfg.get("gif", {})
+    vh = (args.valor_hora if args.valor_hora is not None
+          else cfg.get("valor_hora", VALOR_HORA_POR_DEFECTO))
+    cada = args.cada or gif_c.get("cada", 4)
+    fps = args.fps or gif_c.get("fps", 8)
+    if args.salida:
+        salida = args.salida
+    else:
+        salida = DIR_RESULTADOS / (f"evolucion_{args.algoritmo}.gif")
+    png = DIR_RESULTADOS / f"evolucion_{args.algoritmo}_final.png"
 
     DIR_RESULTADOS.mkdir(parents=True, exist_ok=True)
     datos = cargar_costes()
-    print(f"Ejecutando GA ({datos.n} ciudades, valor_hora="
-          f"{args.valor_hora:.2f}, poblacion={args.poblacion}, "
-          f"generaciones={args.generaciones})...")
+    print(f"Ejecutando {args.algoritmo.upper()} ({datos.n} ciudades, valor_hora="
+          f"{vh:.2f})...")
 
     fig, animacion, registro, resultado = construir_animacion(
-        datos, args.valor_hora,
-        tam_poblacion=args.poblacion,
-        generaciones=args.generaciones,
-        semilla=args.semilla,
-        cada=args.cada,
-        fps=args.fps,
+        datos, vh, algoritmo=args.algoritmo,
+        tam_poblacion=args.poblacion or ga.get("poblacion", 100),
+        generaciones=args.generaciones or ga.get("generaciones", 300),
+        semilla=args.semilla or ga.get("semilla", 42),
+        cada=cada, fps=fps,
+        hormigas=aco_c.get("hormigas", 30),
+        iteraciones=aco_c.get("iteraciones", 120),
+        alfa=aco_c.get("alfa", 1.0), beta=aco_c.get("beta", 3.0),
+        evaporacion=aco_c.get("evaporacion", 0.2),
     )
 
     print(f"Fotogramas: {len(registro)}")
-    animacion.save(str(args.salida), writer=PillowWriter(fps=args.fps),
+    animacion.save(str(salida), writer=PillowWriter(fps=fps),
                    dpi=110)
-    fig.savefig(DIR_RESULTADOS / "evolucion_ga_final.png", dpi=140)
+    fig.savefig(png, dpi=140)
     plt.close(fig)
     print(f"Mejor coste final: {resultado['coste']:.2f} EUR")
-    print(f"GIF: {args.salida}")
+    print(f"GIF: {salida}")
 
 
 if __name__ == "__main__":

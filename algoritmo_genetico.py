@@ -305,30 +305,42 @@ def guardar_resultados(datos, tour, valor_hora, historia, directorio=DIR_RESULTA
 
 def _main():
     parser = argparse.ArgumentParser(description="GA para el TSP de 47 capitales")
-    parser.add_argument("--valor-hora", type=float,
-                        default=VALOR_HORA_POR_DEFECTO)
-    parser.add_argument("--poblacion", type=int, default=100)
-    parser.add_argument("--generaciones", type=int, default=300)
-    parser.add_argument("--prob-mutacion", type=float, default=0.3)
-    parser.add_argument("--semilla", type=int, default=42)
+    parser.add_argument("--config", type=Path, default=None,
+                        help="Archivo JSON de configuracion")
+    parser.add_argument("--demo", action="store_true",
+                        help="Usa el perfil rapido demo de la config (<2 min)")
+    parser.add_argument("--valor-hora", type=float, default=None)
+    parser.add_argument("--poblacion", type=int, default=None)
+    parser.add_argument("--generaciones", type=int, default=None)
+    parser.add_argument("--prob-mutacion", type=float, default=None)
+    parser.add_argument("--semilla", type=int, default=None)
     parser.add_argument("--verbose", action="store_true")
     args = parser.parse_args()
 
+    from config import cargar_config
+    cfg = cargar_config(args.config, demo=args.demo)
+    ga = cfg.get("ga", {})
+    vh = (args.valor_hora if args.valor_hora is not None
+          else cfg.get("valor_hora", VALOR_HORA_POR_DEFECTO))
+    poblacion = args.poblacion or ga.get("poblacion", 100)
+    generaciones = args.generaciones or ga.get("generaciones", 300)
+
     datos = cargar_costes()
-    M = datos.matriz_coste(args.valor_hora)
-    print(f"GA: {datos.n} ciudades, valor_hora={args.valor_hora:.2f} EUR/h, "
-          f"poblacion={args.poblacion}, generaciones={args.generaciones}")
+    M = datos.matriz_coste(vh)
+    print(f"GA: {datos.n} ciudades, valor_hora={vh:.2f} EUR/h, "
+          f"poblacion={poblacion}, generaciones={generaciones}")
 
     resultado = ejecutar_ga(
         M,
-        tam_poblacion=args.poblacion,
-        generaciones=args.generaciones,
-        prob_mutacion=args.prob_mutacion,
-        semilla=args.semilla,
+        tam_poblacion=poblacion,
+        generaciones=generaciones,
+        prob_mutacion=(args.prob_mutacion if args.prob_mutacion is not None
+                       else ga.get("prob_mutacion", 0.3)),
+        semilla=args.semilla or ga.get("semilla", 42),
         verbose=args.verbose,
     )
     ruta_csv, evo_csv, resumen = guardar_resultados(
-        datos, resultado["tour"], args.valor_hora, resultado
+        datos, resultado["tour"], vh, resultado
     )
     print(f"Mejor coste: {resultado['coste']:.2f} EUR")
     print(f"Distancia: {resumen['distancia_total_km']:.1f} km | "

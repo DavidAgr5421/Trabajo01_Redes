@@ -1,0 +1,64 @@
+{
+  "_comentario": "Configuracion central del TSP de 47 capitales. Todos los scripts aceptan --config y cualquier clave puede sobreescribirse por CLI sin editar codigo.",
+  "valor_hora": 20.0,
+  "vehiculo": {
+    "modelo": "Toyota Corolla 140H e-CVT 1.8",
+    "consumo_L_100km": 4.5,
+    "precio_EUR_L": 1.785,
+    "combustible": "Gasolina 95 E5",
+    "fecha_precio": "2026-10-09"
+  },
+  "ga": {
+    "poblacion": 100,
+    "generaciones": 300,
+    "prob_mutacion": 0.3,
+    "semilla": 42
+  },
+  "aco": {
+    "hormigas": 30,
+    "iteraciones": 120,
+    "alfa": 1.0,
+    "beta": 3.0,
+    "evaporacion": 0.2,
+    "semilla": 42
+  },
+  "sensibilidad": {
+    "desde": 0.0,
+    "hasta": 100.0,
+    "paso": 1.0,
+    "poblacion": 40,
+    "generaciones": 40,
+    "semilla": 7
+  },
+  "gif": {
+    "cada": 4,
+    "fps": 8
+  },
+  "demo": {
+    "_comentario": "Perfil rapido para sustentacion (<2 min). Se activa con --demo.",
+    "valor_hora": 20.0,
+    "ga": {
+      "poblacion": 25,
+      "generaciones": 25,
+      "prob_mutacion": 0.3,
+      "semilla": 42
+    },
+    "aco": {
+      "hormigas": 15,
+      "iteraciones": 25,
+      "alfa": 1.0,
+      "beta": 3.0,
+      "evaporacion": 0.2,
+      "semilla": 42
+    },
+    "sensibilidad": {
+      "desde": 0.0,
+      "hasta": 100.0,
+      "paso": 10.0
+    },
+    "gif": {
+      "cada": 2,
+      "fps": 8
+    }
+  }
+}

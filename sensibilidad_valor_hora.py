@@ -284,28 +284,40 @@ def _main():
     parser = argparse.ArgumentParser(
         description="Sensibilidad de la ruta optima al valor de la hora"
     )
-    parser.add_argument("--desde", type=float, default=0.0)
-    parser.add_argument("--hasta", type=float, default=100.0)
-    parser.add_argument("--paso", type=float, default=1.0)
-    parser.add_argument("--poblacion", type=int, default=40)
-    parser.add_argument("--generaciones", type=int, default=40)
-    parser.add_argument("--semilla", type=int, default=7)
+    parser.add_argument("--config", type=Path, default=None)
+    parser.add_argument("--demo", action="store_true")
+    parser.add_argument("--desde", type=float, default=None)
+    parser.add_argument("--hasta", type=float, default=None)
+    parser.add_argument("--paso", type=float, default=None)
+    parser.add_argument("--poblacion", type=int, default=None)
+    parser.add_argument("--generaciones", type=int, default=None)
+    parser.add_argument("--semilla", type=int, default=None)
     parser.add_argument("--refuerzo", type=int, default=2)
     parser.add_argument("--refuerzo-poblacion", type=int, default=100)
     parser.add_argument("--refuerzo-generaciones", type=int, default=150)
     args = parser.parse_args()
 
+    from config import cargar_config
+    cfg = cargar_config(args.config, demo=args.demo)
+    s = cfg.get("sensibilidad", {})
+    desde = args.desde if args.desde is not None else s.get("desde", 0.0)
+    hasta = args.hasta if args.hasta is not None else s.get("hasta", 100.0)
+    paso = args.paso if args.paso is not None else s.get("paso", 1.0)
+    poblacion = args.poblacion or s.get("poblacion", 40)
+    generaciones = args.generaciones or s.get("generaciones", 40)
+    semilla = args.semilla or s.get("semilla", 7)
+
     datos = cargar_costes()
-    valores = np.arange(args.desde, args.hasta + 1e-9, args.paso)
+    valores = np.arange(desde, hasta + 1e-9, paso)
     v_min, v_max = float(valores[0]), float(valores[-1])
     print(f"Barrido de {len(valores)} valores de v en "
           f"[{v_min:g}, {v_max:g}] EUR/h")
 
     candidatos, registros, _ = barrido(
         datos, valores,
-        tam_poblacion=args.poblacion,
-        generaciones=args.generaciones,
-        semilla=args.semilla,
+        tam_poblacion=poblacion,
+        generaciones=generaciones,
+        semilla=semilla,
     )
 
     for v_extremo in (v_min, v_max):
@@ -325,7 +337,7 @@ def _main():
             datos, candidatos, tramos, puntos,
             tam_poblacion=args.refuerzo_poblacion,
             generaciones=args.refuerzo_generaciones,
-            semillas=[args.semilla, args.semilla + 1],
+            semillas=[semilla, semilla + 1],
         )
         tramos, puntos_cambio = envolvente_inferior(
             candidatos, v_min, v_max
