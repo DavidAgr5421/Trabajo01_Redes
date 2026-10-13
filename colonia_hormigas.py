@@ -103,9 +103,11 @@ def ejecutar_aco(
         costes = np.array([coste_tour(M, t) for t in tours], dtype=float)
 
         idx_best = int(np.argmin(costes))
-        if costes[idx_best] < coste_global - EPS:
-            mejor_global = or_opt(tours[idx_best], M)
-            coste_global = coste_tour(M, mejor_global)
+        candidato = or_opt(tours[idx_best], M)
+        coste_candidato = coste_tour(M, candidato)
+        if coste_candidato < coste_global - EPS:
+            mejor_global = candidato
+            coste_global = coste_candidato
 
         # Evaporacion + deposito proporcional (Q = coste medio para escala).
         feromona *= (1.0 - evaporacion)

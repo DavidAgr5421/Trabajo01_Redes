@@ -1,6 +1,7 @@
 {
   "_comentario": "Configuracion central del TSP de 47 capitales. Todos los scripts aceptan --config y cualquier clave puede sobreescribirse por CLI sin editar codigo.",
-  "valor_hora": 20.0,
+  "valor_hora": 9.36,
+  "valor_hora_fuente": "SMI 2026 = 1221 EUR/mes x 14 pagas = 17094 EUR/ano (RD 126/2026, BOE-A-2026-3815) / 1826 h/ano jornada legal (art. 34 ET) = 9.36 EUR/h",
   "vehiculo": {
     "modelo": "Toyota Corolla 140H e-CVT 1.8",
     "consumo_L_100km": 4.5,
@@ -36,7 +37,7 @@
   },
   "demo": {
     "_comentario": "Perfil rapido para sustentacion (<2 min). Se activa con --demo.",
-    "valor_hora": 20.0,
+    "valor_hora": 9.36,
     "ga": {
       "poblacion": 25,
       "generaciones": 25,
