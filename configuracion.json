@@ -16,12 +16,13 @@
     "semilla": 42
   },
   "aco": {
-    "hormigas": 30,
-    "iteraciones": 120,
+    "hormigas": 10,
+    "iteraciones": 200,
     "alfa": 1.0,
     "beta": 3.0,
     "evaporacion": 0.2,
-    "semilla": 42
+    "usar_or_opt": true,
+    "semilla": 7
   },
   "sensibilidad": {
     "desde": 0.0,

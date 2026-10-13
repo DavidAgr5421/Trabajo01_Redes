@@ -60,7 +60,9 @@ def correr_aco(datos, M, cfg, vh, hacer_gif: bool):
                        iteraciones=aco["iteraciones"],
                        alfa=aco.get("alfa", 1.0), beta=aco.get("beta", 3.0),
                        evaporacion=aco.get("evaporacion", 0.2),
-                       semilla=aco.get("semilla", 42), verbose=True)
+                       semilla=aco.get("semilla", 42),
+                       usar_or_opt=aco.get("usar_or_opt", True),
+                       verbose=True)
     _, resumen = guardar_resultados(datos, res["tour"], vh, res)
     print(f"[ACO] coste {res['coste']:.2f} EUR en {time.time()-t0:.1f}s")
     if hacer_gif:
@@ -76,7 +78,8 @@ def correr_aco(datos, M, cfg, vh, hacer_gif: bool):
             cada=gif_c.get("cada", 4), fps=gif_c.get("fps", 8),
             hormigas=aco["hormigas"], iteraciones=aco["iteraciones"],
             alfa=aco.get("alfa", 1.0), beta=aco.get("beta", 3.0),
-            evaporacion=aco.get("evaporacion", 0.2))
+            evaporacion=aco.get("evaporacion", 0.2),
+            usar_or_opt=aco.get("usar_or_opt", True))
         out = DIR_RESULTADOS / "evolucion_aco.gif"
         anim.save(str(out), writer=PillowWriter(fps=gif_c.get("fps", 8)), dpi=110)
         fig.savefig(DIR_RESULTADOS / "evolucion_aco_final.png", dpi=140)

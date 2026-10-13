@@ -24,7 +24,6 @@ from matplotlib.animation import FuncAnimation, PillowWriter
 import numpy as np
 
 from costes_comunes import BASE_DIR, VALOR_HORA_POR_DEFECTO, cargar_costes
-from algoritmo_genetico import ejecutar_ga
 
 DIR_RESULTADOS = BASE_DIR / "resultados"
 
@@ -52,7 +51,8 @@ def construir_animacion(datos, valor_hora, *, algoritmo="ga",
                         tam_poblacion=100, generaciones=300,
                         semilla=42, cada=4, fps=8,
                         hormigas=30, iteraciones=120,
-                        alfa=1.0, beta=3.0, evaporacion=0.2):
+                        alfa=1.0, beta=3.0, evaporacion=0.2,
+                        usar_or_opt=True):
     M = datos.matriz_coste(valor_hora)
     registro = []
     if algoritmo == "aco":
@@ -60,11 +60,13 @@ def construir_animacion(datos, valor_hora, *, algoritmo="ga",
         resultado = ejecutar_aco(
             M, hormigas=hormigas, iteraciones=iteraciones,
             alfa=alfa, beta=beta, evaporacion=evaporacion,
-            semilla=semilla, registro=registro, grabar_cada=cada,
+            semilla=semilla, usar_or_opt=usar_or_opt,
+            registro=registro, grabar_cada=cada,
         )
         total = iteraciones
         etiqueta = "ACO"
     else:
+        from algoritmo_genetico import ejecutar_ga
         resultado = ejecutar_ga(
             M,
             tam_poblacion=tam_poblacion,
@@ -129,6 +131,8 @@ def _main():
     parser.add_argument("--poblacion", type=int, default=None)
     parser.add_argument("--generaciones", type=int, default=None)
     parser.add_argument("--semilla", type=int, default=None)
+    parser.add_argument("--sin-or-opt", action="store_true",
+                        help="Desactiva la busqueda local Or-opt (solo ACO)")
     parser.add_argument("--cada", type=int, default=None,
                         help="fotogramas: 1 por cada N generaciones")
     parser.add_argument("--fps", type=int, default=None)
@@ -153,16 +157,24 @@ def _main():
     print(f"Ejecutando {args.algoritmo.upper()} ({datos.n} ciudades, valor_hora="
           f"{vh:.2f})...")
 
+    if args.algoritmo == "aco":
+        semilla = (args.semilla if args.semilla is not None
+                   else aco_c.get("semilla", 42))
+        usar_or_opt = aco_c.get("usar_or_opt", True) and not args.sin_or_opt
+    else:
+        semilla = args.semilla or ga.get("semilla", 42)
+        usar_or_opt = True
     fig, animacion, registro, resultado = construir_animacion(
         datos, vh, algoritmo=args.algoritmo,
         tam_poblacion=args.poblacion or ga.get("poblacion", 100),
         generaciones=args.generaciones or ga.get("generaciones", 300),
-        semilla=args.semilla or ga.get("semilla", 42),
+        semilla=semilla,
         cada=cada, fps=fps,
         hormigas=aco_c.get("hormigas", 30),
         iteraciones=aco_c.get("iteraciones", 120),
         alfa=aco_c.get("alfa", 1.0), beta=aco_c.get("beta", 3.0),
         evaporacion=aco_c.get("evaporacion", 0.2),
+        usar_or_opt=usar_or_opt,
     )
 
     print(f"Fotogramas: {len(registro)}")

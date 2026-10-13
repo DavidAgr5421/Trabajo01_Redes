@@ -1,0 +1,44 @@
+{
+  "valor_hora_eur": 9.36,
+  "configuracion": {
+    "hormigas": 10,
+    "iteraciones": 200,
+    "alfa": 1.0,
+    "beta": 3.0,
+    "evaporacion": 0.2
+  },
+  "semillas": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "resumen": {
+    "con_oropt": {
+      "etiqueta": "con_oropt",
+      "n_semillas": 8,
+      "coste_mejor_eur": 1128.9904,
+      "coste_medio_eur": 1130.5452,
+      "coste_peor_eur": 1134.171,
+      "coste_desv_std_eur": 2.1114,
+      "tiempo_medio_s": 3.777,
+      "iteracion_convergencia_media": 107.25,
+      "usar_or_opt": true
+    },
+    "sin_oropt": {
+      "etiqueta": "sin_oropt",
+      "n_semillas": 8,
+      "coste_mejor_eur": 1178.1134,
+      "coste_medio_eur": 1192.0426,
+      "coste_peor_eur": 1216.6326,
+      "coste_desv_std_eur": 12.8533,
+      "tiempo_medio_s": 2.811,
+      "iteracion_convergencia_media": 104.12,
+      "usar_or_opt": false
+    }
+  }
+}
