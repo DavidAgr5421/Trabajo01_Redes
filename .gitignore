@@ -1,5 +1,17 @@
+# Entornos virtuales
 .venv/
+env/
+venv/
 .env
+
+# Compilados de Python
 __pycache__/
 *.pyc
+
+# IDEs y editores
+.vscode/
+.idea/
 .atl/
+
+# Temporales
+prueba_alpha.py
