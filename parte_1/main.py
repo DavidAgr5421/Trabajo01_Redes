@@ -286,6 +286,39 @@ def generar_gif_2d(nombre_f: str = "Rosenbrock", metodo: str = "GD", fps: int = 
     print(f"GIF guardado: {out_file}")
 
 
+def generar_grafica_convergencia_parte1(cfg: dict):
+    """Genera grafica comparativa de convergencia para Parte 1 (Rosenbrock y Rastrigin)."""
+    fig, axes = plt.subplots(1, 2, figsize=(14, 5))
+    metodos = ["GD", "PSO", "EA", "DE"]
+    colores = {"GD": "#e74c3c", "PSO": "#2ecc71", "EA": "#f39c12", "DE": "#3498db"}
+
+    for idx, nombre_f in enumerate(["Rosenbrock", "Rastrigin"]):
+        ax = axes[idx]
+        f_info = FUNCIONES_INFO[nombre_f]
+        for met in metodos:
+            res = ejecutar_metodo(met, f_info, dim=2, semilla=42, cfg=cfg)
+            hist = np.asarray(res["historial_f"], dtype=float)
+            if len(hist) > 0:
+                n_pts = min(len(hist), 300)
+                sub_idx = np.linspace(0, len(hist) - 1, n_pts, dtype=int)
+                ax.plot(sub_idx + 1, hist[sub_idx], label=f"{met} (final: {res['f_val']:.2e})",
+                        color=colores[met], linewidth=2.0)
+
+        ax.set_title(f"Convergencia en {nombre_f} 2D", fontsize=11, fontweight="bold")
+        ax.set_xlabel("Iteraciones / Generaciones", fontsize=10)
+        ax.set_ylabel("f(x)", fontsize=10)
+        if nombre_f == "Rosenbrock":
+            ax.set_yscale("log")
+        ax.grid(True, linestyle=":", alpha=0.6)
+        ax.legend(fontsize=9, loc="upper right")
+
+    fig.tight_layout()
+    salida = DIR_RESULTADOS / "convergencia_comparativa_parte1.png"
+    fig.savefig(salida, dpi=130)
+    plt.close(fig)
+    print(f"[Parte 1] Grafica comparativa guardada: {salida}")
+
+
 def main():
     parser = argparse.ArgumentParser(description="Runner Parte 1: Optimizacion Numerica")
     parser.add_argument("--demo", action="store_true", help="Corrida rapida (<15 s)")
@@ -298,6 +331,9 @@ def main():
 
     # Ejecutar estudio comparativo
     ejecutar_estudio_estadistico(cfg, n_corridas=n_corridas)
+
+    # Generar grafica comparativa estatica de convergencia
+    generar_grafica_convergencia_parte1(cfg)
 
     # Generar animaciones GIF
     if args.gif or args.demo:

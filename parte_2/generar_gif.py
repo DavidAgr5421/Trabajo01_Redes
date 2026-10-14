@@ -51,18 +51,39 @@ def construir_animacion(datos, valor_hora, *, algoritmo="aco",
                         semilla=42, cada=2, fps=8,
                         hormigas=20, iteraciones=150,
                         alfa=1.0, beta=3.0, evaporacion=0.2,
-                        usar_or_opt=True):
+                        usar_or_opt=True,
+                        poblacion=100, generaciones=500,
+                        prob_cruce=0.8, prob_mutacion=0.2):
     M = datos.matriz_coste(valor_hora)
     registro = []
-    from colonia_hormigas import ejecutar_aco
-    resultado = ejecutar_aco(
-        M, hormigas=hormigas, iteraciones=iteraciones,
-        alfa=alfa, beta=beta, evaporacion=evaporacion,
-        semilla=semilla, usar_or_opt=usar_or_opt,
-        registro=registro, grabar_cada=cada,
-    )
-    total = iteraciones
-    etiqueta = "ACO (con Or-opt)" if usar_or_opt else "ACO (sin Or-opt)"
+
+    if str(algoritmo).lower() in ("ga", "genetico", "algoritmo_genetico"):
+        from algoritmo_genetico import ejecutar_ga
+        resultado = ejecutar_ga(
+            M,
+            tam_poblacion=poblacion,
+            generaciones=generaciones,
+            prob_cruce=prob_cruce,
+            prob_mutacion=prob_mutacion,
+            semilla=semilla,
+            registro=registro,
+            grabar_cada=cada,
+            verbose=False,
+        )
+        total = generaciones
+        etiqueta = "Algoritmo Genético (DEAP)"
+        color_linea = "#2980b9"
+    else:
+        from colonia_hormigas import ejecutar_aco
+        resultado = ejecutar_aco(
+            M, hormigas=hormigas, iteraciones=iteraciones,
+            alfa=alfa, beta=beta, evaporacion=evaporacion,
+            semilla=semilla, usar_or_opt=usar_or_opt,
+            registro=registro, grabar_cada=cada,
+        )
+        total = iteraciones
+        etiqueta = "ACO (con Or-opt)" if usar_or_opt else "ACO (sin Or-opt)"
+        color_linea = "#c0392b"
 
     lons = datos.coords.loc[datos.ciudades, "lon"].to_numpy(dtype=float)
     lats = datos.coords.loc[datos.ciudades, "lat"].to_numpy(dtype=float)
@@ -79,8 +100,8 @@ def construir_animacion(datos, valor_hora, *, algoritmo="aco",
                 textcoords="offset points", xytext=(6, 4), fontsize=9,
                 color="#0a7d32", zorder=7)
 
-    (linea,) = ax.plot([], [], color="#c0392b", linewidth=2.0,
-                       alpha=0.9, zorder=5, label="Mejor recorrido")
+    (linea,) = ax.plot([], [], color=color_linea, linewidth=2.0,
+                       alpha=0.9, zorder=5, label=f"Mejor recorrido ({etiqueta})")
     titulo = ax.set_title("", fontsize=12)
     ax.set_xlim(CONTORNO[:, 0].min() - 0.6, CONTORNO[:, 0].max() + 0.6)
     ax.set_ylim(CONTORNO[:, 1].min() - 0.6, CONTORNO[:, 1].max() + 0.6)
@@ -98,8 +119,8 @@ def construir_animacion(datos, valor_hora, *, algoritmo="aco",
         ys = np.concatenate([lats_tour, lats_tour[:1]])
         linea.set_data(xs, ys)
         titulo.set_text(
-            f"Mejor solucion {etiqueta}  |  iter {gen}/{total}  |  "
-            f"coste {coste:,.2f} EUR  (valor hora {valor_hora:.0f} EUR/h)"
+            f"Mejor solucion {etiqueta}  |  gen/iter {gen}/{total}  |  "
+            f"coste {coste:,.2f} EUR  (valor hora {valor_hora:.2f} EUR/h)"
         )
         return linea, titulo
 
@@ -109,7 +130,9 @@ def construir_animacion(datos, valor_hora, *, algoritmo="aco",
 
 
 def _main():
-    parser = argparse.ArgumentParser(description="GIF y mapa de la evolucion de Colonia de Hormigas (ACO)")
+    parser = argparse.ArgumentParser(description="GIF y mapa de la evolucion para ACO y GA en el TSP")
+    parser.add_argument("--algoritmo", choices=["aco", "ga"], default="aco",
+                        help="Algoritmo a animar (aco o ga)")
     parser.add_argument("--config", type=Path, default=None)
     parser.add_argument("--demo", action="store_true")
     parser.add_argument("--valor-hora", type=float, default=None)
@@ -118,9 +141,11 @@ def _main():
     parser.add_argument("--alfa", type=float, default=None)
     parser.add_argument("--beta", type=float, default=None)
     parser.add_argument("--evaporacion", type=float, default=None)
+    parser.add_argument("--poblacion", type=int, default=None)
+    parser.add_argument("--generaciones", type=int, default=None)
     parser.add_argument("--semilla", type=int, default=42)
     parser.add_argument("--sin-or-opt", action="store_true",
-                        help="Desactiva la busqueda local Or-opt")
+                        help="Desactiva la busqueda local Or-opt en ACO")
     parser.add_argument("--cada", type=int, default=None,
                         help="fotogramas: 1 por cada N iteraciones")
     parser.add_argument("--fps", type=int, default=None)
@@ -129,7 +154,7 @@ def _main():
 
     from config import cargar_config
     cfg = cargar_config(args.config, demo=args.demo)
-    aco_c, gif_c = cfg.get("aco", {}), cfg.get("gif", {})
+    aco_c, ga_c, gif_c = cfg.get("aco", {}), cfg.get("ga", {}), cfg.get("gif", {})
     vh = (args.valor_hora if args.valor_hora is not None
           else cfg.get("valor_hora", VALOR_HORA_POR_DEFECTO))
     cada = args.cada or gif_c.get("cada", 2)
@@ -137,39 +162,63 @@ def _main():
     usar_or_opt = aco_c.get("usar_or_opt", True) and not args.sin_or_opt
     semilla = args.semilla or aco_c.get("semilla", 42)
 
-    sufijo = "con_oropt" if usar_or_opt else "sin_oropt"
-    if args.salida:
-        salida = args.salida
-        png = salida.with_suffix(".png")
-    else:
-        salida = DIR_RESULTADOS / f"evolucion_aco_{sufijo}.gif"
-        png = DIR_RESULTADOS / f"mapa_aco_{sufijo}.png"
-
     DIR_RESULTADOS.mkdir(parents=True, exist_ok=True)
     datos = cargar_costes()
-    print(f"Ejecutando ACO ({'con Or-opt' if usar_or_opt else 'sin Or-opt'}) "
-          f"({datos.n} ciudades, valor_hora={vh:.2f} EUR/h, semilla={semilla})...")
 
-    fig, animacion, registro, resultado = construir_animacion(
-        datos, vh, algoritmo="aco",
-        semilla=semilla,
-        cada=cada, fps=fps,
-        hormigas=args.hormigas or aco_c.get("hormigas", 20),
-        iteraciones=args.iteraciones or aco_c.get("iteraciones", 150),
-        alfa=args.alfa or aco_c.get("alfa", 1.0),
-        beta=args.beta or aco_c.get("beta", 3.0),
-        evaporacion=(args.evaporacion if args.evaporacion is not None
-                     else aco_c.get("evaporacion", 0.2)),
-        usar_or_opt=usar_or_opt,
-    )
+    if args.algoritmo == "ga":
+        pob = args.poblacion or ga_c.get("poblacion", 100)
+        gen = args.generaciones or ga_c.get("generaciones", 500)
+        if args.salida:
+            salida = args.salida
+            png = salida.with_suffix(".png")
+        else:
+            salida = DIR_RESULTADOS / "evolucion_ga.gif"
+            png = DIR_RESULTADOS / "mapa_ga.png"
 
-    print(f"Fotogramas: {len(registro)}")
-    animacion.save(str(salida), writer=PillowWriter(fps=fps),
-                   dpi=110)
+        print(f"Ejecutando GA para animacion ({datos.n} ciudades, valor_hora={vh:.2f} EUR/h, "
+              f"pob={pob}, gen={gen}, semilla={semilla})...")
+
+        fig, animacion, registro, resultado = construir_animacion(
+            datos, vh, algoritmo="ga",
+            semilla=semilla,
+            cada=cada, fps=fps,
+            poblacion=pob,
+            generaciones=gen,
+            prob_cruce=ga_c.get("probabilidad_cruce", 0.8),
+            prob_mutacion=ga_c.get("probabilidad_mutacion", 0.2),
+        )
+    else:
+        sufijo = "con_oropt" if usar_or_opt else "sin_oropt"
+        if args.salida:
+            salida = args.salida
+            png = salida.with_suffix(".png")
+        else:
+            salida = DIR_RESULTADOS / f"evolucion_aco_{sufijo}.gif"
+            png = DIR_RESULTADOS / f"mapa_aco_{sufijo}.png"
+
+        print(f"Ejecutando ACO ({'con Or-opt' if usar_or_opt else 'sin Or-opt'}) "
+              f"({datos.n} ciudades, valor_hora={vh:.2f} EUR/h, semilla={semilla})...")
+
+        fig, animacion, registro, resultado = construir_animacion(
+            datos, vh, algoritmo="aco",
+            semilla=semilla,
+            cada=cada, fps=fps,
+            hormigas=args.hormigas or aco_c.get("hormigas", 20),
+            iteraciones=args.iteraciones or aco_c.get("iteraciones", 150),
+            alfa=args.alfa or aco_c.get("alfa", 1.0),
+            beta=args.beta or aco_c.get("beta", 3.0),
+            evaporacion=(args.evaporacion if args.evaporacion is not None
+                         else aco_c.get("evaporacion", 0.2)),
+            usar_or_opt=usar_or_opt,
+        )
+
+    print(f"Fotogramas generados: {len(registro)}")
+    animacion.save(str(salida), writer=PillowWriter(fps=fps), dpi=110)
     fig.savefig(png, dpi=140)
     plt.close(fig)
     print(f"Mejor coste final: {resultado['coste']:.2f} EUR")
-    print(f"GIF: {salida}")
+    print(f"GIF guardado: {salida}")
+    print(f"Mapa guardado: {png}")
 
 
 if __name__ == "__main__":

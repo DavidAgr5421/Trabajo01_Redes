@@ -92,7 +92,7 @@ def correr_aco_individual(datos, M, cfg, vh: float, usar_or_opt: bool, hacer_gif
     return resumen
 
 
-def correr_ga_individual(datos, M, cfg, vh: float):
+def correr_ga_individual(datos, M, cfg, vh: float, hacer_gif: bool = True):
     ga = cfg.get("ga", {})
     t0 = time.time()
     pob = ga.get("poblacion", 100)
@@ -122,19 +122,83 @@ def correr_ga_individual(datos, M, cfg, vh: float):
         "distancia_total_km": round(desglose["distancia_km"], 1),
         "tiempo_total_h": round(desglose["tiempo_h"], 2),
         "tiempo_ejecucion_s": round(dt, 2),
+        "historia_mejor": res["historia_mejor"],
         "orden_ciudades": datos.tour_a_nombres(res["tour"]),
     }
     with open(DIR_RESULTADOS / "resumen_ga.json", "w", encoding="utf-8") as f:
         json.dump(resumen_ga, f, ensure_ascii=False, indent=2)
 
+    if hacer_gif:
+        from generar_gif import construir_animacion
+        from matplotlib.animation import PillowWriter
+        import matplotlib
+        matplotlib.use("Agg")
+        import matplotlib.pyplot as plt
+
+        gif_c = cfg.get("gif", {})
+        cada = max(gif_c.get("cada", 2), gen // 40)
+        fps = gif_c.get("fps", 8)
+
+        print(f"[GA] Generando animacion GIF y mapa...")
+        fig, anim, reg, _ = construir_animacion(
+            datos, vh, algoritmo="ga",
+            semilla=semilla,
+            cada=cada, fps=fps,
+            poblacion=pob,
+            generaciones=gen,
+            prob_cruce=ga.get("probabilidad_cruce", 0.8),
+            prob_mutacion=ga.get("probabilidad_mutacion", 0.2),
+        )
+        out_gif = DIR_RESULTADOS / "evolucion_ga.gif"
+        out_png = DIR_RESULTADOS / "mapa_ga.png"
+        anim.save(str(out_gif), writer=PillowWriter(fps=fps), dpi=110)
+        fig.savefig(out_png, dpi=130)
+        plt.close(fig)
+        print(f"[GA] GIF: {out_gif}")
+        print(f"[GA] Mapa: {out_png}")
+
     return resumen_ga
+
+
+def generar_grafica_comparativa_parte2(res_aco, res_ga, vh: float, salida: Path):
+    """Genera grafica comparativa de convergencia entre ACO y GA."""
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+    
+    # Historia ACO
+    aco_hist = res_aco.get("historia_mejor", [])
+    if aco_hist:
+        ax.plot(range(1, len(aco_hist) + 1), aco_hist,
+                label=f"ACO (con Or-opt) - Final: {res_aco['coste_total_eur']:.2f} EUR",
+                color="#c0392b", linewidth=2.5)
+
+    # Historia GA
+    ga_hist = res_ga.get("historia_mejor", [])
+    if ga_hist:
+        ax.plot(range(1, len(ga_hist) + 1), ga_hist,
+                label=f"Algoritmo Genético (DEAP) - Final: {res_ga['coste_total_eur']:.2f} EUR",
+                color="#2980b9", linewidth=2.2, linestyle="--")
+
+    ax.set_title(f"Convergencia Comparativa: ACO vs Algoritmo Genético (TSP 47 Capitales)\n"
+                 f"Valor hora = {vh:.2f} EUR/h | Semilla = 42", fontsize=12, fontweight="bold")
+    ax.set_xlabel("Iteraciones / Generaciones", fontsize=11)
+    ax.set_ylabel("Costo del Tour (EUR)", fontsize=11)
+    ax.grid(True, linestyle=":", alpha=0.6)
+    ax.legend(fontsize=10, loc="upper right")
+    fig.tight_layout()
+    fig.savefig(salida, dpi=130)
+    plt.close(fig)
+    print(f"[Parte 2] Grafica comparativa guardada: {salida}")
 
 
 def main():
     parser = argparse.ArgumentParser(description="Runner Parte 2: Optimizacion Combinatoria (TSP 47 Capitales)")
     parser.add_argument("--demo", action="store_true", help="Perfil rapido (<15 s)")
-    parser.add_argument("--algoritmo", choices=["aco", "ga", "ambos"], default="aco",
-                        help="Algoritmo a ejecutar (por defecto: aco)")
+    parser.add_argument("--algoritmo", choices=["aco", "ga", "ambos"], default="ambos",
+                        help="Algoritmo a ejecutar (por defecto: ambos)")
     parser.add_argument("--valor-hora", type=float, default=None, help="Valor de la hora del vendedor (EUR/h)")
     parser.add_argument("--sin-or-opt", action="store_true", help="Desactiva Or-opt en ACO")
     parser.add_argument("--comparar-oropt", action="store_true", help="Ejecuta comparativa Con vs Sin Or-opt")
@@ -171,7 +235,11 @@ def main():
         resultados["aco"] = correr_aco_individual(datos, M, cfg, vh, usar_or_opt=not args.sin_or_opt, hacer_gif=not args.sin_gif)
 
     if args.algoritmo in ("ga", "ambos"):
-        resultados["ga"] = correr_ga_individual(datos, M, cfg, vh)
+        resultados["ga"] = correr_ga_individual(datos, M, cfg, vh, hacer_gif=not args.sin_gif)
+
+    if "aco" in resultados and "ga" in resultados:
+        generar_grafica_comparativa_parte2(resultados["aco"], resultados["ga"], vh,
+                                           DIR_RESULTADOS / "comparacion_convergencia.png")
 
     print(f"\nTOTAL PARTE 2: {time.time()-t0:.2f}s | Resultados en {DIR_RESULTADOS}")
 
