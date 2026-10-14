@@ -1,174 +1,97 @@
 """
-Runner unico para el TSP de las 47 capitales peninsulares espanolas con ACO.
+Punto de entrada unico (CLI Global) para la Entrega 1.
 
-Permite ejecutar todas las variantes desde un solo comando:
-  python main.py                    # Ejecuta ACO (con Or-opt) + CSV + mapa + GIF
-  python main.py --sin-or-opt       # Ejecuta ACO sin busqueda local Or-opt
-  python main.py --comparar-oropt   # Ejecuta comparativa Con Or-opt vs Sin Or-opt
-  python main.py --barrido          # Ejecuta el barrido completo de configuraciones
-  python main.py --demo             # Corrida rapida (<15 s) para demostracion/sustentacion
-  python main.py --sin-gif          # Ejecuta ACO sin generar archivo GIF (mas rapido)
+Permite ejecutar:
+  python main.py                    # Ejecucion integral (Parte 1 y Parte 2)
+  python main.py --demo             # Demostracion rapida en vivo (< 30 segundos)
+  python main.py --parte 1          # Ejecuta unicamente Parte 1 (Optimizacion Numerica)
+  python main.py --parte 2          # Ejecuta unicamente Parte 2 (Optimizacion Combinatoria TSP)
+  python main.py --parte 2 --algoritmo ga    # Ejecuta el GA en Parte 2
+  python main.py --parte 2 --comparar-oropt # Comparativa Con vs Sin Or-opt en Parte 2
 """
 from __future__ import annotations
 
 import argparse
-import json
+import subprocess
+import sys
 import time
 from pathlib import Path
 
-from config import cargar_config
-from costes_comunes import BASE_DIR, VALOR_HORA_POR_DEFECTO, cargar_costes
+BASE_DIR = Path(__file__).resolve().parent
+PARTE1_DIR = BASE_DIR / "parte_1"
+PARTE2_DIR = BASE_DIR / "parte_2"
 
-DIR_RESULTADOS = BASE_DIR / "resultados"
 
-
-def correr_aco_individual(datos, M, cfg, vh: float, usar_or_opt: bool, hacer_gif: bool):
-    from colonia_hormigas import ejecutar_aco, guardar_resultados
-    aco = cfg.get("aco", {})
-    t0 = time.time()
-    sufijo = "con_oropt" if usar_or_opt else "sin_oropt"
-
-    print(f"\n[ACO {'CON' if usar_or_opt else 'SIN'} Or-opt] "
-          f"Iniciando ejecucion ({aco.get('hormigas', 20)} hormigas, "
-          f"{aco.get('iteraciones', 150)} iteraciones, semilla={aco.get('semilla', 42)})...")
-
-    res = ejecutar_aco(
-        M,
-        hormigas=aco.get("hormigas", 20),
-        iteraciones=aco.get("iteraciones", 150),
-        alfa=aco.get("alfa", 1.0),
-        beta=aco.get("beta", 3.0),
-        evaporacion=aco.get("evaporacion", 0.2),
-        semilla=aco.get("semilla", 42),
-        usar_or_opt=usar_or_opt,
-        verbose=True,
-    )
-    ruta_csv, resumen = guardar_resultados(datos, res["tour"], vh, res, directorio=DIR_RESULTADOS)
-    dt = time.time() - t0
-    print(f"[ACO {sufijo}] Coste: {res['coste']:.2f} EUR en {dt:.2f}s")
-    print(f"[ACO {sufijo}] Desglose: Distancia={resumen['distancia_total_km']:.1f} km, "
-          f"Tiempo={resumen['tiempo_total_h']:.2f} h, Peajes={resumen['peajes_total_eur']:.2f} EUR, "
-          f"Gasolina={resumen['combustible_total_eur']:.2f} EUR")
-
-    if hacer_gif:
-        from generar_gif import construir_animacion
-        from matplotlib.animation import PillowWriter
-        import matplotlib
-        matplotlib.use("Agg")
-        import matplotlib.pyplot as plt
-
-        gif_c = cfg.get("gif", {})
-        cada = gif_c.get("cada", 2)
-        fps = gif_c.get("fps", 8)
-
-        print(f"[ACO {sufijo}] Generando animacion GIF...")
-        fig, anim, reg, _ = construir_animacion(
-            datos, vh, algoritmo="aco",
-            semilla=aco.get("semilla", 42),
-            cada=cada, fps=fps,
-            hormigas=aco.get("hormigas", 20),
-            iteraciones=aco.get("iteraciones", 150),
-            alfa=aco.get("alfa", 1.0),
-            beta=aco.get("beta", 3.0),
-            evaporacion=aco.get("evaporacion", 0.2),
-            usar_or_opt=usar_or_opt,
-        )
-        out_gif = DIR_RESULTADOS / f"evolucion_aco_{sufijo}.gif"
-        out_png = DIR_RESULTADOS / f"mapa_aco_{sufijo}.png"
-        anim.save(str(out_gif), writer=PillowWriter(fps=fps), dpi=110)
-        fig.savefig(out_png, dpi=130)
-        plt.close(fig)
-        print(f"[ACO {sufijo}] GIF guardado: {out_gif}")
-        print(f"[ACO {sufijo}] Mapa final: {out_png}")
-
-    return resumen
+def correr_comando(comando: list[str], cwd: Path) -> int:
+    print(f"\n[EJECUTANDO] {' '.join(comando)} en {cwd.name}/")
+    proceso = subprocess.run([sys.executable] + comando, cwd=str(cwd))
+    return proceso.returncode
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Runner central para el TSP de 47 capitales con ACO")
-    parser.add_argument("--config", type=Path, default=None)
+    parser = argparse.ArgumentParser(
+        description="CLI Global del Proyecto: Parte 1 (Numerica) y Parte 2 (Combinatoria)"
+    )
+    parser.add_argument("--parte", choices=["1", "2", "ambas"], default="ambas",
+                        help="Parte a ejecutar (1: Numerica, 2: Combinatoria, ambas por defecto)")
     parser.add_argument("--demo", action="store_true",
-                        help="Perfil rapido para sustentacion (<15 s)")
-    parser.add_argument("--valor-hora", type=float, default=None,
-                        help="Sobreescribe el valor de la hora del vendedor (EUR/h)")
-    parser.add_argument("--sin-or-opt", action="store_true",
-                        help="Ejecuta ACO sin la busqueda local Or-opt")
+                        help="Perfil rapido para sustentacion en vivo (<30 s)")
+    parser.add_argument("--gif", action="store_true",
+                        help="Genera animaciones GIF")
+    parser.add_argument("--algoritmo", type=str, default=None,
+                        help="Algoritmo especifico para Parte 2 (aco, ga, ambos)")
     parser.add_argument("--comparar-oropt", action="store_true",
-                        help="Ejecuta y compara ACO Con Or-opt vs Sin Or-opt")
+                        help="Ejecuta comparativa Con vs Sin Or-opt en Parte 2")
     parser.add_argument("--barrido", action="store_true",
-                        help="Ejecuta el barrido completo de configuraciones con semilla fija 42")
-    parser.add_argument("--sin-gif", action="store_true",
-                        help="Omite la generacion de animaciones GIF")
+                        help="Ejecuta barrido completo en Parte 2")
+    parser.add_argument("--corridas", type=int, default=None,
+                        help="Numero de corridas independientes en Parte 1")
     args = parser.parse_args()
 
-    cfg = cargar_config(args.config, demo=args.demo)
-    vh = args.valor_hora if args.valor_hora is not None else cfg.get("valor_hora", VALOR_HORA_POR_DEFECTO)
-    semilla = cfg.get("semilla", cfg.get("aco", {}).get("semilla", 42))
+    t_inicio = time.time()
+    print("=" * 75)
+    print("PROYECTO REDES Y ALGORITMOS BIOINSPIRADOS - ENTREGA 1")
+    print(f"Modo: {'DEMOSTRACION EN VIVO (<30 s)' if args.demo else 'COMPLETO'}")
+    print(f"Parte seleccionada: {args.parte}")
+    print("=" * 75)
 
-    DIR_RESULTADOS.mkdir(parents=True, exist_ok=True)
-    datos = cargar_costes()
-    M = datos.matriz_coste(vh)
+    # 1. PARTE 1
+    if args.parte in ("1", "ambas"):
+        cmd_p1 = ["main.py"]
+        if args.demo:
+            cmd_p1.append("--demo")
+        if args.gif:
+            cmd_p1.append("--gif")
+        if args.corridas:
+            cmd_p1.extend(["--corridas", str(args.corridas)])
 
-    print("=" * 65)
-    print(f"SISTEMA DE RUTAS OPTIMAS ACO - 47 CAPITALES ESPAÑOLAS")
-    print(f"Valor hora : {vh:.2f} EUR/h | Semilla : {semilla} | Demo : {args.demo}")
-    print("=" * 65)
+        codigo_p1 = correr_comando(cmd_p1, PARTE1_DIR)
+        if codigo_p1 != 0:
+            print(f"[ERROR] Parte 1 finalizo con codigo {codigo_p1}")
 
-    t0 = time.time()
+    # 2. PARTE 2
+    if args.parte in ("2", "ambas"):
+        cmd_p2 = ["main.py"]
+        if args.demo:
+            cmd_p2.append("--demo")
+        if args.algoritmo:
+            cmd_p2.extend(["--algoritmo", args.algoritmo])
+        if args.comparar_oropt:
+            cmd_p2.append("--comparar-oropt")
+        if args.barrido:
+            cmd_p2.append("--barrido")
 
-    if args.barrido:
-        from experimentos_aco import main as ejecutar_barrido
-        ejecutar_barrido()
-        return
+        codigo_p2 = correr_comando(cmd_p2, PARTE2_DIR)
+        if codigo_p2 != 0:
+            print(f"[ERROR] Parte 2 finalizo con codigo {codigo_p2}")
 
-    if args.comparar_oropt:
-        from experimentos_aco import comparar_con_y_sin_oropt
-        cfg_aco = cfg.get("aco", {})
-        comparar_con_y_sin_oropt(M, datos, vh, cfg_aco)
-
-        # Generar ambos GIFs si no se especifico --sin-gif
-        if not args.sin_gif:
-            from generar_gif import construir_animacion
-            from matplotlib.animation import PillowWriter
-            import matplotlib
-            matplotlib.use("Agg")
-            import matplotlib.pyplot as plt
-
-            gif_c = cfg.get("gif", {})
-            cada = gif_c.get("cada", 2)
-            fps = gif_c.get("fps", 8)
-
-            for opt, sufijo in [(True, "con_oropt"), (False, "sin_oropt")]:
-                print(f"Generando GIF ({sufijo})...")
-                fig, anim, _, _ = construir_animacion(
-                    datos, vh, algoritmo="aco",
-                    semilla=semilla, cada=cada, fps=fps,
-                    hormigas=cfg_aco.get("hormigas", 20),
-                    iteraciones=cfg_aco.get("iteraciones", 150),
-                    alfa=cfg_aco.get("alfa", 1.0),
-                    beta=cfg_aco.get("beta", 3.0),
-                    evaporacion=cfg_aco.get("evaporacion", 0.2),
-                    usar_or_opt=opt,
-                )
-                out_gif = DIR_RESULTADOS / f"evolucion_aco_{sufijo}.gif"
-                out_png = DIR_RESULTADOS / f"mapa_aco_{sufijo}.png"
-                anim.save(str(out_gif), writer=PillowWriter(fps=fps), dpi=110)
-                fig.savefig(out_png, dpi=130)
-                plt.close(fig)
-
-        print(f"\n[OK] Comparativa completa guardada en {DIR_RESULTADOS} en {time.time()-t0:.1f}s")
-        return
-
-    # Ejecucion normal de una variante
-    usar_or_opt = not args.sin_or_opt
-    resumen = correr_aco_individual(datos, M, cfg, vh, usar_or_opt=usar_or_opt, hacer_gif=not args.sin_gif)
-
-    # Actualizar comparativa.json
-    res_json_path = DIR_RESULTADOS / "comparativa.json"
-    with open(res_json_path, "w", encoding="utf-8") as f:
-        json.dump({"valor_hora": vh, "semilla": semilla, "aco": resumen}, f, ensure_ascii=False, indent=2)
-
-    print(f"\nTOTAL: {time.time()-t0:.2f}s | Resultados en {DIR_RESULTADOS}")
+    dt_total = time.time() - t_inicio
+    print("\n" + "=" * 75)
+    print(f"[OK] EJECUCION FINALIZADA EN {dt_total:.2f} segundos.")
+    print("Resultados disponibles en:")
+    print(f"  - Parte 1 : {PARTE1_DIR / 'resultados'}")
+    print(f"  - Parte 2 : {PARTE2_DIR / 'resultados'}")
+    print("=" * 75)
 
 
 if __name__ == "__main__":

@@ -1,43 +1,111 @@
 {
-  "_comentario": "Configuracion central del TSP de 47 capitales peninsulares espanolas con Colonia de Hormigas (ACO).",
-  "valor_hora": 5.09,
-  "valor_hora_fuente": "SMI 2026 = 40,70 EUR/dia (Real Decreto 126/2026, art. 1) / jornada laboral continua de 8 h/dia = 5.0875 EUR/h (~5.09 EUR/h)",
-  "semilla": 42,
-  "vehiculo": {
-    "modelo": "Toyota Corolla 140H e-CVT 1.8",
-    "consumo_L_100km": 4.5,
-    "precio_EUR_L": 1.785,
-    "combustible": "Gasolina 95 E5",
-    "fecha_precio": "2026-10-09"
+  "_comentario": "Configuracion global del Proyecto Entrega 1 - Optimizacion Numerica y Combinatoria.",
+  "parte_1": {
+    "funciones_seleccionadas": ["Rosenbrock", "Rastrigin"],
+    "dimensiones": [2, 3],
+    "n_corridas": 30,
+    "semilla_base": 2026,
+    "umbral_exito": 1e-3,
+    "gradiente_descendente": {
+      "max_iter": 10000,
+      "tolerancia": 1e-4,
+      "alpha_rosenbrock": 0.00085,
+      "alpha_rastrigin": 0.001
+    },
+    "pso": {
+      "n_particulas": 30,
+      "max_iter": 500,
+      "w": 0.7,
+      "c1": 1.5,
+      "c2": 1.5
+    },
+    "algoritmo_evolutivo": {
+      "poblacion": 50,
+      "generaciones": 100,
+      "elitismo": 0.15,
+      "mutacion": 0.2,
+      "cruzamiento": 0.65
+    },
+    "evolucion_diferencial": {
+      "poblacion": 40,
+      "generaciones": 100,
+      "F": 0.7,
+      "CR": 0.8
+    }
   },
-  "aco": {
-    "hormigas": 20,
-    "iteraciones": 150,
-    "alfa": 1.0,
-    "beta": 3.0,
-    "evaporacion": 0.4,
-    "usar_or_opt": true,
-    "semilla": 42
-  },
-  "gif": {
-    "cada": 2,
-    "fps": 8
-  },
-  "demo": {
-    "_comentario": "Perfil rapido para sustentacion (<15 s). Se activa con --demo.",
+  "parte_2": {
+    "ciudades_total": 47,
     "valor_hora": 5.09,
+    "valor_hora_fuente": "SMI 2026 = 40,70 EUR/dia (Real Decreto 126/2026, art. 1) / jornada laboral continua de 8 h/dia = 5.0875 EUR/h (~5.09 EUR/h)",
+    "semilla": 42,
+    "vehiculo": {
+      "modelo": "Toyota Corolla 140H e-CVT 1.8",
+      "consumo_L_100km": 4.5,
+      "precio_EUR_L": 1.785,
+      "combustible": "Gasolina 95 E5",
+      "fecha_precio": "2026-10-09"
+    },
     "aco": {
-      "hormigas": 10,
-      "iteraciones": 30,
+      "hormigas": 20,
+      "iteraciones": 150,
       "alfa": 1.0,
       "beta": 3.0,
       "evaporacion": 0.4,
       "usar_or_opt": true,
       "semilla": 42
     },
+    "ga": {
+      "poblacion": 100,
+      "generaciones": 1000,
+      "probabilidad_cruce": 0.8,
+      "probabilidad_mutacion": 0.2,
+      "semilla": 42
+    },
     "gif": {
-      "cada": 1,
+      "cada": 2,
       "fps": 8
+    }
+  },
+  "demo": {
+    "_comentario": "Perfil rapido para sustentacion en vivo (< 2 min) que ejecuta Parte 1 y Parte 2.",
+    "parte_1": {
+      "n_corridas": 3,
+      "gradiente_descendente": {
+        "max_iter": 500
+      },
+      "pso": {
+        "n_particulas": 15,
+        "max_iter": 50
+      },
+      "algoritmo_evolutivo": {
+        "poblacion": 20,
+        "generaciones": 30
+      },
+      "evolucion_diferencial": {
+        "poblacion": 20,
+        "generaciones": 30
+      }
+    },
+    "parte_2": {
+      "valor_hora": 5.09,
+      "aco": {
+        "hormigas": 10,
+        "iteraciones": 30,
+        "alfa": 1.0,
+        "beta": 3.0,
+        "evaporacion": 0.4,
+        "usar_or_opt": true,
+        "semilla": 42
+      },
+      "ga": {
+        "poblacion": 30,
+        "generaciones": 100,
+        "semilla": 42
+      },
+      "gif": {
+        "cada": 1,
+        "fps": 8
+      }
     }
   }
 }
