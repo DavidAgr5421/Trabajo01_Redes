@@ -2,6 +2,8 @@
 **Curso**: Redes Neuronales y Algoritmos Bioinspirados  
 **Universidad Nacional de Colombia — Facultad de Minas**  
 **Autores**: David Agrono & Alejandro  
+**Repositorio Git**: [https://github.com/DavidAgr5421/Trabajo01_Redes.git](https://github.com/DavidAgr5421/Trabajo01_Redes.git)  
+**Reporte Técnico de Blog**: [REPORTE_BLOG.md](REPORTE_BLOG.md)  
 
 ---
 
