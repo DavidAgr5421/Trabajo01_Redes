@@ -33,8 +33,8 @@ import json
 from datetime import datetime, timezone
 from pathlib import Path
 
-BASE_DIR = Path(__file__).resolve().parent
-DATA_DIR = BASE_DIR / "datos_rutas"
+DATA_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = DATA_DIR.parent
 RUTAS_CSV = DATA_DIR / "rutas.csv"
 SALIDA_CSV = DATA_DIR / "rutas_costes.csv"
 METADATA_JSON = DATA_DIR / "metadata_costes.json"

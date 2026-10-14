@@ -1,7 +1,8 @@
 {
-  "_comentario": "Configuracion central del TSP de 47 capitales. Todos los scripts aceptan --config y cualquier clave puede sobreescribirse por CLI sin editar codigo.",
-  "valor_hora": 9.36,
-  "valor_hora_fuente": "SMI 2026 = 1221 EUR/mes x 14 pagas = 17094 EUR/ano (RD 126/2026, BOE-A-2026-3815) / 1826 h/ano jornada legal (art. 34 ET) = 9.36 EUR/h",
+  "_comentario": "Configuracion central del TSP de 47 capitales peninsulares espanolas con Colonia de Hormigas (ACO).",
+  "valor_hora": 5.09,
+  "valor_hora_fuente": "SMI 2026 = 40,70 EUR/dia (Real Decreto 126/2026, art. 1) / jornada laboral continua de 8 h/dia = 5.0875 EUR/h (~5.09 EUR/h)",
+  "semilla": 42,
   "vehiculo": {
     "modelo": "Toyota Corolla 140H e-CVT 1.8",
     "consumo_L_100km": 4.5,
@@ -9,57 +10,33 @@
     "combustible": "Gasolina 95 E5",
     "fecha_precio": "2026-10-09"
   },
-  "ga": {
-    "poblacion": 100,
-    "generaciones": 300,
-    "prob_mutacion": 0.3,
-    "semilla": 42
-  },
   "aco": {
-    "hormigas": 10,
-    "iteraciones": 200,
+    "hormigas": 20,
+    "iteraciones": 150,
     "alfa": 1.0,
     "beta": 3.0,
-    "evaporacion": 0.2,
+    "evaporacion": 0.4,
     "usar_or_opt": true,
-    "semilla": 7
-  },
-  "sensibilidad": {
-    "desde": 0.0,
-    "hasta": 100.0,
-    "paso": 1.0,
-    "poblacion": 40,
-    "generaciones": 40,
-    "semilla": 7
+    "semilla": 42
   },
   "gif": {
-    "cada": 4,
+    "cada": 2,
     "fps": 8
   },
   "demo": {
-    "_comentario": "Perfil rapido para sustentacion (<2 min). Se activa con --demo.",
-    "valor_hora": 9.36,
-    "ga": {
-      "poblacion": 25,
-      "generaciones": 25,
-      "prob_mutacion": 0.3,
-      "semilla": 42
-    },
+    "_comentario": "Perfil rapido para sustentacion (<15 s). Se activa con --demo.",
+    "valor_hora": 5.09,
     "aco": {
-      "hormigas": 15,
-      "iteraciones": 25,
+      "hormigas": 10,
+      "iteraciones": 30,
       "alfa": 1.0,
       "beta": 3.0,
-      "evaporacion": 0.2,
+      "evaporacion": 0.4,
+      "usar_or_opt": true,
       "semilla": 42
     },
-    "sensibilidad": {
-      "desde": 0.0,
-      "hasta": 100.0,
-      "paso": 10.0
-    },
     "gif": {
-      "cada": 2,
+      "cada": 1,
       "fps": 8
     }
   }

@@ -47,36 +47,22 @@ CONTORNO = np.array([
 ])
 
 
-def construir_animacion(datos, valor_hora, *, algoritmo="ga",
-                        tam_poblacion=100, generaciones=300,
-                        semilla=42, cada=4, fps=8,
-                        hormigas=30, iteraciones=120,
+def construir_animacion(datos, valor_hora, *, algoritmo="aco",
+                        semilla=42, cada=2, fps=8,
+                        hormigas=20, iteraciones=150,
                         alfa=1.0, beta=3.0, evaporacion=0.2,
                         usar_or_opt=True):
     M = datos.matriz_coste(valor_hora)
     registro = []
-    if algoritmo == "aco":
-        from colonia_hormigas import ejecutar_aco
-        resultado = ejecutar_aco(
-            M, hormigas=hormigas, iteraciones=iteraciones,
-            alfa=alfa, beta=beta, evaporacion=evaporacion,
-            semilla=semilla, usar_or_opt=usar_or_opt,
-            registro=registro, grabar_cada=cada,
-        )
-        total = iteraciones
-        etiqueta = "ACO"
-    else:
-        from algoritmo_genetico import ejecutar_ga
-        resultado = ejecutar_ga(
-            M,
-            tam_poblacion=tam_poblacion,
-            generaciones=generaciones,
-            semilla=semilla,
-            registro=registro,
-            grabar_cada=cada,
-        )
-        total = generaciones
-        etiqueta = "GA"
+    from colonia_hormigas import ejecutar_aco
+    resultado = ejecutar_aco(
+        M, hormigas=hormigas, iteraciones=iteraciones,
+        alfa=alfa, beta=beta, evaporacion=evaporacion,
+        semilla=semilla, usar_or_opt=usar_or_opt,
+        registro=registro, grabar_cada=cada,
+    )
+    total = iteraciones
+    etiqueta = "ACO (con Or-opt)" if usar_or_opt else "ACO (sin Or-opt)"
 
     lons = datos.coords.loc[datos.ciudades, "lon"].to_numpy(dtype=float)
     lats = datos.coords.loc[datos.ciudades, "lat"].to_numpy(dtype=float)
@@ -123,57 +109,57 @@ def construir_animacion(datos, valor_hora, *, algoritmo="ga",
 
 
 def _main():
-    parser = argparse.ArgumentParser(description="GIF de la evolucion (GA o ACO)")
+    parser = argparse.ArgumentParser(description="GIF y mapa de la evolucion de Colonia de Hormigas (ACO)")
     parser.add_argument("--config", type=Path, default=None)
     parser.add_argument("--demo", action="store_true")
-    parser.add_argument("--algoritmo", choices=["ga", "aco"], default="ga")
     parser.add_argument("--valor-hora", type=float, default=None)
-    parser.add_argument("--poblacion", type=int, default=None)
-    parser.add_argument("--generaciones", type=int, default=None)
-    parser.add_argument("--semilla", type=int, default=None)
+    parser.add_argument("--hormigas", type=int, default=None)
+    parser.add_argument("--iteraciones", type=int, default=None)
+    parser.add_argument("--alfa", type=float, default=None)
+    parser.add_argument("--beta", type=float, default=None)
+    parser.add_argument("--evaporacion", type=float, default=None)
+    parser.add_argument("--semilla", type=int, default=42)
     parser.add_argument("--sin-or-opt", action="store_true",
-                        help="Desactiva la busqueda local Or-opt (solo ACO)")
+                        help="Desactiva la busqueda local Or-opt")
     parser.add_argument("--cada", type=int, default=None,
-                        help="fotogramas: 1 por cada N generaciones")
+                        help="fotogramas: 1 por cada N iteraciones")
     parser.add_argument("--fps", type=int, default=None)
     parser.add_argument("--salida", type=Path, default=None)
     args = parser.parse_args()
 
     from config import cargar_config
     cfg = cargar_config(args.config, demo=args.demo)
-    ga, aco_c, gif_c = cfg.get("ga", {}), cfg.get("aco", {}), cfg.get("gif", {})
+    aco_c, gif_c = cfg.get("aco", {}), cfg.get("gif", {})
     vh = (args.valor_hora if args.valor_hora is not None
           else cfg.get("valor_hora", VALOR_HORA_POR_DEFECTO))
-    cada = args.cada or gif_c.get("cada", 4)
+    cada = args.cada or gif_c.get("cada", 2)
     fps = args.fps or gif_c.get("fps", 8)
+    usar_or_opt = aco_c.get("usar_or_opt", True) and not args.sin_or_opt
+    semilla = args.semilla or aco_c.get("semilla", 42)
+
+    sufijo = "con_oropt" if usar_or_opt else "sin_oropt"
     if args.salida:
         salida = args.salida
+        png = salida.with_suffix(".png")
     else:
-        salida = DIR_RESULTADOS / (f"evolucion_{args.algoritmo}.gif")
-    png = DIR_RESULTADOS / f"evolucion_{args.algoritmo}_final.png"
+        salida = DIR_RESULTADOS / f"evolucion_aco_{sufijo}.gif"
+        png = DIR_RESULTADOS / f"mapa_aco_{sufijo}.png"
 
     DIR_RESULTADOS.mkdir(parents=True, exist_ok=True)
     datos = cargar_costes()
-    print(f"Ejecutando {args.algoritmo.upper()} ({datos.n} ciudades, valor_hora="
-          f"{vh:.2f})...")
+    print(f"Ejecutando ACO ({'con Or-opt' if usar_or_opt else 'sin Or-opt'}) "
+          f"({datos.n} ciudades, valor_hora={vh:.2f} EUR/h, semilla={semilla})...")
 
-    if args.algoritmo == "aco":
-        semilla = (args.semilla if args.semilla is not None
-                   else aco_c.get("semilla", 42))
-        usar_or_opt = aco_c.get("usar_or_opt", True) and not args.sin_or_opt
-    else:
-        semilla = args.semilla or ga.get("semilla", 42)
-        usar_or_opt = True
     fig, animacion, registro, resultado = construir_animacion(
-        datos, vh, algoritmo=args.algoritmo,
-        tam_poblacion=args.poblacion or ga.get("poblacion", 100),
-        generaciones=args.generaciones or ga.get("generaciones", 300),
+        datos, vh, algoritmo="aco",
         semilla=semilla,
         cada=cada, fps=fps,
-        hormigas=aco_c.get("hormigas", 30),
-        iteraciones=aco_c.get("iteraciones", 120),
-        alfa=aco_c.get("alfa", 1.0), beta=aco_c.get("beta", 3.0),
-        evaporacion=aco_c.get("evaporacion", 0.2),
+        hormigas=args.hormigas or aco_c.get("hormigas", 20),
+        iteraciones=args.iteraciones or aco_c.get("iteraciones", 150),
+        alfa=args.alfa or aco_c.get("alfa", 1.0),
+        beta=args.beta or aco_c.get("beta", 3.0),
+        evaporacion=(args.evaporacion if args.evaporacion is not None
+                     else aco_c.get("evaporacion", 0.2)),
         usar_or_opt=usar_or_opt,
     )
 

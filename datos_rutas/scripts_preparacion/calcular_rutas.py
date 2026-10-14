@@ -35,8 +35,8 @@ import pandas as pd
 import requests
 
 # ---------- CONFIGURACION ----------
-BASE_DIR = Path(__file__).resolve().parent
-DATA_DIR = BASE_DIR / "datos_rutas"
+DATA_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = DATA_DIR.parent
 
 CIUDADES_FILE = DATA_DIR / "ciudades.csv"
 CHECKPOINT_FILE = DATA_DIR / "checkpoint_matriz.json"

@@ -1,0 +1,34 @@
+{
+  "criterio": "menor coste_eur con semilla fija 42 (desempate: menor tiempo_ejecucion_s)",
+  "valor_hora_eur": 5.09,
+  "semilla": 42,
+  "configuracion_ganadora": {
+    "hormigas": 20,
+    "iteraciones": 150,
+    "alfa": 1.0,
+    "beta": 3.0,
+    "evaporacion": 0.4,
+    "usar_or_opt": true,
+    "semilla": 42
+  },
+  "metricas_mejor_corrida": {
+    "fase": "ofat",
+    "etiqueta": "evaporacion=0.4",
+    "hormigas": 20,
+    "iteraciones": 150,
+    "alfa": 1.0,
+    "beta": 3.0,
+    "evaporacion": 0.4,
+    "semilla": 42,
+    "usar_or_opt": true,
+    "coste_eur": 845.09,
+    "distancia_km": 6307.79,
+    "tiempo_total_h": 66.487223,
+    "coste_tiempo_eur": 338.42,
+    "peajes_eur": 0.0,
+    "gas_eur": 506.67,
+    "coste_medio_final_eur": 1061.0764,
+    "iteracion_convergencia": 20,
+    "tiempo_ejecucion_s": 4.762
+  }
+}

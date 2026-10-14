@@ -33,9 +33,9 @@ DATA_DIR = BASE_DIR / "datos_rutas"
 CIUDADES_FILE = DATA_DIR / "ciudades.csv"
 RUTAS_COSTES_FILE = DATA_DIR / "rutas_costes.csv"
 
-# Valor de la hora del vendedor (EUR/h) usado como referencia por defecto.
-# Es un parametro a estudiar: ver sensibilidad_valor_hora.py.
-VALOR_HORA_POR_DEFECTO = 20.0
+# Valor de la hora del vendedor (EUR/h) fijado por el SMI 2026 (RD 126/2026):
+# 40.70 EUR/dia / 8 h jornada continua = 5.0875 EUR/h (~5.09 EUR/h).
+VALOR_HORA_POR_DEFECTO = 5.09
 
 
 def cargar_ciudades(ruta: Path = CIUDADES_FILE):
