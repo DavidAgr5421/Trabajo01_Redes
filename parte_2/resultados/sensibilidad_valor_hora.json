@@ -1,0 +1,46 @@
+[
+  {
+    "Valor_Hora_EUR_h": 0.0,
+    "Coste_Total_EUR": 517.18,
+    "Distancia_km": 6438.57,
+    "Tiempo_h": 68.54,
+    "Coste_Combustible_EUR": 517.18,
+    "Coste_Tiempo_EUR": 0.0,
+    "Ruta_Identica_a_Base": "No",
+    "Regimen_Operativo": "Minima distancia / Combustible puro",
+    "Tiempo_Calculo_s": 0.59
+  },
+  {
+    "Valor_Hora_EUR_h": 5.09,
+    "Coste_Total_EUR": 863.23,
+    "Distancia_km": 6446.57,
+    "Tiempo_h": 67.86,
+    "Coste_Combustible_EUR": 517.83,
+    "Coste_Tiempo_EUR": 345.4,
+    "Ruta_Identica_a_Base": "Si",
+    "Regimen_Operativo": "Equilibrio Economico Laboral (Base)",
+    "Tiempo_Calculo_s": 0.6
+  },
+  {
+    "Valor_Hora_EUR_h": 20.0,
+    "Coste_Total_EUR": 1848.94,
+    "Distancia_km": 6288.33,
+    "Tiempo_h": 66.38,
+    "Coste_Combustible_EUR": 505.09,
+    "Coste_Tiempo_EUR": 1327.5,
+    "Ruta_Identica_a_Base": "No",
+    "Regimen_Operativo": "Reduccion Temporal (Mayor velocidad media)",
+    "Tiempo_Calculo_s": 0.58
+  },
+  {
+    "Valor_Hora_EUR_h": 50.0,
+    "Coste_Total_EUR": 3871.11,
+    "Distancia_km": 6414.92,
+    "Tiempo_h": 66.55,
+    "Coste_Combustible_EUR": 515.27,
+    "Coste_Tiempo_EUR": 3327.64,
+    "Ruta_Identica_a_Base": "No",
+    "Regimen_Operativo": "Dominancia Severa del Tiempo Laboral",
+    "Tiempo_Calculo_s": 0.62
+  }
+]

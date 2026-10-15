@@ -1,0 +1,15 @@
+title: "Optimizacion Numerica y Combinatoria - Redes Neuronales"
+description: "Entrada de blog academica: Optimizacion continua mediante Descenso por Gradiente y Metaheuristicas Bioinspiradas (PSO, EA, DE), y resolucion del TSP peninsular espanol (47 capitales) mediante Colonia de Hormigas (ACO) con busqueda local Or-opt."
+baseurl: "/Trabajo01_Redes"
+url: "https://DavidAgr5421.github.io"
+author:
+  name: "Alejandro Agudelo, David Agudelo, Santiago Alvarez, Daniel Lopez, Sara Osorio"
+  email: "jdospina@unal.edu.co"
+markdown: kramdown
+theme: jekyll-theme-primer
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+kramdown:
+  math_engine: mathjax
+  syntax_highlighter: rouge

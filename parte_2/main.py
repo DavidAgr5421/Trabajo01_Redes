@@ -202,6 +202,7 @@ def main():
     parser.add_argument("--valor-hora", type=float, default=None, help="Valor de la hora del vendedor (EUR/h)")
     parser.add_argument("--sin-or-opt", action="store_true", help="Desactiva Or-opt en ACO")
     parser.add_argument("--comparar-oropt", action="store_true", help="Ejecuta comparativa Con vs Sin Or-opt")
+    parser.add_argument("--sensibilidad", action="store_true", help="Ejecuta estudio de sensibilidad del valor de hora")
     parser.add_argument("--barrido", action="store_true", help="Barrido completo de parametros ACO")
     parser.add_argument("--sin-gif", action="store_true", help="Omite generacion de GIF")
     args = parser.parse_args()
@@ -218,6 +219,11 @@ def main():
     print("=" * 70)
 
     t0 = time.time()
+
+    if args.sensibilidad:
+        from sensibilidad import analizar_sensibilidad
+        analizar_sensibilidad(demo=args.demo)
+        return
 
     if args.barrido:
         from experimentos_aco import main as ejecutar_barrido_aco

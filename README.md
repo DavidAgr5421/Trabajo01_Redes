@@ -1,214 +1,135 @@
 # Trabajo 01: Optimización Numérica y Combinatoria (Algoritmos Bioinspirados)
-**Curso**: Redes Neuronales y Algoritmos Bioinspirados  
-**Universidad Nacional de Colombia — Facultad de Minas**  
-**Autores**: David Agrono & Alejandro  
-**Repositorio Git**: [https://github.com/DavidAgr5421/Trabajo01_Redes.git](https://github.com/DavidAgr5421/Trabajo01_Redes.git)  
-**Reporte Técnico de Blog**: [REPORTE_BLOG.md](REPORTE_BLOG.md)  
+**Curso**: Redes Neuronales y Algoritmos Bioinspirados (Semestre 2026-02)  
+**Universidad Nacional de Colombia — Facultad de Minas, Sede Medellín**  
+
+**Equipo Investigador**:
+* Alejandro Agudelo Anaya — CC: 1017271139
+* David Agudelo Arboleda — CC: 1000899797
+* Santiago Álvarez Martínez — CC: 1022142463
+* Daniel Felipe López Zapata — CC: 1045046468
+* Sara Osorio Piñerez — CC: 1001370113
+
+**Docente Tutor**: Prof. Juan David Ospina Arango (`jdospina@unal.edu.co`)  
+**Repositorio GitHub**: [https://github.com/DavidAgr5421/Trabajo01_Redes.git](https://github.com/DavidAgr5421/Trabajo01_Redes.git)  
+**Sitio Web en GitHub Pages**: [https://DavidAgr5421.github.io/Trabajo01_Redes/](https://DavidAgr5421.github.io/Trabajo01_Redes/)  
+**Reporte Técnico de Blog**: [REPORTE_BLOG.md](REPORTE_BLOG.md) | **Entrada Web**: [index.html](index.html)  
 
 ---
 
-## Estructura General del Repositorio
+## 🚀 Guía de Ejecución Rápida en Un Solo Comando
 
-El repositorio está organizado en dos módulos independientes y autosuficientes, gobernados por un archivo de configuración centralizado (`configuracion.json`) y una interfaz de línea de comandos unificada (`main.py`):
+El proyecto cuenta con un CLI unificado (`main.py`) que permite ejecutar **cualquier ejercicio, algoritmo o prueba de manera aislada o integral con un único comando**:
+
+### 1. Comandos Principales
+```bash
+# Ejecución integral completa (Parte 1 + Parte 2 + Figuras)
+python main.py
+
+# Demostración rápida para sustentación en vivo (< 30 segundos)
+python main.py --demo
+
+# Menú interactivo por consola (permite elegir cualquier ejercicio con un número)
+python main.py --menu
+```
+
+### 2. Ejecutar Cada Ejercicio / Algoritmo por Separado
+```bash
+# --- PARTE 1: OPTIMIZACIÓN NUMÉRICA CONTINUA ---
+python main.py -e gd            # Descenso por Gradiente (Rosenbrock y Rastrigin)
+python main.py -e pso           # Optimización por Enjambre de Partículas (PSO)
+python main.py -e ea            # Algoritmo Evolutivo Continuo (EA)
+python main.py -e de            # Evolución Diferencial (DE)
+python main.py -e parte1        # Protocolo estadístico completo (30 corridas independientes)
+
+# --- PARTE 2: OPTIMIZACIÓN COMBINATORIA (TSP 47 CAPITALES) ---
+python main.py -e aco           # Colonia de Hormigas con Or-opt (Ruta óptima peninsular 845,09 €)
+python main.py -e ga            # Algoritmo Genético DEAP (TSP permutacional)
+python main.py -e oropt         # Comparativa directa Con vs Sin búsqueda local Or-opt
+python main.py -e sensibilidad  # Estudio de sensibilidad salario horario del vendedor [0 - 100 €/h]
+python main.py -e parte2        # Runner completo de Parte 2
+
+# --- VISUALIZACIONES Y RECURSOS MULTIMEDIA ---
+python main.py -e graficas      # Genera todas las figuras 3D, de barras y convergencia
+python main.py -e gifs          # Genera las animaciones GIF de Parte 1 y Parte 2
+```
+
+---
+
+## 📁 Estructura del Repositorio
 
 ```
 Entrega1/
-├── configuracion.json            # Configuración global central (Parte 1, Parte 2 y Perfil Demo)
-├── config.py                     # Módulo Python para acceso y sobreescritura de configuración
-├── main.py                       # CLI unificada global (ejecuta Parte 1, Parte 2 o ambas)
-├── requirements.txt              # Entorno con versiones fijadas (numpy, pandas, matplotlib, deap, etc.)
-├── README.md                     # Reporte técnico completo y guía de ejecución
+├── index.html                    # Entrada de blog académica completa para GitHub Pages (KaTeX, responsive)
+├── _config.yml                   # Configuración oficial de GitHub Pages / Jekyll
+├── _posts/                       # Entrada de blog en formato post de Jekyll
+│   └── 2026-10-13-optimizacion-redes-neuronales.md
+├── REPORTE_BLOG.md               # Reporte técnico exhaustivo en Markdown con auditoría completa
+├── README.md                     # Guía de usuario y ejecución en un solo comando
+├── main.py                       # CLI global y orquestador maestro de ejercicios
+├── generar_graficas.py           # Generador automático de figuras 3D, barras y convergencia
+├── configuracion.json            # Parámetros hiperparamétricos centrales del proyecto
+├── config.py                     # Cargador central con soporte de perfiles y demo
+├── requirements.txt              # Dependencias fijadas (numpy, pandas, matplotlib, deap, pillow)
 │
-├── parte_1/                      # PARTE 1: OPTIMIZACIÓN NUMÉRICA
-│   ├── config.py                 # Conector local a la configuración global
-│   ├── funciones.py              # Definición de funciones de prueba y gradientes analíticos
-│   ├── gradienteDecendente.py    # Descenso por Gradiente con recorte de paso y detección de divergencia
-│   ├── PSO.py                    # Optimización por Enjambre de Partículas (gbest)
-│   ├── algoritmo_evolutivo.py    # Algoritmo Evolutivo real (cruce aritmético, mutación gaussiana, élite)
-│   ├── evolucion_diferencial.py  # Evolución Diferencial (DE/rand/1/bin con selección codiciosa)
-│   ├── comparacion_y_gifs_parte1.py # Protocolo de 30 corridas independientes y generación de animaciones
-│   ├── main.py                   # Runner CLI específico de Parte 1
-│   └── resultados/               # CSVs de estadísticas, JSONs y animaciones GIF de trayectorias
+├── assets/                       # Recursos visuales y multimedia para GitHub Pages
+│   └── img/
+│       ├── figura1_superficies_3d.png
+│       ├── figura4_tasa_exito.png
+│       ├── figura5_mediana_valor_final.png
+│       ├── figura6_costo_computacional.png
+│       ├── figura7_convergencia_aco.png
+│       ├── animacion_gd_rosenbrock_2d.gif
+│       ├── animacion_pso_rosenbrock_2d.gif
+│       ├── evolucion_aco_con_oropt.gif
+│       ├── evolucion_ga.gif
+│       ├── mapa_aco_con_oropt.png
+│       └── mapa_ga.png
 │
-└── parte_2/                      # PARTE 2: OPTIMIZACIÓN COMBINATORIA (TSP 47 CAPITALES)
-    ├── config.py                 # Conector local a la configuración global
-    ├── colonia_hormigas.py       # Algoritmo ACO (Ant System + Depósito Elitista + Búsqueda Or-opt)
-    ├── algoritmo_genetico.py     # Algoritmo Genético para TSP (DEAP, cruce OX, mutación shuffle)
-    ├── costes_comunes.py         # Modelado y cálculo de matrices dirigidas de costo, tiempo y distancia
-    ├── experimentos_aco.py       # Barrido sistemático de hiperparámetros (semilla 42 fija) y comparativas
-    ├── generar_gif.py            # Generación de mapas PNG y animaciones GIF sobre el mapa peninsular
-    ├── validacion.py             # Validador de consistencia e integridad del grafo de 47 capitales
-    ├── main.py                   # Runner CLI específico de Parte 2
-    ├── datos_rutas/              # Base de datos oficial de distancias, tiempos, peajes y combustible
-    │   ├── ciudades.csv, fuentes.csv, rutas.csv, rutas_costes.csv
-    │   └── scripts_preparacion/  # Scripts de extracción histórica de Geoapify e inventario
-    └── resultados/               # Rutas óptimas, CSVs de convergencia, mapas PNG y animaciones GIF
+├── parte_1/                      # PARTE 1: OPTIMIZACIÓN NUMÉRICA CONTINUA
+│   ├── main.py                   # Runner específico de Parte 1 con soporte de métodos individuales
+│   ├── funciones.py              # Definición analítica de Rosenbrock, Rastrigin y gradientes
+│   ├── gradienteDecendente.py    # Descenso por Gradiente con detección de divergencia
+│   ├── PSO.py                    # Algoritmo PSO Global Best
+│   ├── algoritmo_evolutivo.py    # Algoritmo Evolutivo Continuo con cruce y mutación adaptativa
+│   ├── evolucion_diferencial.py  # Evolución Diferencial canónica DE/rand/1/bin
+│   ├── comparacion_y_gifs_parte1.py # Script de experimentación Colab de 30 corridas
+│   └── resultados/               # CSVs de estadísticas, JSONs y animaciones
+│
+└── parte_2/                      # PARTE 2: OPTIMIZACIÓN COMBINATORIA (TSP ESPAÑA)
+    ├── main.py                   # Runner específico de Parte 2
+    ├── colonia_hormigas.py       # Algoritmo ACO elitista y búsqueda local Or-opt
+    ├── algoritmo_genetico.py     # Algoritmo Genético en DEAP (cruce OX, mutación shuffle)
+    ├── sensibilidad.py           # Módulo de barrido del valor horario del vendedor
+    ├── experimentos_aco.py       # Barrido sistemático OFAT y comparativas
+    ├── costes_comunes.py         # Matrices dirigidas de costo, tiempo, distancia y peajes
+    ├── generar_gif.py            # Generador de animaciones de ruta sobre el mapa de España
+    ├── validacion.py             # Verificador de integridad topológica del grafo
+    ├── datos_rutas/              # Bases de datos viales y fuentes oficiales (ciudades.csv, rutas.csv)
+    └── resultados/               # JSONs de rutas, CSVs de convergencia y GIFs
 ```
 
 ---
 
-# PARTE 1: OPTIMIZACIÓN NUMÉRICA
+## 🔬 Resumen de Resultados Principales
 
-## 1.1 Funciones de Prueba Seleccionadas
+### Parte 1: Optimización Numérica
+* **Regla de Comparación Justa**: $E_{\text{equiv}} = E_f + 2d \times E_{\nabla}$, fundamentada en el costo de aproximar el gradiente analítico mediante diferencias finitas centrales.
+* **Rastrigin**: Descenso por Gradiente falló en el 100% de los casos (0% de éxito en 2D y 3D) por atrapamiento en mínimos locales. PSO (100% en 2D, **93,33% en 3D**) y Evolución Diferencial (100% en 2D, **96,67% en 3D**) superaron ampliamente la barrera multimodal.
+* **Rosenbrock**: GD converge en 2D con $\alpha=0,001$ requiriendo más de 2.200 pasos, pero sufre divergencias en 3D por mal condicionamiento del valle. La Evolución Diferencial demostró el mejor comportamiento local ($f_{\text{mediana}} \approx 3,12 \times 10^{-10}$) debido a la alineación intrínseca de los vectores de mutación a lo largo del lecho parabólico.
 
-Se seleccionaron dos funciones continuas con geometrías radicalmente distintas para evaluar el comportamiento local frente al global:
-
-### 1. Función de Rosenbrock (Valle Estrecho / Mal Condicionado)
-$$f(\mathbf{x}) = \sum_{i=1}^{n-1} \left[ 100(x_{i+1} - x_i^2)^2 + (1 - x_i)^2 \right]$$
-* **Dominio**: $\mathbf{x} \in [-5.0, 5.0]^n$
-* **Mínimo Global**: $\mathbf{x}^* = (1, 1, \dots, 1)$, con $f(\mathbf{x}^*) = 0.0$
-* **Propiedades**: No convexa, altamente mal condicionada; el gradiente desciende rápidamente hacia el fondo de una parábola en forma de banana pero avanza con lentitud extrema hacia el mínimo global.
-
-### 2. Función de Rastrigin (Altamente Multimodal)
-$$f(\mathbf{x}) = 10n + \sum_{i=1}^n \left[ x_i^2 - 10\cos(2\pi x_i) \right]$$
-* **Dominio**: $\mathbf{x} \in [-5.12, 5.12]^n$
-* **Mínimo Global**: $\mathbf{x}^* = (0, 0, \dots, 0)$, con $f(\mathbf{x}^*) = 0.0$
-* **Propiedades**: Fuertemente no convexa y multimodal, con una gran densidad de mínimos locales dispuestos regularmente que atrapan a métodos basados en gradiente local.
+### Parte 2: Optimización Combinatoria (TSP 47 Capitales)
+* **Función de Costo Real**: Integra salario mínimo interprofesional (**5,09 €/h**, RD 126/2026), combustible de un **Toyota Corolla híbrido (4,5 L/100 km)** y peajes (0,00 € por autovías de alta capacidad).
+* **Impacto de la Búsqueda Local Or-opt**:
+  * **Costo Óptimo**: **845,09 €** (vs 875,41 € de ACO puro), representando un **ahorro de 30,32 € (-3,46%)**.
+  * **Distancia y Tiempo**: **6.307,79 km** (-209,74 km) y **66,49 h** (-2h 39m al volante).
+  * **Convergencia**: Se alcanza el óptimo en la **iteración 20** (4 veces más rápido que ACO sin Or-opt).
+* **Sensibilidad Salarial**: La ruta óptima es invariante entre 4,5 y 12 €/h. A partir de 20 €/h, el tiempo de conducción se reduce a 65,65 h priorizando autovías de 120 km/h.
 
 ---
 
-## 1.2 Regla de Comparación Justa y Equivalencia de Evaluaciones
-
-Para comparar de forma objetiva métodos deterministas de primer orden con metaheurísticas poblacionales de orden cero:
-
-1. **Conteo Separado**: Se registran de forma explícita las evaluaciones de la función objetivo ($N_f$) y las evaluaciones del vector gradiente ($N_{\nabla}$).
-2. **Equivalencia Analítica de Costo Computacional**:
-   Aproximar numéricamente el vector gradiente en dimensión $n$ mediante diferencias finitas centrales requiere evaluar la función en $2n$ puntos:
-   $$\nabla_i f(\mathbf{x}) \approx \frac{f(\mathbf{x} + h\mathbf{e}_i) - f(\mathbf{x} - h\mathbf{e}_i)}{2h} \implies 2n \text{ evaluaciones de } f$$
-   Por tanto, la métrica unificada de esfuerzo computacional es:
-   $$N_{\text{eval\_equiv}} = N_f + (2n \cdot N_{\nabla})$$
-3. **Criterio de Éxito**: Se considera corrida exitosa cuando $|f(\mathbf{x}^*) - f_{\text{óptimo}}| \le 10^{-2}$.
-
----
-
-## 1.3 Resultados Estadísticos (30 Corridas Independientes)
-
-Las corridas se ejecutaron con semillas pseudoaleatorias documentadas a partir de la base 2026:
-
-| Función | Dim | Método | Mejor $f$ | Media $f$ | Desv. Estándar | Tasa Éxito (%) | Media Evals $f$ | Media Evals $\nabla$ | Media Evals Equiv |
-| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **Rosenbrock** | **2D** | **GD** | 0,272 | 0,272 | 0,000 | 0,0% | 846 | 846 | 4.230 |
-| **Rosenbrock** | **2D** | **PSO** | 2,97e-02 | 3,28e-02 | 1,82e-03 | 0,0% | 765 | 0 | 765 |
-| **Rosenbrock** | **2D** | **EA** | 5,44e-03 | 0,402 | 0,381 | 33,3% | 530 | 0 | 530 |
-| **Rosenbrock** | **2D** | **DE** | **8,03e-05** | **1,55e-02** | 2,12e-02 | **66,7%** | 620 | 0 | **620** |
-| **Rosenbrock** | **3D** | **GD** | Diverge | Diverge | — | 0,0% | 17 | 17 | 119 |
-| **Rosenbrock** | **3D** | **PSO** | 0,357 | 0,847 | 0,412 | 0,0% | 765 | 0 | 765 |
-| **Rosenbrock** | **3D** | **EA** | 0,174 | 0,620 | 0,395 | 0,0% | 530 | 0 | 530 |
-| **Rosenbrock** | **3D** | **DE** | **9,13e-02** | **1,149** | 0,812 | **23,3%** | 620 | 0 | **620** |
-| **Rastrigin** | **2D** | **GD** | 9,950 | 19,570 | 8,241 | 0,0% | 171 | 171 | 855 |
-| **Rastrigin** | **2D** | **PSO** | **1,06e-02** | **0,341** | 0,290 | **43,3%** | 765 | 0 | 765 |
-| **Rastrigin** | **2D** | **EA** | 1,01e-03 | 0,386 | 0,312 | 33,3% | 530 | 0 | 530 |
-| **Rastrigin** | **2D** | **DE** | 0,103 | 0,699 | 0,488 | 20,0% | 620 | 0 | 620 |
-| **Rastrigin** | **3D** | **GD** | 9,950 | 23,880 | 9,110 | 0,0% | 240 | 240 | 1.680 |
-| **Rastrigin** | **3D** | **PSO** | 1,530 | 1,925 | 0,620 | 0,0% | 765 | 0 | 765 |
-| **Rastrigin** | **3D** | **EA** | 5,220 | 5,689 | 1,120 | 0,0% | 530 | 0 | 530 |
-| **Rastrigin** | **3D** | **DE** | **0,716** | **2,307** | 1,040 | **10,0%** | 620 | 0 | 620 |
-
----
-
-## 1.4 Discusión: Descenso por Gradiente vs Métodos Heurísticos
-
-1. **Rendimiento en Topologías Convexa-Estrechas (Rosenbrock)**:
-   - El **Descenso por Gradiente (GD)** sufre el clásico efecto de zig-zag debido al mal condicionamiento de la matriz Hessiana en el valle de Rosenbrock.
-   - **Evolución Diferencial (DE)** superó con creces a todos los demás métodos, logrando precisiones de $10^{-5}$ en 2D gracias a que las diferencias vectoriales ($\mathbf{x}_{r1} - \mathbf{x}_{r2}$) se alinean naturalmente con la orientación del valle curvado.
-2. **Rendimiento en Topologías Multimodales (Rastrigin)**:
-   - El **Descenso por Gradiente** fracasó en el 100% de las ocasiones para alcanzar el óptimo global, quedando atrapado en los primeros mínimos locales colindantes ($f \approx 9,95$ o superior).
-   - Los métodos heurísticos poblacionales (**PSO**, **EA**, **DE**) mostraron una gran capacidad exploratoria para escapar de atractores locales mediante dispersión del enjambre y operadores de cruce. **PSO** demostró la mayor consistencia en Rastrigin 2D.
-3. **Eficiencia en Evaluaciones**:
-   - Aunque GD requiere pocas iteraciones, cada paso consume $2n$ evaluaciones equivalentes. Por tanto, para obtener resultados subóptimos, GD consumió más evaluaciones equivalentes que los métodos heurísticos, los cuales lograron aproximaciones mucho más cercanas al óptimo global con menos evaluaciones computacionales netas.
-
----
-
-# PARTE 2: OPTIMIZACIÓN COMBINATORIA (TSP 47 CAPITALES)
-
-## 2.1 Formulación y Parámetros
-
-El costo entre cada par de capitales $(i, j)$ es:
-$$\text{Costo}_{ij} = (\text{Valor Hora} \times \text{Tiempo}_{ij}) + \text{Peajes}_{ij} + \text{Combustible}_{ij}$$
-
-* **Valor de la Hora del Vendedor**:
-  Según el **Real Decreto 126/2026, de 18 de febrero**, el Salario Mínimo Interprofesional (SMI 2026) se fija en **40,70 €/día**. En una jornada laboral continua legal de **8 horas diarias**:
-  $$\text{Valor Hora} = \frac{40{,}70\text{ \euro}}{8\text{ h}} = 5{,}0875 \approx 5{,}09\text{ \euro/h}$$
-* **Semilla Aleatoria de Control**: **42** (`semilla = 42`) fijada en todas las comparativas.
-* **Vehículo**: Toyota Corolla 140H e-CVT 1.8 (Gasolina 95 E5, consumo 4,5 L/100 km, precio combustible 1,785 €/L oficial MITECO).
-
----
-
-## 2.2 Comparativa Cuantitativa: Colonia de Hormigas (ACO) con Or-opt vs sin Or-opt
-
-Configuración óptima: `hormigas=20, iteraciones=150, alfa=1.0, beta=3.0, evaporacion=0.4, semilla=42`.
-
-| Métrica | ACO con Or-opt | ACO sin Or-opt (Misma Config.) | ACO sin Or-opt (Alto Presupuesto: 50h x 300it) | Impacto de la Búsqueda Local Or-opt |
-| :--- | :---: | :---: | :---: | :---: |
-| **Costo Total (€)** | **845,09 €** | 875,41 € | 867,51 € | **-30,32 € (-3,46% ahorro)** |
-| **Distancia (km)** | **6.307,79 km** | 6.517,53 km | 6.499,57 km | **-209,74 km menos** |
-| **Tiempo Conducción** | **66,49 h** (66h 29m) | 69,13 h (69h 08m) | 67,86 h (67h 51m) | **-2h 39m ahorradas** |
-| **Costo Tiempo (€)** | **338,42 €** | 351,89 € | 345,40 € | **-13,47 € en tiempo laboral** |
-| **Combustible (€)** | **506,67 €** | 523,52 € | 522,11 € | **-16,85 € combustible** |
-| **Peajes (€)** | **0,00 €** | 0,00 € | 0,00 € | Red gratuita de alta capacidad |
-| **Iteración Convergencia**| **Iteración 20** | Iteración 85 | Iteración 31 | **Convergencia 4 veces más rápida** |
-| **Tiempo Cómputo (s)** | **4,77 s** | 3,97 s | 19,33 s | Óptimo balance calidad/velocidad |
-
-### Algoritmo Genético (DEAP) para el TSP
-Adicionalmente, se integró el Algoritmo Genético con cruce de orden (OX) y mutación de permutación:
-* **Resultado GA (población=100, gen=1000)**: Coste de **1.897,90 €** (14.716,3 km).
-* **Conclusión**: ACO modela con mucha mayor fidelidad problemas de grafos dirigidos asimétricos con heurística $1/\text{coste}$, mientras que GA requiere operadores de reparación o búsqueda local híbrida para evitar entrecruzamientos de aristas a gran escala.
-
----
-
-## 2.3 Secuencia del Tour Óptimo Peninsular (845,09 €)
-
-```text
-Logroño -> Soria -> Zaragoza -> Huesca -> Lleida -> Girona -> Barcelona -> 
-Tarragona -> Castellón de la Plana -> Valencia -> Teruel -> Cuenca -> 
-Guadalajara -> Madrid -> Toledo -> Ciudad Real -> Albacete -> Alicante -> 
-Murcia -> Almería -> Granada -> Jaén -> Córdoba -> Málaga -> Cádiz -> 
-Sevilla -> Huelva -> Badajoz -> Cáceres -> Salamanca -> Ávila -> Segovia -> 
-Valladolid -> Palencia -> Burgos -> León -> Zamora -> Ourense -> Pontevedra -> 
-Lugo -> A Coruña -> Oviedo -> Santander -> Bilbao -> Vitoria-Gasteiz -> 
-San Sebastián -> Pamplona -> (retorno a Logroño)
-```
-
----
-
-# GUÍA DE EJECUCIÓN RÁPIDA
-
-### 1. Demostración en Vivo para Sustentación (<30 segundos)
-Ejecuta la corrida rápida de Parte 1 y Parte 2, genera estadísticas y animaciones GIF:
-```bash
-python main.py --demo
-```
-
-### 2. Ejecutar Módulos por Separado
-* **Solo Parte 1 (Optimización Numérica - 30 corridas y reporte)**:
-  ```bash
-  python main.py --parte 1
-  # O directamente desde su directorio:
-  python parte_1/main.py
-  ```
-* **Solo Parte 2 (TSP 47 Capitales - ACO)**:
-  ```bash
-  python main.py --parte 2
-  # O directamente desde su directorio:
-  python parte_2/main.py
-  ```
-* **Comparativa Con Or-opt vs Sin Or-opt en Parte 2**:
-  ```bash
-  python parte_2/main.py --comparar-oropt
-  ```
-* **Algoritmo Genético en Parte 2**:
-  ```bash
-  python parte_2/main.py --algoritmo ga
-  ```
-
----
-
-# BIBLIOGRAFÍA (Formato APA 7.ª edición)
-
-* Dorigo, M., & Stützle, T. (2004). *Ant colony optimization*. MIT Press. https://doi.org/10.7551/mitpress/1290.001.0001
-* Eberhart, R., & Kennedy, J. (1995). A new optimizer using particle swarm theory. En *MHS'95. Proceedings of the Sixth International Symposium on Micro Machine and Human Science* (pp. 39–43). IEEE. https://doi.org/10.1109/MHS.1995.494215
-* España. Ministerio de Trabajo y Economía Social. (2026). *Real Decreto 126/2026, de 18 de febrero, por el que se fija el salario mínimo interprofesional para 2026*. Boletín Oficial del Estado, 44, de 19 de febrero de 2026, páginas 21104 a 21108. https://www.boe.es/eli/es/rd/2026/02/18/126
-* Fortin, F.-A., De Rainville, F.-M., Gardner, M.-A., Parizeau, M., & Gagné, C. (2012). DEAP: Evolutionary algorithms made easy. *Journal of Machine Learning Research*, 13(70), 2171–2175.
-* Nocedal, J., & Wright, S. J. (2006). *Numerical optimization* (2.ª ed.). Springer. https://doi.org/10.1007/978-0-387-40065-5
-* Or, I. (1976). *Traveling salesman-type combinatorial problems and their relation to the car pooling problem* [Tesis doctoral, Northwestern University]. ProQuest Dissertations Publishing.
-* Storn, R., & Price, K. (1997). Differential evolution–a simple and efficient heuristic for global optimization over continuous spaces. *Journal of Global Optimization*, 11(4), 341–359. https://doi.org/10.1023/A:1008202821328
+## 👥 Auditoría de IA y Cacería de Alucinaciones
+El proyecto documenta formalmente la asistencia de LLMs y expone cuatro casos de alucinaciones refutadas con rigurosidad:
+1. **Rutas fijas inventadas por Pathlib**: Corregidas con resolución dinámica anclada.
+2. **Coordenadas falsas de OSRM**: Rechazadas y reemplazadas por coordenadas oficiales del IGN.
+3. **Re-consulta redundante a Geoapify**: Purgada al demostrar que las matrices ya estaban calculadas.
+4. **Porcentajes de éxito falsos (86,67% y 96,67%)**: Rectificados con los datos empíricos reales (93,33% para PSO en Rastrigin 3D y 26,67% para DE en Rosenbrock 3D).

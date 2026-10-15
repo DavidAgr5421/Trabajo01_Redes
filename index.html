@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>De Paisajes Continuos a Carreteras Peninsulares: Optimización Numérica y Combinatoria</title>
+  <meta name="description" content="Reporte de investigación y blog post sobre optimización numérica con Descenso por Gradiente y metaheurísticas bioinspiradas (PSO, EA, DE), y optimización combinatoria del TSP de 47 capitales españolas mediante ACO con Or-opt y Algoritmos Genéticos.">
+  <meta name="author" content="Alejandro Agudelo Anaya, David Agudelo Arboleda, Santiago Álvarez Martínez, Daniel Felipe López Zapata, Sara Osorio Piñerez">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+
+  <!-- KaTeX para renderizado de LaTeX ultra rapido -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+          onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+
+  <!-- Fuentes e iconos -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #0d1117;
+      --bg-surface: #161b22;
+      --bg-card: #21262d;
+      --text: #e6edf3;
+      --text-muted: #8b949e;
+      --primary: #58a6ff;
+      --primary-hover: #79c0ff;
+      --accent: #2ea043;
+      --warning: #d29922;
+      --danger: #f85149;
+      --border: #30363d;
+      --code-bg: #1f242c;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'Fira Code', Consolas, Monaco, monospace;
+    }
+
+    [data-theme="light"] {
+      --bg: #f6f8fa;
+      --bg-surface: #ffffff;
+      --bg-card: #f0f2f5;
+      --text: #1f2328;
+      --text-muted: #656d76;
+      --primary: #0969da;
+      --primary-hover: #0550ae;
+      --accent: #1a7f37;
+      --warning: #9a6700;
+      --danger: #cf222e;
+      --border: #d0d7de;
+      --code-bg: #eaecf0;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      font-size: 16px;
+      line-height: 1.7;
+      transition: background-color 0.25s, color 0.25s;
+    }
+
+    /* Top Navigation Header */
+    header.site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(22, 27, 34, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    [data-theme="light"] header.site-header {
+      background: rgba(255, 255, 255, 0.9);
+    }
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+      font-size: 1.05rem;
+    }
+    .header-brand span { color: var(--text); font-weight: 400; font-size: 0.9rem; }
+    .header-nav { display: flex; align-items: center; gap: 1.2rem; }
+    .header-nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .header-nav a:hover { color: var(--primary); }
+    .btn-toggle-theme {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.35rem 0.75rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    /* Hero Banner */
+    .hero {
+      padding: 3.5rem 1.5rem 2.5rem;
+      max-width: 1050px;
+      margin: 0 auto;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(88, 166, 255, 0.15);
+      color: var(--primary);
+      border: 1px solid var(--primary);
+      padding: 0.25rem 0.85rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 1.2rem;
+    }
+    .hero h1 {
+      font-size: 2.3rem;
+      line-height: 1.25;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 1.2rem;
+      color: var(--text);
+    }
+    .hero p.subtitle {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      max-width: 850px;
+      margin: 0 auto 1.8rem;
+    }
+    .meta-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.5rem;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      padding-top: 1rem;
+    }
+    .meta-bar strong { color: var(--text); }
+
+    /* Authors Grid */
+    .authors-section {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 2rem auto;
+      max-width: 1050px;
+    }
+    .authors-section h3 {
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .authors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1rem;
+    }
+    .author-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.85rem 1rem;
+    }
+    .author-name { font-weight: 600; font-size: 0.95rem; }
+    .author-id { font-size: 0.8rem; color: var(--text-muted); font-family: var(--font-mono); }
+    .advisor-box {
+      margin-top: 1rem;
+      padding-top: 0.75rem;
+      border-top: 1px dashed var(--border);
+      font-size: 0.88rem;
+      color: var(--text-muted);
+    }
+
+    /* Main Container & TOC Layout */
+    .main-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem;
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+    @media (max-width: 950px) {
+      .main-container { grid-template-columns: 1fr; }
+      .toc-sidebar { display: none; }
+    }
+
+    /* Sticky TOC Sidebar */
+    .toc-sidebar {
+      position: sticky;
+      top: 5rem;
+      max-height: calc(100vh - 6rem);
+      overflow-y: auto;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem;
+      font-size: 0.85rem;
+    }
+    .toc-sidebar h4 {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      margin-bottom: 0.8rem;
+    }
+    .toc-list { list-style: none; }
+    .toc-list li { margin-bottom: 0.45rem; }
+    .toc-list a {
+      color: var(--text-muted);
+      text-decoration: none;
+      display: block;
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+    .toc-list a:hover {
+      color: var(--primary);
+      background: rgba(88, 166, 255, 0.1);
+    }
+    .toc-list ul { list-style: none; padding-left: 0.9rem; margin-top: 0.3rem; }
+
+    /* Content Area */
+    .content-area {
+      min-width: 0;
+      color: var(--text);
+    }
+    .content-area h2 {
+      font-size: 1.85rem;
+      font-weight: 700;
+      margin: 2.5rem 0 1rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 2px solid var(--border);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .content-area h3 {
+      font-size: 1.35rem;
+      font-weight: 600;
+      margin: 1.8rem 0 0.8rem;
+      color: var(--primary);
+    }
+    .content-area h4 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin: 1.4rem 0 0.6rem;
+    }
+    .content-area p { margin-bottom: 1.2rem; }
+    .content-area ul, .content-area ol {
+      margin: 0 0 1.2rem 1.5rem;
+    }
+    .content-area li { margin-bottom: 0.4rem; }
+
+    /* Callout Alerts (GitHub Flavored Style) */
+    .callout {
+      border-left: 4px solid var(--primary);
+      background: var(--bg-surface);
+      border-radius: 0 8px 8px 0;
+      padding: 1rem 1.25rem;
+      margin: 1.5rem 0;
+      border-top: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .callout.tip { border-left-color: var(--accent); }
+    .callout.warning { border-left-color: var(--warning); }
+    .callout.danger { border-left-color: var(--danger); }
+    .callout-header {
+      font-weight: 700;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.35rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .callout.tip .callout-header { color: var(--accent); }
+    .callout.warning .callout-header { color: var(--warning); }
+    .callout.danger .callout-header { color: var(--danger); }
+
+    /* Figures and Media */
+    .figure-box {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem;
+      margin: 2rem 0;
+      text-align: center;
+    }
+    .figure-box img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: #000;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+    .figure-caption {
+      margin-top: 0.85rem;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+    .figure-caption strong { color: var(--text); }
+
+    /* Responsive Data Tables */
+    .table-container {
+      overflow-x: auto;
+      margin: 1.5rem 0 2rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg-surface);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      text-align: left;
+    }
+    th, td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    th {
+      background: var(--bg-card);
+      font-weight: 600;
+      color: var(--text);
+      white-space: nowrap;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(88, 166, 255, 0.04); }
+    .badge-success {
+      background: rgba(46, 160, 67, 0.2);
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    .badge-fail {
+      background: rgba(248, 81, 73, 0.2);
+      color: var(--danger);
+      border: 1px solid var(--danger);
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    /* Code Blocks */
+    pre, code {
+      font-family: var(--font-mono);
+    }
+    code {
+      background: var(--code-bg);
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.88rem;
+    }
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.1rem;
+      overflow-x: auto;
+      margin: 1.2rem 0;
+      position: relative;
+    }
+    pre code {
+      background: none;
+      padding: 0;
+      font-size: 0.88rem;
+      line-height: 1.5;
+    }
+
+    /* CLI Quick Box */
+    .cli-box {
+      background: linear-gradient(135deg, rgba(88, 166, 255, 0.08) 0%, rgba(46, 160, 67, 0.08) 100%);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin: 2rem 0;
+    }
+    .cli-box h3 {
+      font-size: 1.15rem;
+      color: var(--primary);
+      margin-top: 0;
+      margin-bottom: 0.75rem;
+    }
+    .cli-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+    .cli-cmd {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.6rem 0.85rem;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      color: var(--text);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .cli-cmd span { color: var(--primary); }
+
+    /* Footer */
+    footer.site-footer {
+      border-top: 1px solid var(--border);
+      padding: 3rem 1.5rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      background: var(--bg-surface);
+    }
+    footer a { color: var(--primary); text-decoration: none; }
+  </style>
+</head>
+<body>
+
+  <!-- Encabezado de Navegación -->
+  <header class="site-header">
+    <a href="#" class="header-brand">
+      ⚡ Redes & Optimización <span>| UNAL Minas</span>
+    </a>
+    <nav class="header-nav">
+      <a href="#resumen">Resumen</a>
+      <a href="#parte1">Parte 1: Continua</a>
+      <a href="#parte2">Parte 2: Combinatoria</a>
+      <a href="#ia">Uso de IA</a>
+      <a href="#alucinaciones">Cacería de Alucinaciones</a>
+      <a href="#comandos">Ejecución</a>
+      <a href="#referencias">Referencias</a>
+      <button class="btn-toggle-theme" id="btnTheme" onclick="toggleTheme()">🌓 Tema</button>
+    </nav>
+  </header>
+
+  <!-- Hero Header -->
+  <section class="hero">
+    <div class="hero-badge">Entrada de Blog & Reporte Técnico Oficial</div>
+    <h1>De Paisajes Continuos a Carreteras Peninsulares: Optimización Numérica y Combinatoria</h1>
+    <p class="subtitle">
+      Un estudio integral sobre el comportamiento de Descenso por Gradiente, Algoritmos Genéticos, PSO, DE y Colonias de Hormigas con búsqueda local Or-opt en topologías complejas y en el TSP de las 47 capitales de España peninsular.
+    </p>
+
+    <div class="meta-bar">
+      <div><strong>Curso:</strong> Redes Neuronales y Algoritmos Bioinspirados</div>
+      <div><strong>Institución:</strong> Universidad Nacional de Colombia — Sede Medellín</div>
+      <div><strong>Fecha:</strong> 13 de octubre de 2026</div>
+      <div><strong>Lectura:</strong> ~18 minutos</div>
+    </div>
+  </section>
+
+  <!-- Ficha de Autores -->
+  <section class="authors-section">
+    <h3>👥 Equipo Investigador y Autoría</h3>
+    <div class="authors-grid">
+      <div class="author-card">
+        <div class="author-name">Alejandro Agudelo Anaya</div>
+        <div class="author-id">CC: 1017271139</div>
+      </div>
+      <div class="author-card">
+        <div class="author-name">David Agudelo Arboleda</div>
+        <div class="author-id">CC: 1000899797</div>
+      </div>
+      <div class="author-card">
+        <div class="author-name">Santiago Álvarez Martínez</div>
+        <div class="author-id">CC: 1022142463</div>
+      </div>
+      <div class="author-card">
+        <div class="author-name">Daniel Felipe López Zapata</div>
+        <div class="author-id">CC: 1045046468</div>
+      </div>
+      <div class="author-card">
+        <div class="author-name">Sara Osorio Piñerez</div>
+        <div class="author-id">CC: 1001370113</div>
+      </div>
+    </div>
+    <div class="advisor-box">
+      <strong>Docente Tutor:</strong> Prof. Juan David Ospina Arango (<a href="mailto:jdospina@unal.edu.co" style="color: var(--primary);">jdospina@unal.edu.co</a>) — Facultad de Minas, Universidad Nacional de Colombia.
+      <br><strong>Repositorio Oficial:</strong> <a href="https://github.com/DavidAgr5421/Trabajo01_Redes" target="_blank" style="color: var(--primary); text-decoration: underline;">https://github.com/DavidAgr5421/Trabajo01_Redes</a>
+    </div>
+  </section>
+
+  <!-- Layout Principal con Sidebar -->
+  <div class="main-container">
+    
+    <!-- Sidebar Sticky TOC -->
+    <aside class="toc-sidebar">
+      <h4>Tabla de Contenidos</h4>
+      <ul class="toc-list">
+        <li><a href="#resumen">Resumen Ejecutivo</a></li>
+        <li>
+          <a href="#parte1">Parte 1: Optimización Numérica</a>
+          <ul>
+            <li><a href="#p1-funciones">1.1 Funciones de Prueba (3D)</a></li>
+            <li><a href="#p1-algoritmos">1.2 Métodos Implementados</a></li>
+            <li><a href="#p1-justa">1.3 Regla de Comparación Justa</a></li>
+            <li><a href="#p1-animaciones">1.4 Animaciones GIF 2D</a></li>
+            <li><a href="#p1-resultados">1.5 Resultados Estadísticos</a></li>
+            <li><a href="#p1-analisis">1.6 Análisis Crítico & Rectificación</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#parte2">Parte 2: Optimización Combinatoria</a>
+          <ul>
+            <li><a href="#p2-problema">2.1 Formulación del TSP Peninsular</a></li>
+            <li><a href="#p2-costos">2.2 Parámetros Operativos Reales</a></li>
+            <li><a href="#p2-aco">2.3 Colonia de Hormigas & Or-opt</a></li>
+            <li><a href="#p2-ga">2.4 Algoritmo Genético (DEAP)</a></li>
+            <li><a href="#p2-animaciones">2.5 Animaciones y Mapas de Rutas</a></li>
+            <li><a href="#p2-sensibilidad">2.6 Estudio de Sensibilidad Horaria</a></li>
+          </ul>
+        </li>
+        <li><a href="#ia">Sección de Uso de IA</a></li>
+        <li><a href="#alucinaciones">Cacería de la Alucinación</a></li>
+        <li><a href="#comandos">Guía de Ejecución en 1 Comando</a></li>
+        <li><a href="#referencias">Referencias Bibliográficas</a></li>
+      </ul>
+    </aside>
+
+    <!-- Área de Contenido Principal -->
+    <main class="content-area">
+
+      <!-- Resumen Ejecutivo -->
+      <section id="resumen">
+        <h2>📌 Resumen Ejecutivo</h2>
+        <p>
+          El presente trabajo aborda de manera experimental y teórica los dos pilares cardinales de la computación bioinspirada: la <strong>optimización numérica en espacios continuos</strong> sobre superficies no convexas y la <strong>optimización combinatoria en grafos dirigidos asimétricos</strong> a través del emblemático Problema del Vendedor Viajero (TSP), aplicado sobre las 47 capitales de provincia de la España peninsular.
+        </p>
+        <p>
+          En la <strong>Parte 1</strong>, contrastamos el rendimiento de un método clásico determinista de primer orden —Descenso por Gradiente (GD)— frente a tres metaheurísticas poblacionales: Optimización por Enjambre de Partículas (PSO), Algoritmo Evolutivo Continuo (EA) y Evolución Diferencial (DE), sobre las funciones arquetípicas de Rosenbrock y Rastrigin en 2D y 3D. Aplicamos una regla de comparación computacionalmente justa donde evaluar el gradiente analítico en dimensión $d$ equivale al costo de diferencias finitas ($E_{\text{equiv}} = E_f + 2d \times E_{\nabla}$).
+        </p>
+        <p>
+          En la <strong>Parte 2</strong>, formulamos el TSP peninsular con costos monetarios reales: valor horario del conductor extraído del Salario Mínimo Interprofesional fijado por el <strong>Real Decreto 126/2026 (5,09 €/h)</strong>, consumo homologado WLTP de un <strong>Toyota Corolla 140H (4,5 L/100 km)</strong> y consulta de peajes oficiales de la red viaria estatal. Demostramos cómo la incorporación del operador de búsqueda local <strong>Or-opt</strong> en la Colonia de Hormigas (ACO) abate el costo del recorrido a <strong>845,09 €</strong> (6.307,79 km y 66,49 h de viaje), logrando un ahorro neto del 3,46% y una convergencia 4 veces más acelerada respecto al ACO canónico.
+        </p>
+      </section>
+
+      <!-- Parte 1 -->
+      <section id="parte1">
+        <h2>1. Parte 1: Optimización Numérica Continua</h2>
+
+        <div id="p1-funciones">
+          <h3>1.1 Funciones de Prueba</h3>
+          <p>
+            Para el desarrollo del trabajo se seleccionaron las funciones de <strong>Rosenbrock</strong> y <strong>Rastrigin</strong>. Ambas permiten evaluar las capacidades de los algoritmos frente a patologías topológicas diametralmente opuestas: un valle curvilíneo con matriz Hessiana mal condicionada frente a una cuadrícula hiper-densa de cientos de óptimos locales atractores.
+          </p>
+
+          <!-- Figura 1 -->
+          <div class="figure-box">
+            <img src="assets/img/figura1_superficies_3d.png" alt="Superficies 3D de Rosenbrock y Rastrigin">
+            <div class="figure-caption">
+              <strong>Figura 1</strong> — Visualización 3D de las funciones de prueba de Rosenbrock (izquierda) y Rastrigin (derecha).
+            </div>
+          </div>
+
+          <h4>Función de Rosenbrock ("Valle en Banana")</h4>
+          <p>
+            Presenta una geometría donde la región que conduce al mínimo global es un valle estrecho y parabólico. Formulación general para $n$ variables:
+          </p>
+          $$f(\mathbf{x}) = \sum_{i=1}^{n-1} \left[ 100\left(x_{i+1} - x_i^2\right)^2 + (1 - x_i)^2 \right]$$
+          <p>
+            El mínimo global único se encuentra en $\mathbf{x}^* = (1, 1, \dots, 1)$ con $f(\mathbf{x}^*) = 0$. Su gradiente analítico general se desglosa vectorialmente como:
+          </p>
+          $$\frac{\partial f}{\partial x_1} = -400 x_1 (x_2 - x_1^2) - 2(1 - x_1)$$
+          $$\frac{\partial f}{\partial x_i} = 200(x_i - x_{i-1}^2) - 400 x_i (x_{i+1} - x_i^2) - 2(1 - x_i), \quad \text{para } 2 \le i \le n-1$$
+          $$\frac{\partial f}{\partial x_n} = 200(x_n - x_{n-1}^2)$$
+
+          <h4>Función de Rastrigin (Paisaje Altamente Multimodal)</h4>
+          <p>
+            Generada por la modulación cosenoidal sobre una cuenca parabólica:
+          </p>
+          $$f(\mathbf{x}) = 10n + \sum_{i=1}^n \left[ x_i^2 - 10\cos(2\pi x_i) \right]$$
+          <p>
+            El mínimo global se localiza en el origen $\mathbf{x}^* = (0, 0, \dots, 0)$ con $f(\mathbf{x}^*) = 0$. Su gradiente analítico es independiente en cada coordenada:
+          </p>
+          $$\nabla f(\mathbf{x}) = \left[ 2x_1 + 20\pi\sin(2\pi x_1), \; 2x_2 + 20\pi\sin(2\pi x_2), \; \dots, \; 2x_n + 20\pi\sin(2\pi x_n) \right]$$
+        </div>
+
+        <div id="p1-algoritmos">
+          <h3>1.2 Métodos de Optimización Implementados</h3>
+          <p>
+            Se implementaron en Python con NumPy cuatro solucionadores:
+          </p>
+          <ul>
+            <li><strong>Descenso por Gradiente (GD):</strong> Avanza según $\mathbf{x}_{k+1} = \mathbf{x}_k - \alpha \nabla f(\mathbf{x}_k)$. Se parametrizó con $\alpha = 0,001$ para Rosenbrock y $\alpha = 0,002$ para Rastrigin, con parada por norma $\|\nabla f\|_2 < 10^{-8}$ o máximo de 10.000 iteraciones.</li>
+            <li><strong>Optimización por Enjambre de Partículas (PSO):</strong> Modelo <em>gbest</em> canónico con 30 partículas, 500 iteraciones, $w=0,7$, $c_1=1,5$, $c_2=1,5$. Ejecuta un total fijo de 15.030 evaluaciones de función.</li>
+            <li><strong>Algoritmo Evolutivo Continuo (EA):</strong> Población de $N=50$ individuos reales, 100 generaciones, elitismo de 8 individuos (15%), cruce por corte aleatorio (65%) y mutación gaussiana adaptativa (20%) basada en la dispersión $\sigma_j = \text{std}(X_{:,j})$. Total de evaluaciones: $50 + 100 \times 42 = 4.250$.</li>
+            <li><strong>Evolución Diferencial (DE):</strong> Estrategia <em>DE/rand/1/bin</em> con $N=40$ individuos, 100 generaciones, factor de escala $F=0,7$ y cruce binomial $CR=0,8$. Total de evaluaciones: $40 \times (100 + 1) = 4.040$.</li>
+          </ul>
+        </div>
+
+        <div id="p1-justa">
+          <h3>1.3 Regla de Comparación Justa</h3>
+          <div class="callout tip">
+            <div class="callout-header">💡 Principio de Equivalencia Computacional</div>
+            <p>
+              Evaluar el vector gradiente no es una operación sin costo. Si la función fuese una caja negra sin derivada analítica, aproximar el gradiente central exige $2d$ evaluaciones de función:
+            </p>
+            $$E_{\text{equivalente}} = E_f + 2d \times E_{\text{gradiente}}$$
+            <p>
+              Por tanto, el costo real de Descenso por Gradiente debe considerar tanto las llamadas directas a $f(x)$ como las $2d$ evaluaciones implícitas en el cálculo del gradiente.
+            </p>
+          </div>
+        </div>
+
+        <div id="p1-animaciones">
+          <h3>1.4 Animaciones GIF de la Parte 1</h3>
+          <p>
+            Se registraron las trayectorias de convergencia en Rosenbrock 2D para Descenso por Gradiente y Enjambre de Partículas:
+          </p>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; margin: 1.5rem 0;">
+            <div class="figure-box">
+              <img src="assets/img/animacion_gd_rosenbrock_2d.gif" alt="GIF Descenso por Gradiente">
+              <div class="figure-caption">
+                <strong>Figura 2</strong> — Animación de la trayectoria del Descenso por Gradiente sobre curvas de nivel de Rosenbrock 2D ($x_0 = [-1.2, 1.0]$, final $f \approx 1,81 \times 10^{-8}$).
+              </div>
+            </div>
+            <div class="figure-box">
+              <img src="assets/img/animacion_pso_rosenbrock_2d.gif" alt="GIF PSO">
+              <div class="figure-caption">
+                <strong>Figura 3</strong> — Animación de las 30 partículas de PSO convergiendo hacia el mínimo global $(1, 1)$ en Rosenbrock 2D ($f_{\text{final}} \approx 3,38 \times 10^{-21}$).
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="p1-resultados">
+          <h3>1.5 Comparación General de Resultados</h3>
+          <p>
+            A partir de 30 corridas independientes por algoritmo, función y dimensión (480 corridas en total), bajo el umbral de éxito estricto $|f(\mathbf{x}) - f^*| \le 10^{-3}$, se consolidó la <strong>Tabla 12</strong>:
+          </p>
+
+          <!-- Tabla 12 Oficial -->
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Función</th>
+                  <th>Dim</th>
+                  <th>Algoritmo</th>
+                  <th>Media $f(x^*)$</th>
+                  <th>Mediana $f(x^*)$</th>
+                  <th>Desv. Estándar</th>
+                  <th>Mejor</th>
+                  <th>Peor</th>
+                  <th>Tasa de Éxito</th>
+                  <th>Evals $f$</th>
+                  <th>Evals Grad</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Rastrigin</td><td>2D</td><td>Descenso por gradiente</td>
+                  <td>15,82</td><td>16,42</td><td>10,03</td><td>0,995</td><td>31,84</td>
+                  <td><span class="badge-fail">0/30 (0%)</span></td><td>33</td><td>33</td>
+                </tr>
+                <tr>
+                  <td>Rastrigin</td><td>2D</td><td>PSO</td>
+                  <td>0,000</td><td>0,000</td><td>0,000</td><td>0,000</td><td>0,000</td>
+                  <td><span class="badge-success">30/30 (100%)</span></td><td>15.030</td><td>0</td>
+                </tr>
+                <tr>
+                  <td>Rastrigin</td><td>2D</td><td>Algoritmo evolutivo</td>
+                  <td>0,298</td><td>0,000</td><td>0,458</td><td>0,000</td><td>0,995</td>
+                  <td><span class="badge-success">21/30 (70%)</span></td><td>4.250</td><td>0</td>
+                </tr>
+                <tr>
+                  <td>Rastrigin</td><td>2D</td><td>Evolución diferencial</td>
+                  <td>0,000</td><td>0,000</td><td>0,000</td><td>0,000</td><td>0,000</td>
+                  <td><span class="badge-success">30/30 (100%)</span></td><td>4.040</td><td>0</td>
+                </tr>
+                <tr style="border-top: 2px solid var(--border);">
+                  <td>Rastrigin</td><td>3D</td><td>Descenso por gradiente</td>
+                  <td>24,48</td><td>22,88</td><td>14,16</td><td>1,990</td><td>53,73</td>
+                  <td><span class="badge-fail">0/30 (0%)</span></td><td>34</td><td>34</td>
+                </tr>
+                <tr>
+                  <td>Rastrigin</td><td>3D</td><td>PSO</td>
+                  <td>0,066</td><td>0,000</td><td>0,248</td><td>0,000</td><td>0,995</td>
+                  <td><span class="badge-success">28/30 (93,33%)</span></td><td>15.030</td><td>0</td>
+                </tr>
+                <tr>
+                  <td>Rastrigin</td><td>3D</td><td>Algoritmo evolutivo</td>
+                  <td>1,426</td><td>0,995</td><td>0,891</td><td>0,000</td><td>3,980</td>
+                  <td><span class="badge-fail">5/30 (16,67%)</span></td><td>4.250</td><td>0</td>
+                </tr>
+                <tr>
+                  <td>Rastrigin</td><td>3D</td><td>Evolución diferencial</td>
+                  <td>3,31e-11</td><td>0,000</td><td>1,79e-10</td><td>0,000</td><td>0,995</td>
+                  <td><span class="badge-success">29/30 (96,67%)</span></td><td>4.040</td><td>0</td>
+                </tr>
+                <tr style="border-top: 2px solid var(--border);">
+                  <td>Rosenbrock</td><td>2D</td><td>Descenso por gradiente</td>
+                  <td>2,79e-5</td><td>3,16e-5</td><td>1,61e-5</td><td>2,64e-10</td><td>6,56e-5</td>
+                  <td><span class="badge-success">30/30 (100%)</span></td><td>2.227</td><td>2.226</td>
+                </tr>
+                <tr>
+                  <td>Rosenbrock</td><td>2D</td><td>PSO</td>
+                  <td>3,37e-18</td><td>4,01e-21</td><td>1,19e-17</td><td>5,84e-26</td><td>5,83e-17</td>
+                  <td><span class="badge-success">30/30 (100%)</span></td><td>15.030</td><td>0</td>
+                </tr>
+                <tr>
+                  <td>Rosenbrock</td><td>2D</td><td>Algoritmo evolutivo</td>
+                  <td>1,84e-2</td><td>3,15e-3</td><td>3,89e-2</td><td>4,22e-5</td><td>1,85e-1</td>
+                  <td><span class="badge-fail">12/30 (40%)</span></td><td>4.250</td><td>0</td>
+                </tr>
+                <tr>
+                  <td>Rosenbrock</td><td>2D</td><td>Evolución diferencial</td>
+                  <td>1,20e-8</td><td>3,12e-10</td><td>2,14e-8</td><td>4,81e-14</td><td>8,95e-8</td>
+                  <td><span class="badge-success">30/30 (100%)</span></td><td>4.040</td><td>0</td>
+                </tr>
+                <tr style="border-top: 2px solid var(--border);">
+                  <td>Rosenbrock</td><td>3D</td><td>Descenso por gradiente</td>
+                  <td>1,16e-5</td><td>9,22e-6</td><td>7,31e-6</td><td>1,92e-7</td><td>3,89e-5</td>
+                  <td><span class="badge-success">27/30 (90%)</span></td><td>339</td><td>338</td>
+                </tr>
+                <tr>
+                  <td>Rosenbrock</td><td>3D</td><td>PSO</td>
+                  <td>7,39e-4</td><td>3,84e-4</td><td>1,06e-3</td><td>6,93e-8</td><td>4,78e-3</td>
+                  <td><span class="badge-success">23/30 (76,67%)</span></td><td>15.030</td><td>0</td>
+                </tr>
+                <tr>
+                  <td>Rosenbrock</td><td>3D</td><td>Algoritmo evolutivo</td>
+                  <td>0,312</td><td>0,184</td><td>0,342</td><td>1,45e-3</td><td>1,458</td>
+                  <td><span class="badge-fail">1/30 (3,33%)</span></td><td>4.250</td><td>0</td>
+                </tr>
+                <tr>
+                  <td>Rosenbrock</td><td>3D</td><td>Evolución diferencial</td>
+                  <td>4,18e-2</td><td>1,20e-2</td><td>6,85e-2</td><td>8,12e-5</td><td>0,242</td>
+                  <td><span class="badge-fail">8/30 (26,67%)</span></td><td>4.040</td><td>0</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Figuras 4, 5, 6 -->
+          <div class="figure-box">
+            <img src="assets/img/figura4_tasa_exito.png" alt="Comparación de Tasa de Éxito">
+            <div class="figure-caption">
+              <strong>Figura 4</strong> — Comparación de la tasa de éxito de los cuatro algoritmos en los cuatro problemas de prueba.
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 1.5rem;">
+            <div class="figure-box">
+              <img src="assets/img/figura5_mediana_valor_final.png" alt="Mediana del valor final en escala logarítmica">
+              <div class="figure-caption">
+                <strong>Figura 5</strong> — Comparación de la mediana del valor final (escala logarítmica).
+              </div>
+            </div>
+            <div class="figure-box">
+              <img src="assets/img/figura6_costo_computacional.png" alt="Evaluaciones promedio de la función">
+              <div class="figure-caption">
+                <strong>Figura 6</strong> — Comparación del costo computacional (evaluaciones de $f$).
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="p1-analisis">
+          <h3>1.6 Análisis Crítico y Rectificación de Discrepancias</h3>
+          
+          <div class="callout danger">
+            <div class="callout-header">🚨 Rectificación de la Alucinación Detectada en el Texto Original</div>
+            <p>
+              En borradores preliminares del informe (e.g. pág. 21 del documento original), se había deslizado un párrafo generado por LLM que afirmaba: <em>"PSO obtuvo una tasa de éxito del 86,67% en Rastrigin, mientras que evolución diferencial alcanzó el 96,67% en Rosenbrock 3D"</em>.
+            </p>
+            <p>
+              <strong>La verdad empírica comprobada:</strong> Al auditar los datos experimentales (Tabla 12 y Tabla 7), <strong>PSO en Rastrigin 3D alcanzó el 93,33% (28 de 30 corridas exitosas)</strong> con mediana 0,000, mientras que en <strong>Rosenbrock 3D la Evolución Diferencial obtuvo una tasa de éxito estricta del 26,67% (8 de 30 corridas)</strong>. Este caso ejemplifica el peligro de confiar ciegamente en redactores automáticos de IA sin contrastar rigurosamente con los archivos de salida CSV/JSON del experimento.
+            </p>
+          </div>
+
+          <p>
+            <strong>Conclusiones de la Parte 1:</strong>
+          </p>
+          <ul>
+            <li><strong>Incapacidad de GD en multimodalidad:</strong> El Descenso por Gradiente obtuvo <strong>0% de éxito en Rastrigin (2D y 3D)</strong>, quedando atrapado en mínimos locales con normas de gradiente menores a $10^{-8}$.</li>
+            <li><strong>Supremacía de DE y PSO en Rastrigin:</strong> Lograron entre 93% y 100% de éxito, demostrando que la diversidad poblacional y la inercia son indispensables para sortear pozos potenciales.</li>
+            <li><strong>Efecto del valle en Rosenbrock:</strong> En 2D, GD navega el lecho si $\alpha$ es suficientemente pequeño (0,001), pero requiere miles de evaluaciones equivalentes ($> 2.200 \times 4 = 8.800$ evals equiv). En 3D, el gradiente sufrió 3 divergencias por inestabilidad numérica.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Parte 2 -->
+      <section id="parte2">
+        <h2>2. Parte 2: Optimización Combinatoria (TSP 47 Capitales)</h2>
+
+        <div id="p2-problema">
+          <h3>2.1 Formulación del Problema</h3>
+          <p>
+            Un vendedor debe visitar las <strong>47 capitales de provincia de la España peninsular</strong> en un recorrido cerrado que inicia y finaliza en la misma ciudad. Se excluyen las islas (Baleares, Canarias) y las ciudades autónomas de Ceuta y Melilla por no ser accesibles por vía terrestre continua.
+          </p>
+          <p>
+            A diferencia de un TSP tradicional basado exclusivamente en distancia euclidiana, el costo dirigido del trayecto entre la ciudad $i$ y la ciudad $j$ responde a un <strong>modelo económico tripartito real</strong>:
+          </p>
+          $$\text{Costo}_{ij} = \left(\text{ValorHora} \times T_{ij}\right) + \text{Peajes}_{ij} + \text{Combustible}_{ij}$$
+        </div>
+
+        <div id="p2-costos">
+          <h3>2.2 Parámetros Operativos y Fuentes Oficiales</h3>
+          <ul>
+            <li><strong>Valor de la Hora del Vendedor:</strong> Fijado por el <strong>Real Decreto 126/2026, de 18 de febrero</strong> (BOE núm. 44). El salario mínimo interprofesional (SMI) se fija en 40,70 €/día. Considerando una jornada continua legal de 8 horas:
+              $$\text{ValorHora} = \frac{40,70 \text{ \euro/d\ía}}{8 \text{ h}} \approx 5,0875 \implies \mathbf{5,09\text{ \euro/h}}$$
+            </li>
+            <li><strong>Consumo de Combustible:</strong> Vehículo oficial modelo <strong>Toyota Corolla 140H e-CVT 1.8</strong> (híbrido autorrecargable a gasolina). Consumo medio homologado WLTP de <strong>4,5 L / 100 km</strong>. Con Gasolina 95 E5 a 1,785 €/L (Geoportal MITECO), el gasto asciende a $0,080325\text{ \euro/km}$. Autonomía calculada de ~956 km por depósito (43 L).</li>
+            <li><strong>Peajes de Autopista:</strong> Evaluados a través de las matrices y la red estatal (BOE y SEITT). En el recorrido óptimo resultante, el algoritmo selecciona sistemáticamente la <strong>red gratuita de autovías de alta capacidad (A-1, A-2, A-7, A-66)</strong>, resultando en un costo de peaje de <strong>0,00 €</strong>.</li>
+          </ul>
+        </div>
+
+        <div id="p2-aco">
+          <h3>2.3 Colonia de Hormigas (ACO) y Búsqueda Local Or-opt</h3>
+          <p>
+            Se implementó un algoritmo de Colonia de Hormigas (ACO) con 20 hormigas, 150 iteraciones, $\alpha = 1,0$, $\beta = 3,0$, evaporación $\rho = 0,4$ y semilla fija 42. Para potenciar la intensificación en un grafo dirigido, se integró la búsqueda local <strong>Or-opt</strong> (Or, 1976), que reubica sistemáticamente bloques de 3, 2 y 1 ciudades sin invertir el sentido de circulación.
+          </p>
+
+          <!-- Tabla 14 -->
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Métrica de Rendimiento</th>
+                  <th>ACO con Or-opt</th>
+                  <th>ACO sin Or-opt</th>
+                  <th>ACO sin Or-opt (Alto Presupuesto: 50h $\times$ 300it)</th>
+                  <th>Ahorro / Impacto con Or-opt</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Costo Total (€)</strong></td>
+                  <td><strong>845,09 €</strong></td>
+                  <td>875,41 €</td>
+                  <td>867,51 €</td>
+                  <td><span class="badge-success">-30,32 € (-3,46%)</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Distancia Conducida</strong></td>
+                  <td><strong>6.307,79 km</strong></td>
+                  <td>6.517,53 km</td>
+                  <td>6.499,57 km</td>
+                  <td><span class="badge-success">-209,74 km ahorrados</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Tiempo de Viaje</strong></td>
+                  <td><strong>66,49 h</strong> (66h 29m)</td>
+                  <td>69,13 h (69h 08m)</td>
+                  <td>67,86 h (67h 51m)</td>
+                  <td><span class="badge-success">-2h 39m al volante</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Costo Tiempo Laboral (€)</strong></td>
+                  <td><strong>338,42 €</strong></td>
+                  <td>351,89 €</td>
+                  <td>345,40 €</td>
+                  <td>-13,47 € en nómina</td>
+                </tr>
+                <tr>
+                  <td><strong>Costo Combustible (€)</strong></td>
+                  <td><strong>506,67 €</strong></td>
+                  <td>523,52 €</td>
+                  <td>522,11 €</td>
+                  <td>-16,85 € en gasolina 95</td>
+                </tr>
+                <tr>
+                  <td><strong>Peajes (€)</strong></td>
+                  <td><strong>0,00 €</strong></td>
+                  <td>0,00 €</td>
+                  <td>0,00 €</td>
+                  <td>Red libre de alta capacidad</td>
+                </tr>
+                <tr>
+                  <td><strong>Iteración de Convergencia</strong></td>
+                  <td><strong>Iteración 20</strong></td>
+                  <td>Iteración 85</td>
+                  <td>Iteración 31</td>
+                  <td><strong>4x más rápida</strong></td>
+                </tr>
+                <tr>
+                  <td><strong>Tiempo de Cómputo (s)</strong></td>
+                  <td><strong>4,77 s</strong></td>
+                  <td>3,97 s</td>
+                  <td>19,81 s</td>
+                  <td>Óptimo balance calidad/tiempo</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="figure-box">
+            <img src="assets/img/figura7_convergencia_aco.png" alt="Curva de Convergencia ACO">
+            <div class="figure-caption">
+              <strong>Figura 7</strong> — Curvas de convergencia comparativa: ACO con Or-opt (verde, 845,09 €) vs ACO sin Or-opt (rojo discontinua, 875,41 €) y ACO de alto presupuesto (naranja puntos, 867,51 €).
+            </div>
+          </div>
+
+          <h4>Ruta Óptima Peninsular Descubierta (845,09 €)</h4>
+          <pre><code>Logroño -> Soria -> Zaragoza -> Huesca -> Lleida -> Girona -> Barcelona -> 
+Tarragona -> Castellón de la Plana -> Valencia -> Teruel -> Cuenca -> 
+Guadalajara -> Madrid -> Toledo -> Ciudad Real -> Albacete -> Alicante -> 
+Murcia -> Almería -> Granada -> Jaén -> Córdoba -> Málaga -> Cádiz -> 
+Sevilla -> Huelva -> Badajoz -> Cáceres -> Salamanca -> Ávila -> Segovia -> 
+Valladolid -> Palencia -> Burgos -> León -> Zamora -> Ourense -> Pontevedra -> 
+Lugo -> A Coruña -> Oviedo -> Santander -> Bilbao -> Vitoria-Gasteiz -> 
+San Sebastián -> Pamplona -> (retorno a Logroño)</code></pre>
+        </div>
+
+        <div id="p2-ga">
+          <h3>2.4 Algoritmo Genético (DEAP) para el TSP</h3>
+          <p>
+            Se implementó un solucionador genético utilizando el framework DEAP con representación permutacional, operador de cruce $OX$ (<em>Order Crossover</em>), mutación $mutShuffleIndexes$ ($indpb=0,05$) y selección por torneo ($tournsize=3$).
+          </p>
+          <p>
+            El algoritmo genético logró un costo final de <strong>1.024,28 €</strong> tras 1.000 generaciones (o 1.897,90 € con 500 generaciones rápidas). Si bien reorganiza sustancialmente las conexiones caóticas iniciales (2.479,36 €), el cruce de permutaciones conserva sub-rutas sin considerar la geometría direccional vial con la agilidad constructiva de las hormigas, lo que resalta la superioridad de ACO para problemas de ruteo vehicular.
+          </p>
+        </div>
+
+        <div id="p2-animaciones">
+          <h3>2.5 Animaciones y Mapas de Rutas en España</h3>
+          <p>
+            A continuación se presentan las animaciones completas generadas que muestran la evolución del recorrido proyectado sobre el mapa peninsular y su curva de costos en tiempo de ejecución:
+          </p>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 1.5rem; margin: 1.5rem 0;">
+            <div class="figure-box">
+              <img src="assets/img/evolucion_aco_con_oropt.gif" alt="GIF ACO con Or-opt">
+              <div class="figure-caption">
+                <strong>Figura 8</strong> — Animación de la evolución de la mejor ruta encontrada por la Colonia de Hormigas con Or-opt (costo inicial 2.479,36 € $\to$ final <strong>845,09 €</strong> en 150 iteraciones).
+              </div>
+            </div>
+            <div class="figure-box">
+              <img src="assets/img/evolucion_ga.gif" alt="GIF Algoritmo Genético">
+              <div class="figure-caption">
+                <strong>Figura 9</strong> — Animación de la evolución del Algoritmo Genético en DEAP (costo inicial 2.479,36 € $\to$ final <strong>1.024,28 €</strong> a lo largo de las generaciones).
+              </div>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 1.5rem;">
+            <div class="figure-box">
+              <img src="assets/img/mapa_aco_con_oropt.png" alt="Mapa Final ACO con Or-opt">
+              <div class="figure-caption"><strong>Mapa Final ACO con Or-opt (845,09 €)</strong></div>
+            </div>
+            <div class="figure-box">
+              <img src="assets/img/mapa_ga.png" alt="Mapa Final GA">
+              <div class="figure-caption"><strong>Mapa Final Algoritmo Genético</strong></div>
+            </div>
+          </div>
+        </div>
+
+        <div id="p2-sensibilidad">
+          <h3>2.6 Estudio de Sensibilidad del Valor de la Hora del Vendedor</h3>
+          <p>
+            Se ejecutó un barrido del parámetro $\text{ValorHora} \in [0, 100]$ €/h para resolver la pregunta de investigación: <em>¿Cambia la ruta óptima al variar el costo de la hora? ¿A partir de qué valor ocurre la transición?</em>
+          </p>
+
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Valor Hora (€/h)</th>
+                  <th>Costo Total (€)</th>
+                  <th>Distancia Total (km)</th>
+                  <th>Tiempo Conducción (h)</th>
+                  <th>Combustible (€)</th>
+                  <th>¿Idéntica a Base (5,09 €/h)?</th>
+                  <th>Régimen Operativo Predominante</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>0,00 €/h</strong></td>
+                  <td>507,06 €</td><td>6.312,50 km</td><td>67,27 h</td><td>507,06 €</td>
+                  <td><span class="badge-fail">No</span></td>
+                  <td>Mínima Distancia / Combustible puro</td>
+                </tr>
+                <tr>
+                  <td><strong>2,00 €/h</strong></td>
+                  <td>644,40 €</td><td>6.348,07 km</td><td>67,25 h</td><td>509,91 €</td>
+                  <td><span class="badge-fail">No</span></td>
+                  <td>Transición temprana</td>
+                </tr>
+                <tr>
+                  <td><strong>5,09 €/h (SMI)</strong></td>
+                  <td><strong>845,09 €</strong></td><td><strong>6.307,79 km</strong></td><td><strong>66,49 h</strong></td><td><strong>506,67 €</strong></td>
+                  <td><span class="badge-success">Sí (Ruta Base)</span></td>
+                  <td><strong>Equilibrio Económico Laboral</strong></td>
+                </tr>
+                <tr>
+                  <td><strong>10,00 €/h</strong></td>
+                  <td>1.171,54 €</td><td>6.307,79 km</td><td>66,49 h</td><td>506,67 €</td>
+                  <td><span class="badge-success">Sí (Idéntica)</span></td>
+                  <td>Equilibrio Económico Laboral</td>
+                </tr>
+                <tr>
+                  <td><strong>20,00 €/h</strong></td>
+                  <td>1.834,79 €</td><td>6.292,41 km</td><td>65,65 h</td><td>505,44 €</td>
+                  <td><span class="badge-fail">No</span></td>
+                  <td>Reducción Temporal (Alta Velocidad)</td>
+                </tr>
+                <tr>
+                  <td><strong>50,00 €/h</strong></td>
+                  <td>3.815,92 €</td><td>6.236,88 km</td><td>65,82 h</td><td>500,98 €</td>
+                  <td><span class="badge-fail">No</span></td>
+                  <td>Dominancia severa del tiempo laboral</td>
+                </tr>
+                <tr>
+                  <td><strong>100,00 €/h</strong></td>
+                  <td>7.124,84 €</td><td>6.294,22 km</td><td>66,03 h</td><td>505,58 €</td>
+                  <td><span class="badge-fail">No</span></td>
+                  <td>Saturación de penalización horaria</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>
+            <strong>Hallazgo Teórico:</strong> La ruta óptima es <strong>invariante entre 4,5 €/h y 12 €/h</strong>. El umbral crítico de transición ocurre entre <strong>15 y 20 €/h</strong>, donde el costo laboral sobrepasa el 70% del total y la colonia reorganiza los enlaces para priorizar tramos de autovía de mayor velocidad crucero (120 km/h), ahorrando <strong>50 minutos de conducción</strong> (65,65 h vs 66,49 h) a cambio de una ligera variación en combustible.
+          </p>
+        </div>
+      </section>
+
+      <!-- Sección de Uso de IA -->
+      <section id="ia">
+        <h2>3. Sección de Uso de Inteligencia Artificial</h2>
+        <p>
+          Siguiendo el protocolo ético y académico de transparencia, se documentan las interacciones con modelos de lenguaje generativo (Opencode Muse / Gemini / ChatGPT) durante las etapas de desarrollo:
+        </p>
+
+        <div class="callout">
+          <div class="callout-header">💬 Primer Prompt: Automatización de Peticiones y Estructuración de Matrices</div>
+          <p><em>“Necesito tomar la api de geoapify y realizar requests automáticas para obtener los datos de la matriz”</em></p>
+          <p>
+            <strong>Respuesta & Utilidad:</strong> El modelo interpretó la documentación técnica de Geoapify Routing API para diseñar un script que desacopló los metadatos de distancias y tiempos de la geometría espacial de las rutas.
+          </p>
+          <p>
+            <strong>Impacto en el Resultado:</strong> Se separaron estrictamente las matrices numéricas dirigidas (47x47) de la representación visual del mapa, eliminando sobrecarga en las consultas recurrentes de ACO y GA.
+          </p>
+        </div>
+
+        <div class="callout">
+          <div class="callout-header">💬 Segundo Prompt: Soporte en Redacción y Visualización de Métricas</div>
+          <p><em>“Ayúdame a realizar la documentación de los GIF y la comparación de los algoritmos de optimización.”</em></p>
+          <p>
+            <strong>Respuesta & Utilidad:</strong> Propuso una estructura narrativa para documentar las animaciones e integrar gráficas de barras con tasa de éxito, mediana en escala logarítmica y número promedio de evaluaciones.
+          </p>
+          <p>
+            <strong>Impacto en el Resultado:</strong> Agilizó la articulación entre los integrantes del grupo, requiriendo validación cruzada para evitar incorporar conclusiones estadísticas no verificadas.
+          </p>
+        </div>
+      </section>
+
+      <!-- Cacería de Alucinaciones -->
+      <section id="alucinaciones">
+        <h2>4. Cacería de la Alucinación</h2>
+        <p>
+          Se documentan cuatro alucinaciones críticas detectadas durante la asistencia de la IA, con su respectiva refutación técnica:
+        </p>
+
+        <div class="callout danger">
+          <div class="callout-header">🚨 Alucinación 1: Asunción Arbitraria de Rutas de Archivos con Pathlib</div>
+          <p><strong>Prompt:</strong> <em>“Si mi archivo se llama rutas_costes.csv y está en una subcarpeta, ¿cómo lo hago?...”</em></p>
+          <p><strong>Alucinación:</strong> La IA generó código asumiendo nombres de carpetas inexistentes (<code>/datos/rutas_costes.csv</code>) e inventó la estructura de directorios, provocando errores de importación <code>FileNotFoundError</code>.</p>
+          <p><strong>Corrección:</strong> Se implementó <code>Path(__file__).resolve().parent</code> anclado al directorio base real del repositorio.</p>
+        </div>
+
+        <div class="callout danger">
+          <div class="callout-header">🚨 Alucinación 2: Coordenadas Inventadas en Geofabrik / OSRM</div>
+          <p><strong>Prompt:</strong> <em>“¿Cómo hago para conseguir una matriz con los datos usando geofabrik?”</em></p>
+          <p><strong>Alucinación:</strong> La IA generó un diccionario en Python con supuestas coordenadas geográficas de ciudades españolas con valores completamente falsos e inventados sin base topográfica real.</p>
+          <p><strong>Corrección:</strong> Se rechazaron las coordenadas alucinadas y se construyó <code>datos_rutas/ciudades.csv</code> a partir de coordenadas validadas por el Instituto Geográfico Nacional (IGN) y Geoapify.</p>
+        </div>
+
+        <div class="callout danger">
+          <div class="callout-header">🚨 Alucinación 3: Re-consumo Redundante de API de Peajes Ignorando Datos Existentes</div>
+          <p><strong>Prompt:</strong> <em>“Implementemos la opción A y usemos la api de tollguru para obtener los datos de peaje”</em></p>
+          <p><strong>Alucinación:</strong> La IA alegó erróneamente que no se disponía de la geometría de las carreteras y propuso volver a consultar masivamente la API de Geoapify para alimentar TollGuru, agotando la cuota de peticiones gratuitas.</p>
+          <p><strong>Corrección:</strong> Se constató que las conexiones ya estaban consolidadas y se tabularon las tarifas oficiales vigentes de autopistas (AP-6, AP-51, AP-66, AP-9) en <code>tabla_peajes_2026.csv</code>.</p>
+        </div>
+
+        <div class="callout danger">
+          <div class="callout-header">🚨 Alucinación 4: Invención de Estadísticas de Convergencia (86,67% y 96,67%)</div>
+          <p><strong>Prompt:</strong> <em>“Ayúdame a comparar los cuatro algoritmos de optimización según sus resultados...”</em></p>
+          <p><strong>Alucinación:</strong> La IA respondió textualmente que <em>"PSO obtuvo una tasa de éxito del 86,67% en Rastrigin, mientras que evolución diferencial alcanzó el 96,67% en Rosenbrock 3D"</em>, cifras inventadas que no correspondían a los experimentos reales.</p>
+          <p><strong>Corrección:</strong> Se rectificaron los valores contra los CSV de salida: PSO en Rastrigin 3D obtuvo <strong>93,33% (28/30)</strong> y DE en Rosenbrock 3D obtuvo <strong>26,67% (8/30)</strong>, purgando la alucinación del informe final.</p>
+        </div>
+      </section>
+
+      <!-- Guía de Comandos -->
+      <section id="comandos">
+        <h2>5. Guía de Reproducibilidad y Ejecución en Un Solo Comando</h2>
+        <p>
+          Cumpliendo con los criterios de evaluación, el proyecto cuenta con un <strong>CLI maestro global</strong> que permite reproducir cada ejercicio individual o el flujo integral con un solo comando:
+        </p>
+
+        <div class="cli-box">
+          <h3>⚡ Comandos de Ejecución Inmediata</h3>
+          <p>Abra una terminal en la raíz del repositorio y ejecute:</p>
+
+          <div class="cli-grid">
+            <div class="cli-cmd"><span>python main.py</span> <span>[Todo Integral]</span></div>
+            <div class="cli-cmd"><span>python main.py --demo</span> <span>[&lt; 30s en vivo]</span></div>
+            <div class="cli-cmd"><span>python main.py --menu</span> <span>[Menú Interactivo]</span></div>
+            <div class="cli-cmd"><span>python main.py -e gd</span> <span>[Descenso Gradiente]</span></div>
+            <div class="cli-cmd"><span>python main.py -e pso</span> <span>[Enjambre Partículas]</span></div>
+            <div class="cli-cmd"><span>python main.py -e ea</span> <span>[Algoritmo Evolutivo]</span></div>
+            <div class="cli-cmd"><span>python main.py -e de</span> <span>[Evolución Diferencial]</span></div>
+            <div class="cli-cmd"><span>python main.py -e aco</span> <span>[Colonia Hormigas]</span></div>
+            <div class="cli-cmd"><span>python main.py -e ga</span> <span>[Algoritmo Genético]</span></div>
+            <div class="cli-cmd"><span>python main.py -e oropt</span> <span>[Comparativa Or-opt]</span></div>
+            <div class="cli-cmd"><span>python main.py -e sensibilidad</span> <span>[Sensibilidad Salario]</span></div>
+            <div class="cli-cmd"><span>python main.py -e graficas</span> <span>[Regenerar Figuras]</span></div>
+            <div class="cli-cmd"><span>python main.py -e gifs</span> <span>[Generar Animaciones]</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Referencias -->
+      <section id="referencias">
+        <h2>6. Referencias Bibliográficas (APA 7.ª Edición)</h2>
+        <ul style="font-size: 0.9rem; line-height: 1.6;">
+          <li>Anfac. (s. f.). <em>Matriculaciones turismos y todoterreno</em>. <a href="https://anfac.com/cifras-clave/matriculaciones-turismos-y-todoterreno/" target="_blank">https://anfac.com/cifras-clave/matriculaciones-turismos-y-todoterreno/</a></li>
+          <li>Dorigo, M., &amp; Stützle, T. (2004). <em>Ant colony optimization</em>. MIT Press. <a href="https://doi.org/10.7551/mitpress/1290.001.0001" target="_blank">https://doi.org/10.7551/mitpress/1290.001.0001</a></li>
+          <li>Eberhart, R., &amp; Kennedy, J. (1995). A new optimizer using particle swarm theory. En <em>MHS'95. Proceedings of the Sixth International Symposium on Micro Machine and Human Science</em> (pp. 39–43). IEEE. <a href="https://doi.org/10.1109/MHS.1995.494215" target="_blank">https://doi.org/10.1109/MHS.1995.494215</a></li>
+          <li>España. Ministerio de Trabajo y Economía Social. (2026). Real Decreto 126/2026, de 18 de febrero, por el que se fija el salario mínimo interprofesional para 2026. <em>Boletín Oficial del Estado</em>, 44, de 19 de febrero de 2026, páginas 21104 a 21108. <a href="https://www.boe.es/eli/es/rd/2026/02/18/126" target="_blank">https://www.boe.es/eli/es/rd/2026/02/18/126</a></li>
+          <li>España. Ministerio de Transportes y Movilidad Sostenible. (s. f.). <em>Peajes dependientes de la AGE</em>. <a href="https://www.transportes.gob.es/carreteras/nuestra-red/autopistas-peaje/peajes-dependientes-de-la-age" target="_blank">https://www.transportes.gob.es/</a></li>
+          <li>Fortin, F.-A., De Rainville, F.-M., Gardner, M.-A., Parizeau, M., &amp; Gagné, C. (2012). DEAP: Evolutionary algorithms made easy. <em>Journal of Machine Learning Research</em>, 13(70), 2171–2175.</li>
+          <li>Km77. (s. f.). <em>Toyota Corolla 140H Style Plus (2023): Datos técnicos y equipamiento</em>. <a href="https://www.km77.com/coches/toyota/corolla/2023/5-puertas/estandar/corolla-140h-style-plus/datos" target="_blank">https://www.km77.com/</a></li>
+          <li>Ministerio para la Transición Ecológica y el Reto Demográfico. (s. f.). <em>Sistema de Información para la Geolocalización de Estaciones de Servicio y Precios de Carburantes</em>. <a href="https://energia.serviciosmin.gob.es/shpCarburantes/" target="_blank">https://energia.serviciosmin.gob.es/shpCarburantes/</a></li>
+          <li>Nocedal, J., &amp; Wright, S. J. (2006). <em>Numerical optimization</em> (2.ª ed.). Springer. <a href="https://doi.org/10.1007/978-0-387-40065-5" target="_blank">https://doi.org/10.1007/978-0-387-40065-5</a></li>
+          <li>Or, I. (1976). <em>Traveling salesman-type combinatorial problems and their relation to the car pooling problem</em> [Tesis doctoral, Northwestern University]. ProQuest Dissertations Publishing.</li>
+          <li>Storn, R., &amp; Price, K. (1997). Differential evolution–a simple and efficient heuristic for global optimization over continuous spaces. <em>Journal of Global Optimization</em>, 11(4), 341–359. <a href="https://doi.org/10.1023/A:1008202821328" target="_blank">https://doi.org/10.1023/A:1008202821328</a></li>
+        </ul>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <p>
+      Documentación y Entrada de Blog Oficial — Trabajo 1 de Redes Neuronales y Algoritmos Bioinspirados.
+      <br>Universidad Nacional de Colombia, Sede Medellín — Facultad de Minas (2026).
+    </p>
+    <p style="margin-top: 0.5rem;">
+      Código disponible en <a href="https://github.com/DavidAgr5421/Trabajo01_Redes" target="_blank">GitHub: DavidAgr5421/Trabajo01_Redes</a>
+    </p>
+  </footer>
+
+  <script>
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute("data-theme");
+      const target = current === "light" ? "dark" : "light";
+      document.documentElement.setAttribute("data-theme", target);
+      localStorage.setItem("theme", target);
+    }
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme) {
+      document.documentElement.setAttribute("data-theme", savedTheme);
+    }
+  </script>
+</body>
+</html>

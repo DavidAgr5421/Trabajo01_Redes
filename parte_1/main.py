@@ -319,17 +319,78 @@ def generar_grafica_convergencia_parte1(cfg: dict):
     print(f"[Parte 1] Grafica comparativa guardada: {salida}")
 
 
+def ejecutar_metodo_individual(metodo: str, funcion_nom: str, dim: int, cfg: dict, n_corridas: int = 1):
+    """Ejecuta un metodo especifico de la Parte 1 de forma aislada."""
+    f_info = FUNCIONES_INFO[funcion_nom]
+    print("\n" + "=" * 75)
+    print(f"PARTE 1: EJECUCION INDIVIDUAL - METODO [{metodo.upper()}]")
+    print(f"Funcion: {funcion_nom} | Dimension: {dim}D | Corridas: {n_corridas}")
+    print("=" * 75)
+
+    if n_corridas == 1:
+        semilla = cfg.get("semilla_base", 2026)
+        res = ejecutar_metodo(metodo.upper(), f_info, dim, semilla, cfg)
+        x_fin = res["historial_x"][-1] if len(res["historial_x"]) > 0 else "N/A"
+        print(f"\n[RESULTADO]")
+        print(f"  Metodo                 : {metodo.upper()}")
+        print(f"  Punto final x*         : {np.round(x_fin, 6) if isinstance(x_fin, np.ndarray) else x_fin}")
+        print(f"  Valor optimo f(x*)     : {res['f_val']:.6e}")
+        print(f"  Evaluaciones f(x)      : {res['evals_f']:,}")
+        print(f"  Evaluaciones grad_f(x) : {res['evals_grad']:,}")
+        print(f"  Evaluaciones equiv     : {res['evals_equiv']:,}")
+        exito = abs(res['f_val'] - f_info['optimo_f']) <= f_info['umbral_exito']
+        print(f"  Criterio de exito      : {'EXITOSO (<= 1e-2)' if exito else 'NO ALCANZO UMBRAL'}")
+        print("=" * 75)
+        return [res]
+    else:
+        valores, evals_eq, exitos = [], [], 0
+        t0 = time.time()
+        for c in range(n_corridas):
+            sem = cfg.get("semilla_base", 2026) + c * 37
+            r = ejecutar_metodo(metodo.upper(), f_info, dim, sem, cfg)
+            valores.append(r["f_val"])
+            evals_eq.append(r["evals_equiv"])
+            if np.isfinite(r["f_val"]) and abs(r["f_val"] - f_info["optimo_f"]) <= f_info["umbral_exito"]:
+                exitos += 1
+        dt = time.time() - t0
+        vals_fin = np.array([v for v in valores if np.isfinite(v)])
+        print(f"\n[RESUMEN {n_corridas} CORRIDAS]")
+        print(f"  Mejor f(x*)            : {np.min(vals_fin):.6e}" if len(vals_fin) else "  Mejor f(x*): NaN")
+        print(f"  Media f(x*)            : {np.mean(vals_fin):.6e}" if len(vals_fin) else "  Media f(x*): NaN")
+        print(f"  Mediana f(x*)          : {np.median(vals_fin):.6e}" if len(vals_fin) else "  Mediana: NaN")
+        print(f"  Desv. Estandar         : {np.std(vals_fin):.6e}" if len(vals_fin) else "  Std: NaN")
+        print(f"  Tasa de Exito          : {(exitos / n_corridas) * 100:.1f}% ({exitos}/{n_corridas})")
+        print(f"  Evals Equiv Promedio   : {int(np.mean(evals_eq)):,}")
+        print(f"  Tiempo Total           : {dt:.2f} s")
+        print("=" * 75)
+        return valores
+
+
 def main():
     parser = argparse.ArgumentParser(description="Runner Parte 1: Optimizacion Numerica")
     parser.add_argument("--demo", action="store_true", help="Corrida rapida (<15 s)")
+    parser.add_argument("--metodo", choices=["gd", "pso", "ea", "de", "todos"], default="todos",
+                        help="Algoritmo especifico a ejecutar (gd, pso, ea, de o todos)")
+    parser.add_argument("--funcion", choices=["Rosenbrock", "Rastrigin", "ambas"], default="ambas",
+                        help="Funcion de prueba a optimizar")
+    parser.add_argument("--dim", choices=[2, 3, 0], type=int, default=0,
+                        help="Dimension del problema (2, 3 o 0 para ambas)")
     parser.add_argument("--corridas", type=int, default=None, help="Numero de corridas independientes")
     parser.add_argument("--gif", action="store_true", help="Genera animaciones GIF de GD y PSO en Rosenbrock")
     args = parser.parse_args()
 
     cfg = cargar_config(parte="parte_1", demo=args.demo)
-    n_corridas = args.corridas or cfg.get("n_corridas", 30)
+    n_corridas = args.corridas or (3 if args.demo else cfg.get("n_corridas", 30))
 
-    # Ejecutar estudio comparativo
+    if args.metodo != "todos":
+        funcs = [args.funcion] if args.funcion != "ambas" else ["Rosenbrock", "Rastrigin"]
+        dims = [args.dim] if args.dim in (2, 3) else [2, 3]
+        for f in funcs:
+            for d in dims:
+                ejecutar_metodo_individual(args.metodo, f, d, cfg, n_corridas=n_corridas)
+        return
+
+    # Ejecutar estudio comparativo completo
     ejecutar_estudio_estadistico(cfg, n_corridas=n_corridas)
 
     # Generar grafica comparativa estatica de convergencia

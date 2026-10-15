@@ -1,0 +1,5 @@
+﻿Valor_Hora_EUR_h,Coste_Total_EUR,Distancia_km,Tiempo_h,Coste_Combustible_EUR,Coste_Tiempo_EUR,Ruta_Identica_a_Base,Regimen_Operativo,Tiempo_Calculo_s
+0.0,517.18,6438.57,68.54,517.18,0.0,No,Minima distancia / Combustible puro,0.59
+5.09,863.23,6446.57,67.86,517.83,345.4,Si,Equilibrio Economico Laboral (Base),0.6
+20.0,1848.94,6288.33,66.38,505.09,1327.5,No,Reduccion Temporal (Mayor velocidad media),0.58
+50.0,3871.11,6414.92,66.55,515.27,3327.64,No,Dominancia Severa del Tiempo Laboral,0.62
