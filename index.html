@@ -437,6 +437,94 @@
     }
     .cli-cmd span { color: var(--primary); }
 
+    /* Videos de Contribución Individual */
+    .videos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+      margin: 1.8rem 0 2.5rem;
+    }
+    .video-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.15rem;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .video-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary);
+    }
+    .video-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 0.85rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .video-card-header h4 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+      margin: 0;
+    }
+    .video-author-cc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      background: var(--bg-card);
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+    }
+    .video-responsive-wrapper {
+      position: relative;
+      padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+      height: 0;
+      overflow: hidden;
+      border-radius: 8px;
+      background: #000;
+      margin-bottom: 0.85rem;
+      border: 1px solid var(--border);
+    }
+    .video-responsive-wrapper iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+    .video-card-desc {
+      font-size: 0.86rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+      margin-bottom: 0.85rem;
+      flex-grow: 1;
+    }
+    .video-direct-link a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--primary);
+      text-decoration: none;
+      padding: 0.3rem 0.6rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      transition: all 0.2s;
+    }
+    .video-direct-link a:hover {
+      background: rgba(88, 166, 255, 0.15);
+      border-color: var(--primary);
+    }
+
     /* Footer */
     footer.site-footer {
       border-top: 1px solid var(--border);
@@ -461,7 +549,8 @@
       <a href="#parte1">Parte 1: Continua</a>
       <a href="#parte2">Parte 2: Combinatoria</a>
       <a href="#ia">Uso de IA</a>
-      <a href="#alucinaciones">Cacería de Alucinaciones</a>
+      <a href="#alucinaciones">Alucinaciones</a>
+      <a href="#videos">Videos</a>
       <a href="#comandos">Ejecución</a>
       <a href="#referencias">Referencias</a>
       <button class="btn-toggle-theme" id="btnTheme" onclick="toggleTheme()">🌓 Tema</button>
@@ -545,10 +634,10 @@
             <li><a href="#p2-sensibilidad">2.6 Estudio de Sensibilidad Horaria</a></li>
           </ul>
         </li>
-        <li><a href="#ia">Sección de Uso de IA</a></li>
-        <li><a href="#alucinaciones">Cacería de la Alucinación</a></li>
-        <li><a href="#comandos">Guía de Ejecución en 1 Comando</a></li>
-        <li><a href="#referencias">Referencias Bibliográficas</a></li>
+        <li><a href="#ia">3. Uso de IA & Alucinaciones</a></li>
+        <li><a href="#videos">4. Videos de Contribución</a></li>
+        <li><a href="#comandos">5. Guía de Ejecución en 1 Comando</a></li>
+        <li><a href="#referencias">6. Referencias Bibliográficas</a></li>
       </ul>
     </aside>
 
@@ -1054,13 +1143,14 @@ San Sebastián -> Pamplona -> (retorno a Logroño)</code></pre>
         </div>
       </section>
 
-      <!-- Sección de Uso de IA -->
+      <!-- Sección de Uso de IA y Alucinaciones -->
       <section id="ia">
-        <h2>3. Sección de Uso de Inteligencia Artificial</h2>
+        <h2>3. Uso de Inteligencia Artificial y Cacería de la Alucinación</h2>
         <p>
           Siguiendo el protocolo ético y académico de transparencia, se documentan las interacciones con modelos de lenguaje generativo (Opencode Muse / Gemini / ChatGPT) durante las etapas de desarrollo:
         </p>
 
+        <h3>3.1 Prompts Principales Empleados</h3>
         <div class="callout">
           <div class="callout-header">💬 Primer Prompt: Automatización de Peticiones y Estructuración de Matrices</div>
           <p><em>“Necesito tomar la api de geoapify y realizar requests automáticas para obtener los datos de la matriz”</em></p>
@@ -1082,41 +1172,142 @@ San Sebastián -> Pamplona -> (retorno a Logroño)</code></pre>
             <strong>Impacto en el Resultado:</strong> Agilizó la articulación entre los integrantes del grupo, requiriendo validación cruzada para evitar incorporar conclusiones estadísticas no verificadas.
           </p>
         </div>
+
+        <div id="alucinaciones">
+          <h3>3.2 Cacería de la Alucinación</h3>
+          <p>
+            Se documentan cuatro alucinaciones críticas detectadas durante la asistencia de la IA, con su respectiva refutación técnica:
+          </p>
+
+          <div class="callout danger">
+            <div class="callout-header">🚨 Alucinación 1: Asunción Arbitraria de Rutas de Archivos con Pathlib</div>
+            <p><strong>Prompt:</strong> <em>“Si mi archivo se llama rutas_costes.csv y está en una subcarpeta, ¿cómo lo hago?...”</em></p>
+            <p><strong>Alucinación:</strong> La IA generó código asumiendo nombres de carpetas inexistentes (<code>/datos/rutas_costes.csv</code>) e inventó la estructura de directorios, provocando errores de importación <code>FileNotFoundError</code>.</p>
+            <p><strong>Corrección:</strong> Se implementó <code>Path(__file__).resolve().parent</code> anclado al directorio base real del repositorio.</p>
+          </div>
+
+          <div class="callout danger">
+            <div class="callout-header">🚨 Alucinación 2: Coordenadas Inventadas en Geofabrik / OSRM</div>
+            <p><strong>Prompt:</strong> <em>“¿Cómo hago para conseguir una matriz con los datos usando geofabrik?”</em></p>
+            <p><strong>Alucinación:</strong> La IA generó un diccionario en Python con supuestas coordenadas geográficas de ciudades españolas con valores completamente falsos e inventados sin base topográfica real.</p>
+            <p><strong>Corrección:</strong> Se rechazaron las coordenadas alucinadas y se construyó <code>datos_rutas/ciudades.csv</code> a partir de coordenadas validadas por el Instituto Geográfico Nacional (IGN) y Geoapify.</p>
+          </div>
+
+          <div class="callout danger">
+            <div class="callout-header">🚨 Alucinación 3: Re-consumo Redundante de API de Peajes Ignorando Datos Existentes</div>
+            <p><strong>Prompt:</strong> <em>“Implementemos la opción A y usemos la api de tollguru para obtener los datos de peaje”</em></p>
+            <p><strong>Alucinación:</strong> La IA alegó erróneamente que no se disponía de la geometría de las carreteras y propuso volver a consultar masivamente la API de Geoapify para alimentar TollGuru, agotando la cuota de peticiones gratuitas.</p>
+            <p><strong>Corrección:</strong> Se constató que las conexiones ya estaban consolidadas y se tabularon las tarifas oficiales vigentes de autopistas (AP-6, AP-51, AP-66, AP-9) en <code>tabla_peajes_2026.csv</code>.</p>
+          </div>
+
+          <div class="callout danger">
+            <div class="callout-header">🚨 Alucinación 4: Invención de Estadísticas de Convergencia (86,67% y 96,67%)</div>
+            <p><strong>Prompt:</strong> <em>“Ayúdame a comparar los cuatro algoritmos de optimización según sus resultados...”</em></p>
+            <p><strong>Alucinación:</strong> La IA respondió textualmente que <em>"PSO obtuvo una tasa de éxito del 86,67% en Rastrigin, mientras que evolución diferencial alcanzó el 96,67% en Rosenbrock 3D"</em>, cifras inventadas que no correspondían a los experimentos reales.</p>
+            <p><strong>Corrección:</strong> Se rectificaron los valores contra los CSV de salida: PSO en Rastrigin 3D obtuvo <strong>93,33% (28/30)</strong> y DE en Rosenbrock 3D obtuvo <strong>26,67% (8/30)</strong>, purgando la alucinación del informe final.</p>
+          </div>
+        </div>
       </section>
 
-      <!-- Cacería de Alucinaciones -->
-      <section id="alucinaciones">
-        <h2>4. Cacería de la Alucinación</h2>
+      <!-- 4. Videos de Contribución Individual -->
+      <section id="videos">
+        <h2>4. Videos de Contribución Individual</h2>
         <p>
-          Se documentan cuatro alucinaciones críticas detectadas durante la asistencia de la IA, con su respectiva refutación técnica:
+          Cada integrante del equipo grabó un video de 2 a 3 minutos hablando en primera persona sobre sus aportes específicos al trabajo. Cada video expone evidencia concreta de autoría: fragmentos de código implementados, commits en el repositorio Git, figuras elaboradas y secciones del reporte redactadas, explicando de forma concisa su fundamentación teórica y operativa.
         </p>
 
-        <div class="callout danger">
-          <div class="callout-header">🚨 Alucinación 1: Asunción Arbitraria de Rutas de Archivos con Pathlib</div>
-          <p><strong>Prompt:</strong> <em>“Si mi archivo se llama rutas_costes.csv y está en una subcarpeta, ¿cómo lo hago?...”</em></p>
-          <p><strong>Alucinación:</strong> La IA generó código asumiendo nombres de carpetas inexistentes (<code>/datos/rutas_costes.csv</code>) e inventó la estructura de directorios, provocando errores de importación <code>FileNotFoundError</code>.</p>
-          <p><strong>Corrección:</strong> Se implementó <code>Path(__file__).resolve().parent</code> anclado al directorio base real del repositorio.</p>
+        <div class="callout tip">
+          <div class="callout-header">📌 Base para la Sustentación Oral</div>
+          <p>
+            De conformidad con la rúbrica del curso, lo que cada integrante declara en su respectivo video conforma el marco temático y la evidencia auditable que podrá ser preguntada durante la sustentación oral frente al profesor.
+          </p>
         </div>
 
-        <div class="callout danger">
-          <div class="callout-header">🚨 Alucinación 2: Coordenadas Inventadas en Geofabrik / OSRM</div>
-          <p><strong>Prompt:</strong> <em>“¿Cómo hago para conseguir una matriz con los datos usando geofabrik?”</em></p>
-          <p><strong>Alucinación:</strong> La IA generó un diccionario en Python con supuestas coordenadas geográficas de ciudades españolas con valores completamente falsos e inventados sin base topográfica real.</p>
-          <p><strong>Corrección:</strong> Se rechazaron las coordenadas alucinadas y se construyó <code>datos_rutas/ciudades.csv</code> a partir de coordenadas validadas por el Instituto Geográfico Nacional (IGN) y Geoapify.</p>
-        </div>
+        <div class="videos-grid">
+          <!-- Video 1: Alejandro Agudelo Anaya -->
+          <div class="video-card">
+            <div class="video-card-header">
+              <h4>Alejandro Agudelo Anaya</h4>
+              <span class="video-author-cc">CC: 1017271139</span>
+            </div>
+            <div class="video-responsive-wrapper">
+              <iframe src="https://www.youtube-nocookie.com/embed/0caV8OajlQM" title="Video de Contribución - Alejandro Agudelo Anaya" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
+            </div>
+            <p class="video-card-desc">
+              <strong>Aportes sustentados:</strong> Implementación y experimentación de Descenso por Gradiente (GD) y Optimización por Enjambre de Partículas (PSO) en Rosenbrock y Rastrigin.
+            </p>
+            <div class="video-direct-link">
+              <a href="https://www.youtube.com/watch?v=0caV8OajlQM" target="_blank" rel="noopener">Ver en YouTube ↗</a>
+            </div>
+          </div>
 
-        <div class="callout danger">
-          <div class="callout-header">🚨 Alucinación 3: Re-consumo Redundante de API de Peajes Ignorando Datos Existentes</div>
-          <p><strong>Prompt:</strong> <em>“Implementemos la opción A y usemos la api de tollguru para obtener los datos de peaje”</em></p>
-          <p><strong>Alucinación:</strong> La IA alegó erróneamente que no se disponía de la geometría de las carreteras y propuso volver a consultar masivamente la API de Geoapify para alimentar TollGuru, agotando la cuota de peticiones gratuitas.</p>
-          <p><strong>Corrección:</strong> Se constató que las conexiones ya estaban consolidadas y se tabularon las tarifas oficiales vigentes de autopistas (AP-6, AP-51, AP-66, AP-9) en <code>tabla_peajes_2026.csv</code>.</p>
-        </div>
+          <!-- Video 2: David Agudelo Arboleda -->
+          <div class="video-card">
+            <div class="video-card-header">
+              <h4>David Agudelo Arboleda</h4>
+              <span class="video-author-cc">CC: 1000899797</span>
+            </div>
+            <div class="video-responsive-wrapper">
+              <iframe src="https://www.youtube-nocookie.com/embed/xvnyp074I1E" title="Video de Contribución - David Agudelo Arboleda" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
+            </div>
+            <p class="video-card-desc">
+              <strong>Aportes sustentados:</strong> Algoritmo de Colonia de Hormigas (ACO), integración del operador de búsqueda local Or-opt, modelado de costos del TSP peninsular y animaciones GIF de recorridos.
+            </p>
+            <div class="video-direct-link">
+              <a href="https://youtu.be/xvnyp074I1E" target="_blank" rel="noopener">Ver en YouTube ↗</a>
+            </div>
+          </div>
 
-        <div class="callout danger">
-          <div class="callout-header">🚨 Alucinación 4: Invención de Estadísticas de Convergencia (86,67% y 96,67%)</div>
-          <p><strong>Prompt:</strong> <em>“Ayúdame a comparar los cuatro algoritmos de optimización según sus resultados...”</em></p>
-          <p><strong>Alucinación:</strong> La IA respondió textualmente que <em>"PSO obtuvo una tasa de éxito del 86,67% en Rastrigin, mientras que evolución diferencial alcanzó el 96,67% en Rosenbrock 3D"</em>, cifras inventadas que no correspondían a los experimentos reales.</p>
-          <p><strong>Corrección:</strong> Se rectificaron los valores contra los CSV de salida: PSO en Rastrigin 3D obtuvo <strong>93,33% (28/30)</strong> y DE en Rosenbrock 3D obtuvo <strong>26,67% (8/30)</strong>, purgando la alucinación del informe final.</p>
+          <!-- Video 3: Santiago Álvarez Martínez -->
+          <div class="video-card">
+            <div class="video-card-header">
+              <h4>Santiago Álvarez Martínez</h4>
+              <span class="video-author-cc">CC: 1022142463</span>
+            </div>
+            <div class="video-responsive-wrapper">
+              <iframe src="https://www.youtube-nocookie.com/embed/QNHQFw3YrUI" title="Video de Contribución - Santiago Álvarez Martínez" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
+            </div>
+            <p class="video-card-desc">
+              <strong>Aportes sustentados:</strong> Desarrollo metodológico, formulación experimental y análisis comparativo de convergencia y robustez de los algoritmos.
+            </p>
+            <div class="video-direct-link">
+              <a href="https://youtu.be/QNHQFw3YrUI" target="_blank" rel="noopener">Ver en YouTube ↗</a>
+            </div>
+          </div>
+
+          <!-- Video 4: Daniel Felipe López Zapata -->
+          <div class="video-card">
+            <div class="video-card-header">
+              <h4>Daniel Felipe López Zapata</h4>
+              <span class="video-author-cc">CC: 1045046468</span>
+            </div>
+            <div class="video-responsive-wrapper">
+              <iframe src="https://www.youtube-nocookie.com/embed/_6JfD148hN4" title="Video de Contribución - Daniel Felipe López Zapata" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
+            </div>
+            <p class="video-card-desc">
+              <strong>Aportes sustentados:</strong> Arquitectura de código, validación de integridad de datos viales y estructuración técnica del reporte.
+            </p>
+            <div class="video-direct-link">
+              <a href="https://youtu.be/_6JfD148hN4" target="_blank" rel="noopener">Ver en YouTube ↗</a>
+            </div>
+          </div>
+
+          <!-- Video 5: Sara Osorio Piñerez -->
+          <div class="video-card">
+            <div class="video-card-header">
+              <h4>Sara Osorio Piñerez</h4>
+              <span class="video-author-cc">CC: 1001370113</span>
+            </div>
+            <div class="video-responsive-wrapper">
+              <iframe src="https://www.youtube-nocookie.com/embed/W_dBpcZ_9g4" title="Video de Contribución - Sara Osorio Piñerez" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
+            </div>
+            <p class="video-card-desc">
+              <strong>Aportes sustentados:</strong> Verificación empírica de resultados, redacción técnica y auditoría en la cacería de alucinaciones de IA.
+            </p>
+            <div class="video-direct-link">
+              <a href="https://www.youtube.com/watch?v=W_dBpcZ_9g4" target="_blank" rel="noopener">Ver en YouTube ↗</a>
+            </div>
+          </div>
         </div>
       </section>
 

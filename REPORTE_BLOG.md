@@ -284,7 +284,9 @@ Se implementó un algoritmo genético en DEAP empleando:
 
 ---
 
-# SECCIÓN DE USO DE INTELIGENCIA ARTIFICIAL
+# 3. USO DE INTELIGENCIA ARTIFICIAL Y CACERÍA DE LA ALUCINACIÓN
+
+### 3.1 Prompts Principales Empleados
 
 * **Primer Prompt**:  
   *“Necesito tomar la api de geoapify y realizar requests automáticas para obtener los datos de la matriz”*  
@@ -293,9 +295,7 @@ Se implementó un algoritmo genético en DEAP empleando:
   *“Ayúdame a realizar la documentación de los GIF y la comparación de los algoritmos de optimización.”*  
   *Impacto*: Facilitó la estructuración pedagógica del informe y la selección de métricas (tasa de éxito, mediana logarítmica y evaluaciones directas de función).
 
----
-
-# CACERÍA DE LA ALUCINACIÓN
+### 3.2 Cacería de la Alucinación
 
 1. **Alucinación 1 (Pathlib y Rutas Relativas Asumidas)**:  
    La IA asumió nombres de directorios inventados (`/datos/rutas_costes.csv`), generando errores `FileNotFoundError`. Se corrigió implementando resolución dinámica anclada a la raíz con `Path(__file__).resolve().parent`.
@@ -308,7 +308,21 @@ Se implementó un algoritmo genético en DEAP empleando:
 
 ---
 
-# GUÍA DE EJECUCIÓN EN UN SOLO COMANDO
+# 4. VIDEOS DE CONTRIBUCIÓN INDIVIDUAL
+
+Cada integrante grabó un video de 2 a 3 minutos hablando en primera persona sobre sus aportes específicos. El video muestra evidencia concreta: un fragmento de código que escribió, un commit, una figura que elaboró o una sección del reporte que redactó, y explica brevemente cómo funciona. Lo que cada persona declare en su video podrá ser preguntado en la sustentación.
+
+| Integrante | Documento | Aportes Específicos Sustentados | Enlace Directo al Video |
+| :--- | :---: | :--- | :---: |
+| **Alejandro Agudelo Anaya** | CC: 1017271139 | Descenso por Gradiente (GD) y Optimización por Enjambre de Partículas (PSO) | [https://www.youtube.com/watch?v=0caV8OajlQM](https://www.youtube.com/watch?v=0caV8OajlQM) |
+| **David Agudelo Arboleda** | CC: 1000899797 | Colonia de Hormigas (ACO) con Or-opt, modelado económico del TSP y animaciones | [https://youtu.be/xvnyp074I1E](https://youtu.be/xvnyp074I1E) |
+| **Santiago Álvarez Martínez** | CC: 1022142463 | Formulación metodológica, diseño experimental y comparativa estadística | [https://youtu.be/QNHQFw3YrUI](https://youtu.be/QNHQFw3YrUI) |
+| **Daniel Felipe López Zapata** | CC: 1045046468 | Arquitectura modular de código, validación de datos viales y estructuración | [https://youtu.be/_6JfD148hN4](https://youtu.be/_6JfD148hN4) |
+| **Sara Osorio Piñerez** | CC: 1001370113 | Verificación empírica, redacción técnica y auditoría en cacería de alucinaciones | [https://www.youtube.com/watch?v=W_dBpcZ_9g4](https://www.youtube.com/watch?v=W_dBpcZ_9g4) |
+
+---
+
+# 5. GUÍA DE EJECUCIÓN EN UN SOLO COMANDO
 
 Cualquier evaluador puede ejecutar el proyecto completo o cualquier ejercicio aislado con un solo comando:
 

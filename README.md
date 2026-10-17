@@ -133,3 +133,18 @@ El proyecto documenta formalmente la asistencia de LLMs y expone cuatro casos de
 2. **Coordenadas falsas de OSRM**: Rechazadas y reemplazadas por coordenadas oficiales del IGN.
 3. **Re-consulta redundante a Geoapify**: Purgada al demostrar que las matrices ya estaban calculadas.
 4. **Porcentajes de éxito falsos (86,67% y 96,67%)**: Rectificados con los datos empíricos reales (93,33% para PSO en Rastrigin 3D y 26,67% para DE en Rosenbrock 3D).
+
+---
+
+## 📹 Videos de Contribución Individual
+
+Cada integrante grabó un video de 2 a 3 minutos hablando en primera persona sobre sus aportes específicos con evidencia concreta (código, commits, figuras y secciones del reporte):
+
+| Integrante | Documento | Aportes Específicos Sustentados | Enlace al Video |
+| :--- | :---: | :--- | :---: |
+| **Alejandro Agudelo Anaya** | CC: 1017271139 | Descenso por Gradiente (GD) y Optimización por Enjambre de Partículas (PSO) | [Ver en YouTube](https://www.youtube.com/watch?v=0caV8OajlQM) |
+| **David Agudelo Arboleda** | CC: 1000899797 | Colonia de Hormigas (ACO) con Or-opt, modelado económico del TSP y animaciones | [Ver en YouTube](https://youtu.be/xvnyp074I1E) |
+| **Santiago Álvarez Martínez** | CC: 1022142463 | Formulación metodológica, diseño experimental y comparativa estadística | [Ver en YouTube](https://youtu.be/QNHQFw3YrUI) |
+| **Daniel Felipe López Zapata** | CC: 1045046468 | Arquitectura modular de código, validación de datos viales y estructuración | [Ver en YouTube](https://youtu.be/_6JfD148hN4) |
+| **Sara Osorio Piñerez** | CC: 1001370113 | Verificación empírica, redacción técnica y auditoría en cacería de alucinaciones | [Ver en YouTube](https://www.youtube.com/watch?v=W_dBpcZ_9g4) |
+

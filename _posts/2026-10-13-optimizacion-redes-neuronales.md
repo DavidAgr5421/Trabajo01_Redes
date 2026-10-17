@@ -175,19 +175,31 @@ San Sebastián -> Pamplona -> (retorno a Logroño)
 
 ---
 
-## 3. Sección de Uso de Inteligencia Artificial
+## 3. Uso de Inteligencia Artificial y Cacería de la Alucinación
 
+### 3.1 Prompts Principales Empleados
 * **Prompt 1 (Geoapify API & Vectorización)**: Asistencia en la extracción modular de datos y separación de costos y geometría. Facilitó la creación limpia de las matrices 47x47.
 * **Prompt 2 (Redacción & Estructuración)**: Asistencia en la organización pedagógica del informe técnico y justificación de métricas estadísticas (mediana logarítmica y tasa de éxito).
 
----
-
-## 4. Cacería de la Alucinación
-
+### 3.2 Cacería de la Alucinación
 1. **Alucinación 1 (Pathlib & Rutas Asumidas)**: La IA inventó rutas fijas erróneas (`/datos/rutas_costes.csv`). Se corrigió anclando las rutas con `Path(__file__).resolve().parent`.
 2. **Alucinación 2 (Coordenadas OSRM Inventadas)**: La IA generó un diccionario con coordenadas geográficas arbitrarias. Se corrigió tomando coordenadas oficiales validadas del IGN.
 3. **Alucinación 3 (TollGuru & Re-consulta Redundante)**: La IA sugirió re-consultar Geoapify para cada tramo. Se demostró que las matrices precalculadas ya disponían de la información, ahorrando cuota y tiempo.
 4. **Alucinación 4 (Porcentajes de Convergencia Falsos: 86,67% y 96,67%)**: La IA redactó que *PSO logró 86,67% en Rastrigin y DE logró 96,67% en Rosenbrock 3D*. Se auditó empíricamente contra los CSV: los valores reales son **93,33% para PSO en Rastrigin 3D** y **26,67% para DE en Rosenbrock 3D**.
+
+---
+
+## 4. Videos de Contribución Individual
+
+Cada integrante del equipo grabó un video de 2 a 3 minutos hablando en primera persona sobre sus aportes específicos. El video muestra evidencia concreta: un fragmento de código que escribió, un commit, una figura que elaboró o una sección del reporte que redactó, y explica brevemente cómo funciona. Lo que cada persona declara en su video podrá ser preguntado en la sustentación oral:
+
+| Integrante | Documento | Tema / Aporte Principal | Enlace al Video |
+| :--- | :---: | :--- | :---: |
+| **Alejandro Agudelo Anaya** | CC: 1017271139 | Descenso por Gradiente y PSO en Rosenbrock y Rastrigin | [Ver Video (YouTube)](https://www.youtube.com/watch?v=0caV8OajlQM) |
+| **David Agudelo Arboleda** | CC: 1000899797 | Colonia de Hormigas (ACO) con Or-opt, modelado TSP y animaciones | [Ver Video (YouTube)](https://youtu.be/xvnyp074I1E) |
+| **Santiago Álvarez Martínez** | CC: 1022142463 | Formulación metodológica, experimentación y análisis comparativo | [Ver Video (YouTube)](https://youtu.be/QNHQFw3YrUI) |
+| **Daniel Felipe López Zapata** | CC: 1045046468 | Arquitectura de código, validación de datos viales y estructuración | [Ver Video (YouTube)](https://youtu.be/_6JfD148hN4) |
+| **Sara Osorio Piñerez** | CC: 1001370113 | Verificación empírica, redacción técnica y auditoría de alucinaciones | [Ver Video (YouTube)](https://www.youtube.com/watch?v=W_dBpcZ_9g4) |
 
 ---
 
