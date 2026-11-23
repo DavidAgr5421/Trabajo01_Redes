@@ -7,6 +7,7 @@
     "semilla_base": 2026,
     "umbral_exito": 1e-3,
     "gradiente_descendente": {
+      "punto_inicial": null,
       "max_iter": 10000,
       "tolerancia": 1e-4,
       "alpha_rosenbrock": 0.00085,

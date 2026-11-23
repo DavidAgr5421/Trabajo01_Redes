@@ -68,7 +68,20 @@ def ejecutar_metodo(metodo: str, f_info: dict, dim: int, semilla: int, cfg: dict
 
     if metodo == "GD":
         c_gd = cfg.get("gradiente_descendente", {})
-        x0 = rng.uniform(lb, ub, size=dim)
+        punto_configurado = c_gd.get("punto_inicial")
+        if punto_configurado is None:
+            x0 = rng.uniform(lb, ub, size=dim)
+        else:
+            punto_configurado = np.asarray(punto_configurado, dtype=float)
+            if punto_configurado.ndim != 1 or punto_configurado.size not in (2, 3):
+                raise ValueError("El punto inicial de GD debe tener 2 o 3 coordenadas.")
+            if not np.all(np.isfinite(punto_configurado)):
+                raise ValueError("Las coordenadas del punto inicial de GD deben ser finitas.")
+            x0 = (
+                punto_configurado
+                if punto_configurado.size == dim
+                else rng.uniform(lb, ub, size=dim)
+            )
         res = gradient_descent(
             func, grad, x0,
             alpha=f_info["alpha"],
@@ -384,7 +397,21 @@ def main():
 
     if args.metodo != "todos":
         funcs = [args.funcion] if args.funcion != "ambas" else ["Rosenbrock", "Rastrigin"]
-        dims = [args.dim] if args.dim in (2, 3) else [2, 3]
+        punto_configurado = cfg.get("gradiente_descendente", {}).get("punto_inicial")
+        if args.metodo == "gd" and punto_configurado is not None:
+            punto_configurado = np.asarray(punto_configurado, dtype=float)
+            if punto_configurado.ndim != 1 or punto_configurado.size not in (2, 3):
+                parser.error("El punto inicial de GD debe tener 2 o 3 coordenadas.")
+            if not np.all(np.isfinite(punto_configurado)):
+                parser.error("Las coordenadas del punto inicial de GD deben ser finitas.")
+            dimension_punto = punto_configurado.size
+            if args.dim in (2, 3) and args.dim != dimension_punto:
+                parser.error(
+                    f"--dim debe ser {dimension_punto} para el punto inicial configurado."
+                )
+            dims = [dimension_punto] if args.dim == 0 else [args.dim]
+        else:
+            dims = [args.dim] if args.dim in (2, 3) else [2, 3]
         for f in funcs:
             for d in dims:
                 ejecutar_metodo_individual(args.metodo, f, d, cfg, n_corridas=n_corridas)

@@ -5,11 +5,11 @@
 **Universidad Nacional de Colombia — Facultad de Minas, Sede Medellín**  
 
 **Autores**:
-* Alejandro Agudelo Anaya — CC: 1017271139
-* David Agudelo Arboleda — CC: 1000899797
-* Santiago Álvarez Martínez — CC: 1022142463
-* Daniel Felipe López Zapata — CC: 1045046468
-* Sara Osorio Piñerez — CC: 1001370113
+* Alejandro Agudelo Anaya
+* David Agudelo Arboleda
+* Santiago Álvarez Martínez
+* Daniel Felipe López Zapata
+* Sara Osorio Piñerez
 
 **Docente Tutor**: Prof. Juan David Ospina Arango (`jdospina@unal.edu.co`)  
 **Repositorio Git**: [https://github.com/DavidAgr5421/Trabajo01_Redes.git](https://github.com/DavidAgr5421/Trabajo01_Redes.git)  
@@ -22,9 +22,9 @@
 
 Este trabajo aborda dos de las ramas fundamentales de la optimización moderna: la **optimización numérica continua** en paisajes topológicos no convexos y la **optimización combinatoria discreta** mediante el Problema del Vendedor Viajero (TSP) aplicado a las 47 capitales de provincia de la España peninsular. 
 
-En la primera parte, se contrasta el rendimiento del Descenso por Gradiente (GD) frente a tres metaheurísticas poblacionales —Optimización por Enjambre de Partículas (PSO), Algoritmo Evolutivo Continuo (EA) y Evolución Diferencial (DE)— evaluando las funciones de Rosenbrock y Rastrigin en 2 y 3 dimensiones bajo una regla de comparación computacionalmente justa (basada en el costo analítico de $2d$ evaluaciones de función por aproximación de gradiente: $E_{\text{equiv}} = E_f + 2d \times E_{\nabla}$). 
+En la primera parte, se contrasta el rendimiento del Descenso por Gradiente (GD; Nocedal & Wright, 2006) frente a tres metaheurísticas poblacionales —Optimización por Enjambre de Partículas (PSO; Eberhart & Kennedy, 1995), Algoritmo Evolutivo Continuo (EA) y Evolución Diferencial (DE; Storn & Price, 1997)— evaluando las funciones de Rosenbrock y Rastrigin en 2 y 3 dimensiones bajo una regla de comparación computacionalmente justa (basada en el costo analítico de $2n$ evaluaciones de función por aproximación de gradiente: $E_{\text{equiv}} = E_f + 2n \times E_{\nabla}$). 
 
-En la segunda parte, se modela y resuelve el TSP cerrado peninsular incorporando una función de costo tripartita real: tiempo laboral de conducción (con salario fijado por el **Real Decreto 126/2026 a 5,09 €/h**), costo de peajes reales (0,00 € mediante la red estatal libre de autopistas y autovías) e impacto del consumo de combustible de un **Toyota Corolla 140H híbrido (4,5 L/100 km)**. Mediante una Colonia de Hormigas (ACO) enriquecida con búsqueda local **Or-opt** (Or, 1976), se alcanza un recorrido óptimo de **845,09 €** (6.307,79 km y 66,49 h), superando en un 3,46% al ACO puro y demostrando una reducción cuádruple en el tiempo de convergencia. 
+En la segunda parte, se formula el TSP cerrado y asimétrico peninsular como un problema de optimización sobre permutaciones (y como programa lineal entero de referencia), incorporando una función de costo tripartita real: tiempo laboral de conducción (con salario fijado por el **Real Decreto 126/2026 a 5,09 €/h**; España. Ministerio de Trabajo y Economía Social, 2026), costo de peajes reales (0,00 € mediante la red estatal libre de autopistas y autovías) e impacto del consumo de combustible de un **Toyota Corolla 140H híbrido (4,5 L/100 km**; Km77, s. f.). Mediante una Colonia de Hormigas (ACO; Dorigo & Stützle, 2004) enriquecida con búsqueda local **Or-opt** (Or, 1976), se alcanza el mejor recorrido encontrado, de **845,09 €** (6.307,79 km y 66,49 h), superando en un 3,46% al ACO puro y demostrando una reducción cuádruple en el tiempo de convergencia. 
 
 Finalmente, se documenta la sensibilidad del recorrido ante variaciones en el valor horario del conductor, se expone el protocolo de asistencia por Inteligencia Artificial y se detalla una rigurosa "Cacería de la Alucinación" técnica y regulatoria.
 
@@ -34,10 +34,29 @@ Finalmente, se documenta la sensibilidad del recorrido ante variaciones en el va
 
 ## 1.1 Fundamentación Matemática y Topologías de Prueba
 
-La evaluación de algoritmos de optimización numérica requiere enfrentar a los solucionadores a retos geométricos arquetípicos: valles estrechos mal condicionados (donde las curvaturas principales difieren en órdenes de magnitud) y superficies altamente multimodales (donde proliferan los mínimos locales). En concordancia con Nocedal y Wright (2006), se seleccionaron dos funciones de prueba estándar.
+### 1.1.1 Planteamiento general
 
-![Visualización 3D de Superficies](assets/img/figura1_superficies_3d.png)  
-*Figura 1 — Visualización 3D de las funciones de Rosenbrock y Rastrigin.*
+Se aborda el problema de minimización con restricciones de caja
+
+$$\min_{\mathbf{x} \in \mathcal{D}} f(\mathbf{x}), \qquad \mathcal{D} = [-D, D]^n \subset \mathbb{R}^n, \qquad f : \mathbb{R}^n \to \mathbb{R}, \qquad n \in \{2, 3\},$$
+
+donde $D$ es el semiancho del dominio de búsqueda y $n$ la dimensión del problema. En todo el documento $\|\cdot\|_2$ denota la norma euclídea, $\mathbf{e}_j$ el $j$-ésimo vector canónico y $\odot$ el producto elemento a elemento.
+
+La evaluación de algoritmos de optimización numérica requiere enfrentar a los solucionadores a retos geométricos arquetípicos: valles estrechos mal condicionados (donde las curvaturas principales difieren en órdenes de magnitud) y superficies altamente multimodales (donde proliferan los mínimos locales). En concordancia con Nocedal y Wright (2006), se seleccionaron dos funciones de prueba estándar, cuyas propiedades se resumen en la **Tabla 1**.
+
+#### Tabla 1: Dominios y Propiedades de las Funciones de Prueba
+*Fuente: Elaboración propia a partir de las definiciones estándar (Nocedal & Wright, 2006). Los números de condición se calcularon a partir de las matrices Hessianas presentadas en esta sección.*
+
+| Propiedad | Rosenbrock | Rastrigin |
+| :--- | :---: | :---: |
+| **Dominio natural de $f$** | $\mathbb{R}^n$ ($f \in C^{\infty}$) | $\mathbb{R}^n$ ($f \in C^{\infty}$) |
+| **Dominio de búsqueda $\mathcal{D}$** | $[-5.0,\, 5.0]^n$ ($D=5.0$) | $[-5.12,\, 5.12]^n$ ($D=5.12$) |
+| **Dominio del gradiente** | $\nabla f : \mathbb{R}^n \to \mathbb{R}^n$ | $\nabla f : \mathbb{R}^n \to \mathbb{R}^n$ |
+| **Imagen / cota inferior** | $f(\mathbf{x}) \ge 0$ | $f(\mathbf{x}) \ge 0$ |
+| **Mínimo global** | $\mathbf{x}^* = (1,\dots,1)^T \in \mathrm{int}(\mathcal{D})$, $f(\mathbf{x}^*) = 0$ | $\mathbf{x}^* = \mathbf{0} \in \mathrm{int}(\mathcal{D})$, $f(\mathbf{x}^*) = 0$ |
+| **Convexidad** | No convexa | No convexa |
+| **Modalidad** | Un solo punto estacionario en $n \in \{2,3\}$; valle estrecho | $\approx 11^n$ mínimos locales en $\mathcal{D}$ ($\approx 121$ en 2D; $\approx 1.331$ en 3D) |
+| **Número de condición de $\nabla^2 f(\mathbf{x}^*)$** | $\kappa \approx 2{,}5 \times 10^3$ ($n=2$); $\kappa \approx 2{,}9 \times 10^3$ ($n=3$) | $\kappa = 1$ |
 
 ### 1. Función de Rosenbrock ("Valle en Banana")
 
@@ -46,28 +65,37 @@ La función generalizada de Rosenbrock en dimensión $n \ge 2$ se define analít
 $$f(\mathbf{x}) = \sum_{i=1}^{n-1} \left[ 100\left(x_{i+1} - x_i^2\right)^2 + (1 - x_i)^2 \right]$$
 
 * **Dominio de Búsqueda**: $\mathbf{x} \in [-5.0, 5.0]^n$.
-* **Mínimo Global Único**: $\mathbf{x}^* = (1, 1, \dots, 1)^T$, con valor óptimo $f(\mathbf{x}^*) = 0.0$.
-* **Propiedades Geométricas**: Función continua y no convexa. El mínimo global descansa en el fondo de un valle parabólico extremadamente estrecho y curvado. Aunque descender hacia el valle es trivial, navegar a lo largo de su lecho hacia el punto $(1, \dots, 1)^T$ resulta notoriamente difícil para métodos de primer orden debido a que la matriz Hessiana $\nabla^2 f(\mathbf{x})$ presenta un número de condición elevado ($\kappa \gg 10^3$), provocando oscilaciones transversales agresivas.
+* **Cota inferior y mínimo global**: $f$ es una suma de cuadrados, por lo que $f(\mathbf{x}) \ge 0$. La igualdad exige $x_i = 1$ para $i = 1,\dots,n-1$ (segundo sumando) y $x_{i+1} = x_i^2$ (primer sumando), lo que implica $x_n = 1$. Por tanto, el mínimo global es $\mathbf{x}^* = (1, 1, \dots, 1)^T$, con valor óptimo $f(\mathbf{x}^*) = 0.0$, y es el único punto estacionario en las dimensiones empleadas ($n \in \{2, 3\}$).
+* **Propiedades Geométricas**: Función continua y no convexa. El mínimo global descansa en el fondo de un valle parabólico ($x_{i+1} = x_i^2$) extremadamente estrecho y curvado. Aunque descender hacia el valle es trivial, navegar a lo largo de su lecho hacia el punto $(1, \dots, 1)^T$ resulta notoriamente difícil para métodos de primer orden debido al mal condicionamiento de la Hessiana, que provoca oscilaciones transversales agresivas.
 * **Gradiente Analítico Vectorizado $\nabla f(\mathbf{x})$**:
   $$\frac{\partial f}{\partial x_1} = -400 x_1 (x_2 - x_1^2) - 2(1 - x_1)$$
   $$\frac{\partial f}{\partial x_i} = 200(x_i - x_{i-1}^2) - 400 x_i (x_{i+1} - x_i^2) - 2(1 - x_i) \quad \text{para } 2 \le i \le n-1$$
   $$\frac{\partial f}{\partial x_n} = 200(x_n - x_{n-1}^2)$$
+* **Hessiana $\nabla^2 f(\mathbf{x})$** (tridiagonal y simétrica):
+  $$H_{11} = 1200x_1^2 - 400x_2 + 2, \qquad H_{ii} = 202 + 1200x_i^2 - 400x_{i+1} \;\; (2 \le i \le n-1), \qquad H_{nn} = 200,$$
+  $$H_{i,i+1} = H_{i+1,i} = -400\,x_i .$$
+  En el óptimo para $n=2$: $\nabla^2 f(\mathbf{x}^*) = \begin{pmatrix} 802 & -400 \\ -400 & 200 \end{pmatrix}$, con autovalores $\lambda_{\max} \approx 1001{,}6$ y $\lambda_{\min} \approx 0{,}399$ (su producto es $\det = 400$), de modo que $\kappa = \lambda_{\max}/\lambda_{\min} \approx 2{,}5 \times 10^3$. Para $n = 3$ se obtiene $\lambda_{\max} \approx 1{,}40 \times 10^3$, $\lambda_{\min} \approx 0{,}475$ y $\kappa \approx 2{,}9 \times 10^3$. Ambas Hessianas son definidas positivas, por lo que $\mathbf{x}^*$ es un mínimo estricto.
 
 ### 2. Función de Rastrigin (Paisaje Altamente Multimodal)
 
 La función de Rastrigin en dimensión $n \ge 2$ se formula como:
 
-$$f(\mathbf{x}) = 10n + \sum_{i=1}^n \left[ x_i^2 - 10\cos(2\pi x_i) \right]$$
+$$f(\mathbf{x}) = 10n + \sum_{i=1}^n \left[ x_i^2 - 10\cos(2\pi x_i) \right] = \sum_{i=1}^n \left[ x_i^2 + 10\bigl(1 - \cos(2\pi x_i)\bigr) \right]$$
 
 * **Dominio de Búsqueda**: $\mathbf{x} \in [-5.12, 5.12]^n$.
-* **Mínimo Global Único**: $\mathbf{x}^* = (0, 0, \dots, 0)^T$, con valor óptimo $f(\mathbf{x}^*) = 0.0$.
-* **Propiedades Geométricas**: Fuertemente no lineal y altamente no convexa. Resulta de perturbar una parábola cuadrática de gran escala con un término oscilatorio cosenoidal de alta frecuencia espacial. Esto genera una cuadrícula regular de cientos de mínimos locales atractores que atrapan de manera casi determinista a cualquier método que dependa de información exclusivamente local.
+* **Cota inferior y mínimo global**: en la segunda forma, cada sumando es no negativo ($x_i^2 \ge 0$ y $1 - \cos(\cdot) \ge 0$) y solo se anula en $x_i = 0$. El mínimo global único es $\mathbf{x}^* = (0, 0, \dots, 0)^T$, con valor óptimo $f(\mathbf{x}^*) = 0.0$.
+* **Propiedades Geométricas**: Fuertemente no lineal y altamente no convexa. Resulta de perturbar una parábola cuadrática de gran escala con un término oscilatorio cosenoidal de alta frecuencia espacial. Cada coordenada aporta un mínimo local cerca de cada entero $k$ con $|k| \le 5$, por lo que en $\mathcal{D}$ existen aproximadamente $11^n$ mínimos locales, con valor $f \approx \sum_i k_i^2$. Esto genera una cuadrícula regular de atractores que atrapa de manera casi determinista a cualquier método que dependa de información exclusivamente local.
 * **Gradiente Analítico $\nabla f(\mathbf{x})$**:
   $$\frac{\partial f}{\partial x_i} = 2x_i + 20\pi \sin(2\pi x_i), \quad \forall i \in \{1, \dots, n\}$$
+* **Hessiana $\nabla^2 f(\mathbf{x})$** (diagonal, pues la función es separable):
+  $$\frac{\partial^2 f}{\partial x_i^2} = 2 + 40\pi^2 \cos(2\pi x_i), \qquad \frac{\partial^2 f}{\partial x_i \partial x_j} = 0 \;\; (i \ne j).$$
+  En el óptimo, $\nabla^2 f(\mathbf{0}) = (2 + 40\pi^2)\,I \approx 396{,}8\, I$, es decir, $\kappa = 1$: localmente Rastrigin es perfectamente condicionada y su dificultad es exclusivamente la multimodalidad, en contraste con Rosenbrock, cuya dificultad es el condicionamiento.
 
 ---
 
 ## 1.2 Formulación de los Algoritmos de Optimización Continua
+
+En todos los casos, la posición de un individuo es $\mathbf{x} \in \mathcal{D} \subset \mathbb{R}^n$ y el objetivo es minimizar $f$. Los dominios admisibles de los hiperparámetros y los valores empleados se consolidan en la **Tabla 2**.
 
 ### Descenso por Gradiente (GD)
 Método iterativo determinista de primer orden (Nocedal & Wright, 2006). A partir de una condición inicial aleatoria $\mathbf{x}_0 \sim \mathcal{U}(-D, D)^n$, la actualización de posición se rige por:
@@ -77,30 +105,58 @@ $$\mathbf{x}_{k+1} = \mathbf{x}_k - \alpha \nabla f(\mathbf{x}_k)$$
 * Para Rosenbrock se utilizó: $\alpha = 0,001$.
 * Para Rastrigin se utilizó: $\alpha = 0,002$.
 * Criterios de parada: tolerancia $\|\nabla f\|_2 < 10^{-8}$, máximo de 10.000 iteraciones o detección de divergencia / valor no finito.
+* **Condición de estabilidad local**: en una vecindad de un punto estacionario $\mathbf{x}^\star$ con Hessiana $H$, la iteración se comporta como $\mathbf{e}_{k+1} \approx (I - \alpha H)\,\mathbf{e}_k$ y converge si $\alpha < 2/\lambda_{\max}(H)$, con factor de contracción $\rho = \max_i |1 - \alpha\lambda_i|$. Para Rosenbrock, $2/\lambda_{\max} \approx 0{,}0020$ ($n=2$) y $\approx 0{,}0014$ ($n=3$), por lo que $\alpha = 0{,}001$ es estable, pero en la dirección del valle $\rho \approx 1 - 0{,}001 \times 0{,}399 \approx 0{,}9996$ (convergencia muy lenta). Para Rastrigin, $\lambda_{\max} \approx 396{,}8$ en los mínimos locales, así que $2/\lambda_{\max} \approx 0{,}0050$, $\alpha = 0{,}002$ es estable y $\rho \approx |1 - 0{,}002 \times 396{,}8| \approx 0{,}21$ (convergencia rápida, pero hacia el mínimo local más cercano).
 
 ### Optimización por Enjambre de Partículas (PSO)
-Metaheurística poblacional bioinspirada en el comportamiento social coordinado de bandadas (Eberhart & Kennedy, 1995). Esquema Global Best (*gbest*):
-* Número de partículas: 30
-* Iteraciones máximas: 500
+Metaheurística poblacional bioinspirada en el comportamiento social coordinado de bandadas (Eberhart & Kennedy, 1995). Esquema Global Best (*gbest*), con $S$ partículas, posición $\mathbf{x}_i^k$, velocidad $\mathbf{v}_i^k$, mejor posición personal $\mathbf{p}_i$ y mejor posición global $\mathbf{g}$:
+
+$$\mathbf{v}_i^{k+1} = w\,\mathbf{v}_i^{k} + c_1\,\mathbf{r}_1 \odot (\mathbf{p}_i - \mathbf{x}_i^{k}) + c_2\,\mathbf{r}_2 \odot (\mathbf{g} - \mathbf{x}_i^{k}), \qquad \mathbf{x}_i^{k+1} = \mathbf{x}_i^{k} + \mathbf{v}_i^{k+1},$$
+
+donde $\mathbf{r}_1, \mathbf{r}_2 \sim \mathcal{U}(0,1)^n$ se muestrean de forma independiente en cada partícula e iteración. Tras evaluar $f(\mathbf{x}_i^{k+1})$, se actualiza $\mathbf{p}_i \leftarrow \mathbf{x}_i^{k+1}$ si mejora a $f(\mathbf{p}_i)$, y $\mathbf{g} = \arg\min_i f(\mathbf{p}_i)$.
+* Número de partículas: $S = 30$
+* Iteraciones máximas: $K = 500$
 * Parámetros: $w = 0,7$ (inercia), $c_1 = 1,5$ (cognitivo), $c_2 = 1,5$ (social)
-* Evaluaciones por corrida: $30 + 500 \times 30 = 15.030$ evaluaciones de $f$.
+* Evaluaciones por corrida: $S + K \cdot S = 30 + 500 \times 30 = 15.030$ evaluaciones de $f$.
 
 ### Algoritmo Evolutivo Continuo (EA)
-Basado en selección natural y genética de poblaciones:
-* Tamaño de población: $N = 50$ individuos en $\mathbb{R}^n$
-* Generaciones máximas: 100
-* Elitismo: 15% (8 mejores individuos preservados intactos)
-* Cruzamiento: 65% (32 hijos por corte aleatorio de coordenadas)
-* Mutación gaussiana adaptativa: 20% (10 mutantes con ruido $\mathcal{N}(0, \sigma_j^2)$ donde $\sigma_j = \text{std}(X_{:,j})$)
+Basado en selección natural y genética de poblaciones. Sea $X_t \in \mathbb{R}^{N \times n}$ la población de la generación $t$, ordenada por aptitud. La siguiente generación se construye como $X_{t+1} = \mathcal{E}_t \cup \mathcal{C}_t \cup \mathcal{M}_t$, donde:
+* **Elitismo** ($\mathcal{E}_t$): 15% (8 mejores individuos preservados intactos).
+* **Cruzamiento** ($\mathcal{C}_t$): 65% (32 hijos). Dados dos padres $\mathbf{p}, \mathbf{q}$ y un punto de corte $\kappa \sim \mathcal{U}\{1,\dots,n-1\}$, el hijo es $\mathbf{c} = (p_1, \dots, p_\kappa, q_{\kappa+1}, \dots, q_n)$.
+* **Mutación gaussiana adaptativa** ($\mathcal{M}_t$): 20% (10 mutantes), con $\mathbf{x}' = \mathbf{x} + \boldsymbol{\varepsilon}$, $\varepsilon_j \sim \mathcal{N}(0, \sigma_j^2)$ y $\sigma_j = \text{std}(X_{:,j})$, es decir, la escala de la mutación en cada coordenada es la dispersión actual de la población en esa coordenada.
+* Tamaño de población: $N = 50$ individuos en $\mathbb{R}^n$; generaciones máximas: $G_{\max} = 100$.
 * Evaluaciones por corrida: $N + G_{\max} \times (N - N_{\text{élites}}) = 50 + 100 \times 42 = 4.250$ evaluaciones de $f$.
 
 ### Evolución Diferencial (DE)
-Metaheurística estocástica basada en vectores (Storn & Price, 1997). Estrategia canónica **DE/rand/1/bin** con selección codiciosa 1 a 1:
-* Tamaño de población: $N = 40$
-* Generaciones máximas: 100
+Metaheurística estocástica basada en vectores (Storn & Price, 1997). Estrategia canónica **DE/rand/1/bin** con selección codiciosa 1 a 1. Para cada individuo $\mathbf{x}_i$ de la generación $g$ se elige $r_1 \ne r_2 \ne r_3 \ne i$ al azar y se construye:
+
+$$\mathbf{v}_i = \mathbf{x}_{r_1} + F\,(\mathbf{x}_{r_2} - \mathbf{x}_{r_3}) \qquad \text{(mutación diferencial)}$$
+
+$$u_{i,j} = \begin{cases} v_{i,j} & \text{si } \text{rand}_j \le CR \;\text{ o }\; j = j_{\text{rand}} \\ x_{i,j} & \text{en otro caso} \end{cases} \qquad \text{(cruce binomial)}$$
+
+$$\mathbf{x}_i^{g+1} = \begin{cases} \mathbf{u}_i & \text{si } f(\mathbf{u}_i) \le f(\mathbf{x}_i^{g}) \\ \mathbf{x}_i^{g} & \text{en otro caso} \end{cases} \qquad \text{(selección codiciosa)}$$
+
+donde $\text{rand}_j \sim \mathcal{U}(0,1)$ y $j_{\text{rand}} \in \{1,\dots,n\}$ garantiza que al menos una coordenada proviene del vector mutante.
+* Tamaño de población: $N = 40$ (se requiere $N \ge 4$ para disponer de cuatro individuos distintos)
+* Generaciones máximas: $G_{\max} = 100$
 * Factor de escala diferencial: $F = 0,7$
 * Probabilidad de cruce binomial: $CR = 0,8$
 * Evaluaciones por corrida: $N \times (G_{\max} + 1) = 40 \times (100 + 1) = 4.040$ evaluaciones de $f$.
+
+#### Tabla 2: Hiperparámetros, Dominios Admisibles y Presupuesto de los Algoritmos Continuos
+*Fuente: Elaboración propia a partir de la configuración de los módulos de la Parte 1 del repositorio del proyecto; dominios admisibles según Nocedal y Wright (2006) para GD, Eberhart y Kennedy (1995) para PSO y Storn y Price (1997) para DE.*
+
+| Algoritmo | Parámetro | Valor | Dominio admisible | Evaluaciones de $f$ por corrida |
+| :--- | :--- | :---: | :---: | :---: |
+| GD | $\alpha$ (Rosenbrock / Rastrigin) | 0,001 / 0,002 | $0 < \alpha < 2/\lambda_{\max}$ (local) | Variable ($E_f$ y $E_\nabla$ por separado) |
+| GD | Tolerancia $\|\nabla f\|_2$ / iteraciones máx. | $10^{-8}$ / 10.000 | $\mathbb{R}_{>0}$ / $\mathbb{N}$ | — |
+| PSO | $S$ / $K$ | 30 / 500 | $\mathbb{N}$ | $S + KS = 15.030$ |
+| PSO | $w$ | 0,7 | $0 \le w < 1$ (régimen contractivo) | — |
+| PSO | $c_1$ / $c_2$ | 1,5 / 1,5 | $\mathbb{R}_{>0}$ | — |
+| EA | $N$ / $G_{\max}$ | 50 / 100 | $\mathbb{N}$ | $N + G_{\max}(N - N_{\text{élites}}) = 4.250$ |
+| EA | Élites / cruce / mutación | 15% / 65% / 20% | $[0,1]$, suma 100% | — |
+| DE | $N$ / $G_{\max}$ | 40 / 100 | $N \ge 4$ / $\mathbb{N}$ | $N(G_{\max}+1) = 4.040$ |
+| DE | $F$ | 0,7 | $(0, 2]$ | — |
+| DE | $CR$ | 0,8 | $[0, 1]$ | — |
 
 ---
 
@@ -111,11 +167,11 @@ Una deficiencia común en la literatura es comparar algoritmos basándose única
 Para garantizar una comparación cuantitativamente rigurosa y justa:
 1. **Conteo Separado**: Se instrumentaron los solucionadores para registrar de manera desacoplada las evaluaciones de función objetivo ($E_f$) y las evaluaciones del vector gradiente ($E_{\nabla}$).
 2. **Justificación de Equivalencia de Costo**:  
-   Si la función fuera una caja negra sin gradiente analítico disponible, calcular cada componente del gradiente en dimensión $d$ mediante diferencias finitas centrales requeriría evaluar la función en:
+   Si la función fuera una caja negra sin gradiente analítico disponible, calcular cada componente del gradiente en dimensión $n$ mediante diferencias finitas centrales (error de truncamiento $\mathcal{O}(h^2)$; Nocedal & Wright, 2006, cap. 8) requeriría evaluar la función en:
    $$\frac{\partial f(\mathbf{x})}{\partial x_j} \approx \frac{f(\mathbf{x} + h\mathbf{e}_j) - f(\mathbf{x} - h\mathbf{e}_j)}{2h} \implies 2 \text{ evaluaciones de } f \text{ por coordenada}$$
-   Por lo tanto, la aproximación del gradiente completo $\nabla f(\mathbf{x}) \in \mathbb{R}^d$ impone un costo computacional estricto de $2d$ evaluaciones de función. Aún cuando se cuente con un gradiente analítico, la complejidad computacional intrínseca de evaluar $d$ derivadas parciales respecto a $f$ es al menos del mismo orden asintótico $\mathcal{O}(d \cdot \text{coste}(f))$ (Nocedal & Wright, 2006).  
-   En consecuencia, se define la **métrica unificada de evaluaciones equivalentes**:
-   $$E_{\text{equivalente}} = E_f + (2d \times E_{\nabla})$$
+   Por lo tanto, la aproximación del gradiente completo $\nabla f(\mathbf{x}) \in \mathbb{R}^n$ impone un costo de $2n$ evaluaciones de función. Con el gradiente analítico aquí empleado, el costo real de $\nabla f$ es $\mathcal{O}(n)$ operaciones, del mismo orden que evaluar $f$, por lo que la regla de $2n$ debe entenderse como una **convención conservadora** (desfavorable para GD) que lo coloca en las mismas condiciones que un método de caja negra. En consecuencia, se define la **métrica unificada de evaluaciones equivalentes**:
+   $$E_{\text{equivalente}} = E_f + (2n \times E_{\nabla})$$
+   En la Sección 1.6.3 se evalúa cuánto cambian las conclusiones si cada evaluación de $\nabla f$ se contabiliza como una sola evaluación de $f$.
 3. **Criterio de Éxito**: Se define una corrida como exitosa si el valor final satisface $|f(\mathbf{x}^*) - f_{\text{óptimo}}| \le 10^{-3}$.
 
 ---
@@ -124,18 +180,19 @@ Para garantizar una comparación cuantitativamente rigurosa y justa:
 
 Para contrastar el comportamiento de una solución individual frente al movimiento simultáneo de un enjambre de partículas, se generaron animaciones en Rosenbrock 2D sobre curvas de nivel:
 
-| Descenso por Gradiente | Enjambre de Partículas (PSO) |
-| :---: | :---: |
-| ![Animación GD](assets/img/animacion_gd_rosenbrock_2d.gif) | ![Animación PSO](assets/img/animacion_pso_rosenbrock_2d.gif) |
-| *Figura 2 — Trayectoria de Descenso por Gradiente en Rosenbrock 2D ($x_0=[-1.2, 1.0]$, final $f \approx 1,81 \times 10^{-8}$).* | *Figura 3 — Movimiento de 30 partículas de PSO en Rosenbrock 2D (final $f \approx 3,38 \times 10^{-21}$).* |
+![Animación GD](assets/img/animacion_gd_rosenbrock_2d.gif)  
+*Figura 2 — Trayectoria de Descenso por Gradiente en Rosenbrock 2D ($x_0=[-1.2, 1.0]$, final $f \approx 1,81 \times 10^{-8}$).*
+
+![Animación PSO](assets/img/animacion_pso_rosenbrock_2d.gif)  
+*Figura 3 — Movimiento de 30 partículas de PSO en Rosenbrock 2D (final $f \approx 3,38 \times 10^{-21}$).*
 
 ---
 
 ## 1.5 Comparación General de Resultados Oficiales
 
-Se ejecutaron 30 corridas independientes por cada combinación de función, dimensión y algoritmo (480 ejecuciones en total) partiendo de semillas pseudoaleatorias controladas. Los resultados se resumen en la **Tabla 12**:
+Se ejecutaron 30 corridas independientes por cada combinación de función, dimensión y algoritmo (480 ejecuciones en total) partiendo de semillas pseudoaleatorias controladas. Los resultados se resumen en la **Tabla 3**:
 
-#### Tabla 12: Comparación General de los Resultados Obtenidos por los Cuatro Algoritmos
+#### Tabla 3: Comparación General de los Resultados Obtenidos por los Cuatro Algoritmos
 *Fuente: Resultados experimentales oficiales del módulo `parte_1/comparacion_y_gifs_parte1.py`.*
 
 | Función | Dim | Algoritmo | Media $f$ | Mediana $f$ | Desv. Estándar | Mejor | Peor | Tasa Éxito | Evals $f$ Prom | Evals Grad Prom |
@@ -172,15 +229,81 @@ Se ejecutaron 30 corridas independientes por cada combinación de función, dime
 
 ---
 
-## 1.6 Análisis Comparativo y Rectificación de Alucinaciones
+## 1.6 Discusión y Análisis Comparativo de la Parte 1
 
 > [!CAUTION] Rectificación Importante sobre Cifras Estadísticas Preliminares
 > En versiones previas del informe (pág. 21 original), un asistente de IA insertó la afirmación errónea:  
 > *"PSO obtuvo una tasa de éxito del 86,67 % en Rastrigin, mientras que la evolución diferencial alcanzó el 96,67 % en Rosenbrock."*  
-> **Auditoría de datos reales:** Al contrastar con la Tabla 12 y las salidas experimentales, **PSO en Rastrigin 3D obtuvo 93,33% de éxito (28 de 30 corridas exitosas)**, mientras que la **Evolución Diferencial en Rosenbrock 3D reportó un 26,67% (8 de 30 corridas)**. La cifra de 96,67% correspondía en realidad a Evolución Diferencial en *Rastrigin 3D* (29/30 corridas). Este hallazgo reafirma la necesidad de verificar empíricamente cada afirmación cuantitativa reportada.
+> **Auditoría de datos reales:** Al contrastar con la Tabla 3 y las salidas experimentales, **PSO en Rastrigin 3D obtuvo 93,33% de éxito (28 de 30 corridas exitosas)**, mientras que la **Evolución Diferencial en Rosenbrock 3D reportó un 26,67% (8 de 30 corridas)**. La cifra de 96,67% correspondía en realidad a Evolución Diferencial en *Rastrigin 3D* (29/30 corridas). Este hallazgo reafirma la necesidad de verificar empíricamente cada afirmación cuantitativa reportada.
 
-1. **Rastrigin y la Trampa Multimodal**: El descenso por gradiente falló en el 100% de las ejecuciones tanto en 2D como en 3D (media de 15,82 y 24,48), cayendo invariablemente en el mínimo local más cercano al punto de inicio. En cambio, PSO (100% y 93,33%) y Evolución Diferencial (100% y 96,67%) demostraron su capacidad para escapar de atractores subóptimos.
-2. **Rosenbrock y el Valle Parabólico**: El descenso por gradiente logró converger en 2D (100%) pero demandó 2.227 pasos con un paso muy conservador ($\alpha = 0,001$). En 3D, 3 de las 30 ejecuciones presentaron inestabilidad numérica/divergencia. Por su parte, la Evolución Diferencial navegó con gran solvencia en 2D ($f_{\text{mediana}} \approx 3,12 \times 10^{-10}$) debido a que el operador de mutación vectorial tiende a orientarse tangencialmente a lo largo del fondo de la banana.
+La discusión se organiza en torno a la geometría de cada función (Sección 1.1), la naturaleza de cada operador (Sección 1.2) y el costo bajo la regla justa (Sección 1.3). Las explicaciones de mecanismo que se ofrecen son interpretaciones coherentes con los datos de la Tabla 3, no resultados de experimentos de ablación.
+
+### 1.6.1 Rastrigin: multimodalidad frente a información local
+
+**Descenso por gradiente (0/30 en 2D y 3D).** Con $\alpha = 0{,}002$ y curvatura local $\lambda \approx 396{,}8$ en cada mínimo, el factor de contracción es $\rho \approx 0{,}21$ (Sección 1.2), lo que explica que GD converja en apenas 33–34 evaluaciones, pero siempre al mínimo local de la cuenca donde nació el punto inicial (Nocedal & Wright, 2006). La cuenca del óptimo global es aproximadamente el cubo $(-0{,}5, 0{,}5)^n$, de modo que la probabilidad de iniciar en ella con $\mathbf{x}_0 \sim \mathcal{U}(-5{,}12, 5{,}12)^n$ es $\approx (1/10{,}24)^n$: cerca de 0,95% en 2D y 0,09% en 3D, es decir, se esperarían 0,29 y 0,03 éxitos en 30 corridas, coherente con los 0 observados. Además, como GD termina en el mínimo local $f \approx \sum_i k_i^2$ con $k_i$ el entero más cercano a cada coordenada inicial, el valor final esperado es $\approx n\,(D^2/3 + 1/12) \approx 17{,}6$ (2D) y $\approx 26{,}5$ (3D), frente a las medias observadas de 15,82 y 24,48 (errores estándar $\approx 1{,}8$ y $\approx 2{,}6$), con lo que ambas están dentro de aproximadamente un error estándar de la predicción teórica. Los mejores valores (0,995 y 1,990) corresponden a los mínimos locales más cercanos al origen, con una y dos coordenadas desplazadas una unidad.
+
+**Metaheurísticas poblacionales.** PSO (100% en 2D; 93,33% en 3D) y DE (100%; 96,67%) logran escapar de los atractores porque conservan diversidad: en PSO, el término de inercia ($w = 0{,}7$) y los factores estocásticos $\mathbf{r}_1, \mathbf{r}_2$ mantienen exploración mientras el enjambre es disperso; en DE, el vector $F(\mathbf{x}_{r_2} - \mathbf{x}_{r_3})$ tiene inicialmente una escala comparable a la del dominio y se contrae de forma automática a medida que la población converge, produciendo una transición natural de exploración a explotación (Storn & Price, 1997; Eberhart & Kennedy, 1995). Las únicas fallas de PSO en 3D (2 corridas) terminaron en $f = 0{,}995$, es decir, en un mínimo local vecino del óptimo, lo que sugiere convergencia prematura del enjambre alrededor de $\mathbf{g}$ cuando el número de cuencas crece de $\approx 121$ a $\approx 1.331$ con una población fija de 30 partículas.
+
+**Algoritmo evolutivo (70% en 2D; 16,67% en 3D).** Es el que más se degrada con la dimensión. Una explicación plausible reside en su mutación adaptativa: como $\sigma_j$ es la desviación estándar de la población en la coordenada $j$, cuando la población se concentra en una cuenca la escala de mutación colapsa con ella y deja de poder saltar a cuencas vecinas (separadas por una unidad), mientras que el elitismo del 15% acelera ese colapso. El cruce por corte de coordenadas, por su parte, solo recombina coordenadas ya existentes y no genera valores nuevos.
+
+### 1.6.2 Rosenbrock: condicionamiento y geometría del valle
+
+**Descenso por gradiente (100% en 2D; 90% en 3D).** Al ser una función suave y unimodal en estas dimensiones, GD con gradiente analítico converge de forma consistente, pero su costo está dominado por el condicionamiento: con $\alpha = 0{,}001$ el factor de contracción en la dirección del valle es $\rho \approx 0{,}9996$ (Sección 1.2), lo que se traduce en 2.227 pasos promedio en 2D. En 3D, el límite de estabilidad local baja a $2/\lambda_{\max} \approx 0{,}0014$, de manera que el paso elegido deja un margen menor, coherente con que 3 de las 30 ejecuciones presentaron inestabilidad numérica/divergencia.
+
+**PSO (100% en 2D; 76,67% en 3D).** En 2D alcanza la mayor precisión de todos los métodos (mediana $4 \times 10^{-21}$), pero en 3D la mediana ($3{,}84 \times 10^{-4}$) queda apenas por debajo del umbral de éxito ($10^{-3}$) y el peor caso ($4{,}78 \times 10^{-3}$) lo supera: el enjambre llega al valle, pero el avance a lo largo de este es lento con 500 iteraciones, lo que apunta a una limitación de presupuesto más que a un atrapamiento.
+
+**Algoritmo evolutivo (40%; 3,33%).** La estructura del valle ($x_{i+1} \approx x_i^2$) acopla las coordenadas. El cruce por corte produce hijos $(p_1, q_2)$ con $q_2 \approx q_1^2 \ne p_1^2$, es decir, puntos que en general caen fuera del valle aun cuando ambos padres estén sobre él. Esto explica por qué el operador de cruce es particularmente inadecuado en este paisaje.
+
+**Evolución diferencial (100% en 2D; 26,67% en 3D).** En 2D navega con gran solvencia (mediana $3{,}12 \times 10^{-10}$) porque las diferencias $\mathbf{x}_{r_2} - \mathbf{x}_{r_3}$ heredan la orientación y escala de la población y, por tanto, tienden a alinearse tangencialmente con el fondo de la banana, un comportamiento que el cruce por coordenadas de EA no replica. En 3D, con el mismo presupuesto de 100 generaciones, la mediana ($1{,}20 \times 10^{-2}$) indica que la población aún no ha terminado de recorrer el valle, por lo que la ventaja de DE observada en 2D no se traslada a 3D con esa configuración.
+
+### 1.6.3 Costo computacional bajo la regla justa
+
+La **Tabla 4** traduce los resultados de la Tabla 3 a la métrica unificada de la Sección 1.3 ($E_{\text{equiv}} = E_f + 2n\,E_\nabla$) y añade el **costo esperado por éxito**, $E_{\text{equiv}}/\hat{p}$, con $\hat{p}$ la tasa de éxito observada: representa las evaluaciones equivalentes esperadas para obtener una corrida exitosa si el algoritmo se reinicia de forma independiente hasta lograrlo.
+
+#### Tabla 4: Evaluaciones Equivalentes y Costo Esperado por Éxito
+*Fuente: Elaboración propia a partir de la Tabla 3 y de la métrica $E_{\text{equiv}} = E_f + 2n \times E_{\nabla}$ (Sección 1.3). "—" indica que no hubo corridas exitosas.*
+
+| Función | Dim | Algoritmo | $E_f$ | $E_\nabla$ | $E_{\text{equiv}}$ | Tasa Éxito | Costo por éxito |
+| :--- | :---: | :--- | :---: | :---: | :---: | :---: | :---: |
+| **Rastrigin** | **2D** | Descenso por gradiente | 33 | 33 | 165 | 0,0% | — |
+| **Rastrigin** | **2D** | PSO | 15.030 | 0 | 15.030 | 100,0% | 15.030 |
+| **Rastrigin** | **2D** | Algoritmo evolutivo | 4.250 | 0 | 4.250 | 70,0% | 6.071 |
+| **Rastrigin** | **2D** | Evolución diferencial | 4.040 | 0 | 4.040 | 100,0% | **4.040** |
+| **Rastrigin** | **3D** | Descenso por gradiente | 34 | 34 | 238 | 0,0% | — |
+| **Rastrigin** | **3D** | PSO | 15.030 | 0 | 15.030 | 93,33% | 16.104 |
+| **Rastrigin** | **3D** | Algoritmo evolutivo | 4.250 | 0 | 4.250 | 16,67% | 25.500 |
+| **Rastrigin** | **3D** | Evolución diferencial | 4.040 | 0 | 4.040 | 96,67% | **4.179** |
+| **Rosenbrock** | **2D** | Descenso por gradiente | 2.227 | 2.226 | 11.131 | 100,0% | 11.131 |
+| **Rosenbrock** | **2D** | PSO | 15.030 | 0 | 15.030 | 100,0% | 15.030 |
+| **Rosenbrock** | **2D** | Algoritmo evolutivo | 4.250 | 0 | 4.250 | 40,0% | 10.625 |
+| **Rosenbrock** | **2D** | Evolución diferencial | 4.040 | 0 | 4.040 | 100,0% | **4.040** |
+| **Rosenbrock** | **3D** | Descenso por gradiente | 339 | 338 | 2.367 | 90,0% | **2.630** |
+| **Rosenbrock** | **3D** | PSO | 15.030 | 0 | 15.030 | 76,67% | 19.604 |
+| **Rosenbrock** | **3D** | Algoritmo evolutivo | 4.250 | 0 | 4.250 | 3,33% | 127.500 |
+| **Rosenbrock** | **3D** | Evolución diferencial | 4.040 | 0 | 4.040 | 26,67% | 15.150 |
+
+De la Tabla 4 se desprenden tres lecturas:
+
+1. **DE es el más eficiente en tres de los cuatro escenarios** (Rastrigin 2D y 3D, Rosenbrock 2D), con un costo por éxito de 4.040–4.179 evaluaciones. PSO resulta entre 3,7 y 3,9 veces más costoso en Rastrigin: logra tasas comparables, pero con un presupuesto de 15.030 evaluaciones frente a 4.040, por lo que su tasa de éxito no debe leerse sin considerar que parte con una ventaja de presupuesto de $15.030/4.040 \approx 3{,}7$.
+2. **GD es el más eficiente en Rosenbrock 3D** (2.630 frente a 15.150 de DE y 19.604 de PSO), pues explota la suavidad de la función con información de primer orden. Este resultado depende de la convención de costo: si cada evaluación de $\nabla f$ se contabiliza como una sola evaluación de $f$ (costo real del gradiente analítico, Sección 1.3), $E_{\text{equiv}}$ de GD baja a 4.453 (Rosenbrock 2D) y 677 (Rosenbrock 3D), lo cual **refuerza** su ventaja en 3D y lo coloca a la par de DE en 2D (4.453 frente a 4.040). La regla $2n$ no favorece, por tanto, a GD en este análisis.
+3. **EA es el menos robusto**: su costo por éxito se multiplica por más de 4 al pasar de 2D a 3D en Rastrigin (6.071 a 25.500) y alcanza 127.500 en Rosenbrock 3D, unas 48 veces el de GD.
+
+### 1.6.4 Efecto de la dimensión
+
+Todas las tasas de éxito disminuyen al pasar de 2D a 3D, salvo GD en Rastrigin (0% en ambas). El descenso es moderado en PSO y DE sobre Rastrigin (de 100% a 93,33% y 96,67%), cuyo número de mínimos locales crece de $\approx 121$ a $\approx 1.331$, pero abrupto en Rosenbrock para DE (100% a 26,67%), PSO (100% a 76,67%) y EA (40% a 3,33%), donde el obstáculo no es el número de cuencas sino la longitud y el acoplamiento del valle, que exige más iteraciones. Esto sugiere que, con presupuestos fijos, el costo de los métodos poblacionales crece más rápido con $n$ en problemas de valle que en problemas multimodales separables como Rastrigin.
+
+### 1.6.5 Limitaciones y validez de las conclusiones
+
+* **Dimensiones bajas**: solo se evaluaron $n \in \{2, 3\}$; los resultados no extrapolan directamente a dimensiones mayores, donde el número de mínimos locales de Rastrigin y el costo del gradiente en diferencias finitas crecen.
+* **Hiperparámetros fijos**: cada algoritmo se ejecutó con una única configuración (Tabla 2), sin ajuste por función. Parte de las diferencias entre algoritmos puede deberse a esa configuración y no al algoritmo (por ejemplo, 100 generaciones de DE en Rosenbrock 3D).
+* **Presupuestos distintos**: la regla justa homogeniza el *conteo* de evaluaciones, pero los presupuestos por corrida difieren (15.030, 4.250, 4.040); el costo por éxito (Tabla 4) mitiga, pero no elimina, esta asimetría.
+* **Tamaño muestral**: con 30 corridas por celda, diferencias de una o dos corridas (3–7 puntos porcentuales; por ejemplo, 28/30 frente a 29/30) no son estadísticamente concluyentes.
+
+### 1.6.6 Síntesis de la Parte 1
+
+* En paisajes **multimodales** (Rastrigin), los métodos de orden cero con diversidad —DE y PSO— son los únicos que resuelven el problema, y DE lo hace con el menor costo. GD falla por construcción, pues converge a la cuenca de partida.
+* En paisajes **suaves y mal condicionados** (Rosenbrock), GD con gradiente analítico es competitivo y el más barato en 3D, pero depende de un paso conservador y es sensible a la inestabilidad; PSO y DE son más precisos en 2D a mayor costo.
+* El EA con cruce por corte de coordenadas es el menos robusto, en particular cuando las variables están acopladas.
 
 ---
 
@@ -188,27 +311,132 @@ Se ejecutaron 30 corridas independientes por cada combinación de función, dime
 
 ## 2.1 Formulación del Problema y Modelo Económico
 
-El vendedor debe recorrer las 47 capitales de provincia de la España peninsular en un recorrido cerrado. El costo de traslado dirigido entre la ciudad $i$ y la ciudad $j$ se define como:
+### 2.1.1 Definición formal
 
-$$\text{Costo}_{ij} = (\text{ValorHora} \times T_{ij}) + \text{Peajes}_{ij} + \text{Combustible}_{ij}$$
+Sea $V = \{1, 2, \dots, n\}$ el conjunto de las $n = 47$ capitales de provincia de la España peninsular y $A \subseteq \{(i,j) \in V \times V : i \ne j\}$ el conjunto de arcos dirigidos con conexión vial. La red es **asimétrica**: en general $T_{ij} \ne T_{ji}$, $D_{ij} \ne D_{ji}$ y $P_{ij} \ne P_{ji}$. Para cada arco $(i,j) \in A$ se dispone de:
 
-### Parámetros Reales y Justificación Jurídica
+* $T_{ij} \in \mathbb{R}_{>0}$: tiempo de conducción [h].
+* $D_{ij} \in \mathbb{R}_{>0}$: distancia por carretera [km].
+* $P_{ij} \in \mathbb{R}_{\ge 0}$: peaje [€].
 
-1. **Valor de la Hora del Vendedor ($\text{ValorHora}$)**:  
-   Según el **Real Decreto 126/2026, de 18 de febrero**, por el que se fija el Salario Mínimo Interprofesional para 2026 (BOE núm. 44, art. 1), el SMI se fija en 40,70 €/día. Asumiendo una jornada laboral continua de 8 horas diarias:
-   $$\text{ValorHora} = \frac{40{,}70\text{ \euro}}{8\text{ h}} = 5{,}0875 \approx \mathbf{5{,}09\text{ \euro/h}}$$
+El costo de traslado dirigido entre la ciudad $i$ y la ciudad $j$ se define como:
+
+$$C_{ij} = h \cdot T_{ij} + P_{ij} + \kappa \cdot D_{ij}, \qquad \kappa = c \cdot p, \qquad C : V \times V \to \mathbb{R}_{\ge 0} \cup \{+\infty\},$$
+
+donde $h$ es el valor de la hora del vendedor [€/h], $c$ el consumo [L/km], $p$ el precio del combustible [€/L] y $C_{ij} = +\infty$ para los pares sin conexión (en la implementación, entradas `np.inf`; la diagonal se fija en 0). En forma de costo por componentes: $\text{Costo}_{ij} = (\text{ValorHora} \times T_{ij}) + \text{Peajes}_{ij} + \text{Combustible}_{ij}$.
+
+### 2.1.2 Formulación sobre permutaciones
+
+Un recorrido cerrado que visita cada capital exactamente una vez es una permutación cíclica $\pi$ de $V$ (un ciclo hamiltoniano dirigido). El espacio de búsqueda es el conjunto $\Pi_n$ de tales ciclos y el problema es:
+
+$$\min_{\pi \in \Pi_n} Z(\pi) = \sum_{k=1}^{n} C_{\pi(k),\,\pi(k+1)}, \qquad \pi(n+1) \equiv \pi(1).$$
+
+Gracias a la linealidad de $C_{ij}$ en sus tres componentes, el objetivo se descompone exactamente como
+
+$$Z(\pi) = h\,T(\pi) + P(\pi) + \kappa\,D(\pi), \qquad T(\pi) = \sum_k T_{\pi(k)\pi(k+1)}, \quad D(\pi) = \sum_k D_{\pi(k)\pi(k+1)}, \quad P(\pi) = \sum_k P_{\pi(k)\pi(k+1)},$$
+
+que corresponde al desglose reportado en la Tabla 7 (*costo del vendedor* $= hT$, *combustible* $= \kappa D$, *peajes* $= P$). Dado que $C$ es asimétrica, $|\Pi_n| = (n-1)! = 46! \approx 5{,}5 \times 10^{57}$ recorridos distintos (la mitad que $(n-1)!$ solo se obtendría en el caso simétrico). Incluso evaluando $10^9$ recorridos por segundo, la enumeración exhaustiva tomaría del orden de $10^{41}$ años, lo que justifica el uso de metaheurísticas.
+
+### 2.1.3 Formulación como programa lineal entero (referencia)
+
+Con variables binarias $x_{ij} = 1$ si el recorrido usa el arco $(i,j)$, el problema es un TSP asimétrico (ATSP):
+
+$$\min \sum_{(i,j) \in A} C_{ij}\,x_{ij}$$
+
+$$\text{s.a.} \quad \sum_{j:(i,j)\in A} x_{ij} = 1 \;\;\forall i \in V, \qquad \sum_{i:(i,j)\in A} x_{ij} = 1 \;\;\forall j \in V, \qquad x_{ij} \in \{0,1\},$$
+
+más una familia de restricciones de eliminación de subtours. En la formulación de Dantzig–Fulkerson–Johnson (Dantzig et al., 1954):
+
+$$\sum_{i \in S}\;\sum_{j \in S,\, j \ne i} x_{ij} \le |S| - 1 \qquad \forall S \subset V,\; 2 \le |S| \le n-1,$$
+
+que requiere $2^n - n - 2 \approx 1{,}4 \times 10^{14}$ restricciones para $n = 47$. La formulación compacta de Miller–Tucker–Zemlin (Miller et al., 1960) introduce variables auxiliares de orden $u_i$:
+
+$$u_i - u_j + n\,x_{ij} \le n - 1 \quad \forall\, i \ne j,\; i,j \in \{2, \dots, n\}, \qquad 1 \le u_i \le n-1,$$
+
+con $n(n-1) = 2.162$ variables binarias, $2n = 94$ restricciones de asignación y $(n-1)(n-2) = 2.070$ restricciones de orden. Estas formulaciones se presentan como modelo de referencia: en este trabajo el problema se resuelve de forma aproximada mediante metaheurísticas, de modo que el valor de $Z$ obtenido es una **cota superior** del óptimo y no un óptimo certificado.
+
+### 2.1.4 Parámetros Reales y Justificación Jurídica
+
+Los parámetros del modelo se resumen en la **Tabla 5** y se justifican a continuación.
+
+#### Tabla 5: Parámetros del Modelo de Costo
+*Fuente: Elaboración propia a partir de las fuentes indicadas en cada fila.*
+
+| Parámetro | Símbolo | Valor | Unidad | Fuente |
+| :--- | :---: | :---: | :---: | :--- |
+| Valor de la hora del vendedor | $h$ | 5,09 | €/h | España. Ministerio de Trabajo y Economía Social (2026): 40,70 €/día $\div$ 8 h |
+| Consumo del vehículo (WLTP) | $c$ | 4,5 L/100 km (0,045 L/km) | L/km | Km77 (s. f.) |
+| Precio de la gasolina 95 E5 | $p$ | 1,785 | €/L | MITECO (s. f.) |
+| Costo de combustible por kilómetro | $\kappa = c \cdot p$ | 0,080325 | €/km | Cálculo propio a partir de las dos filas anteriores |
+| Capacidad del tanque / autonomía | — | 43 L / $\approx$ 956 km | — | Km77 (s. f.); autonomía $= 43 / 0{,}045$ |
+| Peajes de la ruta resultante | $P(\pi)$ | 0,00 | € | España. Ministerio de Transportes y Movilidad Sostenible (s. f.) |
+| Semilla pseudoaleatoria | — | 42 | — | Configuración del proyecto |
+
+1. **Valor de la Hora del Vendedor ($h$)**:  
+   Según el **Real Decreto 126/2026, de 18 de febrero**, por el que se fija el Salario Mínimo Interprofesional para 2026 (BOE núm. 44, art. 1; España. Ministerio de Trabajo y Economía Social, 2026), el SMI se fija en 40,70 €/día. Asumiendo una jornada laboral continua de 8 horas diarias:
+   $$h = \frac{40{,}70\text{ \euro}}{8\text{ h}} = 5{,}0875 \approx \mathbf{5{,}09\text{ \euro/h}}$$
 2. **Cálculo del Combustible y Vehículo**:  
-   Se seleccionó el **Toyota Corolla 140H e-CVT 1.8** híbrido (sexto turismo más vendido en España en 2025 según ANFAC). Consumo homologado en ciclo WLTP de **4,5 L / 100 km**. Precio de Gasolina 95 E5: 1,785 €/L (Geoportal del Ministerio para la Transición Ecológica y el Reto Demográfico - MITECO).  
-   Gasto por kilómetro: $0{,}045 \times 1{,}785 = 0{,}080325\text{ \euro/km}$. Tanque de 43 L con autonomía de ~956 km.
+   Se seleccionó el **Toyota Corolla 140H e-CVT 1.8** híbrido, sexto turismo más vendido en España en 2025 según Anfac (s. f.). Consumo homologado en ciclo WLTP de **4,5 L / 100 km** según la ficha técnica de Km77 (s. f.). Precio de Gasolina 95 E5: 1,785 €/L según el Geoportal del Ministerio para la Transición Ecológica y el Reto Demográfico (MITECO, s. f.).  
+   Gasto por kilómetro: $\kappa = 0{,}045 \times 1{,}785 = 0{,}080325\text{ \euro/km}$. Tanque de 43 L con autonomía de ~956 km.
 3. **Cálculos de Peaje**:  
-   Se tabularon los tramos de pago de la red estatal (AP-6, AP-51, AP-66, AP-9). En la ruta óptima resultante, el algoritmo selecciona la red libre de autovías paralelas (A-1, A-2, A-7, A-66), resultando en **0,00 € de peaje real**.
+   Se tabularon los tramos de pago de la red estatal (AP-6, AP-51, AP-66, AP-9) a partir del listado de peajes dependientes de la Administración General del Estado (España. Ministerio de Transportes y Movilidad Sostenible, s. f.). En la ruta resultante, el algoritmo selecciona la red libre de autovías paralelas (A-1, A-2, A-7, A-66), resultando en **0,00 € de peaje real**.
 4. **Semilla Obligatoria**: Se empleó la semilla canónica **42** en todas las ejecuciones.
 
 ---
 
-## 2.2 Desempeño Cuantitativo: ACO con Or-opt vs ACO Puro
+## 2.2 Formulación de los Algoritmos de la Parte 2
 
-#### Tabla 14: Comparación de Resultados ACO Con vs Sin Búsqueda Local Or-opt
+### 2.2.1 Colonia de Hormigas (ACO)
+
+La optimización por colonias de hormigas (Dorigo & Stützle, 2004) construye soluciones con $m$ hormigas artificiales que se desplazan por el grafo dirigido $(V, A)$ guiadas por una matriz de feromonas $\tau_{ij} > 0$ y una heurística local $\eta_{ij}$. En cada paso, la hormiga $k$ ubicada en la ciudad $i$ elige la siguiente ciudad $j$ del conjunto de ciudades factibles $\mathcal{N}_i^k$ (no visitadas y con $C_{ij} < \infty$) con probabilidad
+
+$$p_{ij}^{k} = \frac{[\tau_{ij}]^{\alpha}\,[\eta_{ij}]^{\beta}}{\displaystyle\sum_{l \in \mathcal{N}_i^k} [\tau_{il}]^{\alpha}\,[\eta_{il}]^{\beta}}, \quad j \in \mathcal{N}_i^k, \qquad \eta_{ij} = \frac{1}{C_{ij}},$$
+
+y, una vez construidos los $m$ recorridos $\pi_1, \dots, \pi_m$, la feromona se actualiza con evaporación y depósito:
+
+$$\tau_{ij} \leftarrow (1 - \rho)\,\tau_{ij} + \sum_{k=1}^{m} \Delta\tau_{ij}^{k}, \qquad \Delta\tau_{ij}^{k} = \begin{cases} Q / Z(\pi_k) & \text{si } (i,j) \in \pi_k \\ 0 & \text{en otro caso} \end{cases}$$
+
+Como el problema es asimétrico, el depósito se realiza únicamente sobre el arco dirigido $(i,j)$ y no sobre $(j,i)$. Los dominios admisibles son $\alpha, \beta \ge 0$, $\rho \in (0, 1]$, $Q > 0$ y $m \in \mathbb{N}$. El costo de construcción de una iteración es $\mathcal{O}(m\,n^2)$.
+
+### 2.2.2 Búsqueda local Or-opt
+
+Or-opt (Or, 1976) mejora un recorrido moviendo un segmento de $s$ ciudades consecutivas ($s \in \{1,2,3\}$ en la formulación original) a otra posición del ciclo. Sea el segmento $(a_1, \dots, a_s)$ con predecesor $p$ y sucesor $q$ en el recorrido, y sean $u, v$ dos ciudades consecutivas fuera del segmento. La variación de costo al reinsertarlo entre $u$ y $v$ conservando su orientación es
+
+$$\Delta = \bigl[C_{p,q} + C_{u,a_1} + C_{a_s,v}\bigr] - \bigl[C_{p,a_1} + C_{a_s,q} + C_{u,v}\bigr],$$
+
+y el movimiento se acepta si $\Delta < 0$. Como $C$ es asimétrica, una inserción con el segmento invertido exige además recalcular los arcos internos del segmento, que cambian de sentido. Una pasada completa evalúa $\approx 3n^2 \approx 6 \times 10^3$ movimientos candidatos para $n = 47$, cada uno con costo $\mathcal{O}(1)$.
+
+### 2.2.3 Algoritmo Genético (DEAP)
+
+Un individuo es una permutación $\pi \in \Pi_n$ y su aptitud es $Z(\pi)$ (a minimizar). Se implementó el algoritmo genético con la biblioteca DEAP (Fortin et al., 2012) empleando:
+* Inicialización de matriz con `np.inf` para tramos no conectados y diagonal en 0.
+* Operador de cruce $OX$ (*Order Crossover*), que preserva secuencias de subrutas sin duplicar ciudades: se eligen dos puntos de corte $a < b$, el hijo hereda el segmento $[a, b)$ del primer padre y completa las posiciones restantes con las ciudades del segundo padre en su orden relativo, comenzando después de $b$ y omitiendo las ya presentes.
+* Mutación $mutShuffleIndexes$ con $indpb = 0,05$: cada posición, con probabilidad $indpb$, se intercambia con otra posición elegida al azar, por lo que en promedio ocurren $n \cdot indpb = 47 \times 0{,}05 = 2{,}35$ intercambios por individuo mutado.
+* Selección por torneo de tamaño $k = 3$: se muestrean tres individuos al azar y se conserva el de menor $Z$.
+* 1.000 generaciones.
+
+#### Tabla 6: Hiperparámetros y Dominios Admisibles de ACO + Or-opt y GA
+*Fuente: Elaboración propia a partir de la configuración del módulo `parte_2` del repositorio; dominios admisibles según Dorigo y Stützle (2004) para ACO y Fortin et al. (2012) para DEAP. Las celdas marcadas con "*por completar*" deben tomarse del código del proyecto.*
+
+| Algoritmo | Parámetro | Valor | Dominio admisible |
+| :--- | :--- | :---: | :---: |
+| ACO | Número de hormigas $m$ | *por completar* | $\mathbb{N}$ |
+| ACO | $\alpha$ / $\beta$ | *por completar* | $\mathbb{R}_{\ge 0}$ |
+| ACO | Evaporación $\rho$ | *por completar* | $(0, 1]$ |
+| ACO | Constante de depósito $Q$ | *por completar* | $\mathbb{R}_{>0}$ |
+| ACO | Iteraciones | 150 | $\mathbb{N}$ |
+| ACO + Or-opt | Longitud de segmento $s$ / dónde se aplica | *por completar* | $s \in \{1,2,3\}$ |
+| GA | Generaciones | 1.000 | $\mathbb{N}$ |
+| GA | Torneo $k$ | 3 | $\mathbb{N},\; k \ge 2$ |
+| GA | `indpb` (mutación) | 0,05 | $[0, 1]$ |
+| GA | Cruce | $OX$ | — |
+| Ambos | Semilla | 42 | — |
+
+---
+
+## 2.3 Desempeño Cuantitativo: ACO con Or-opt vs ACO Puro
+
+#### Tabla 7: Comparación de Resultados ACO Con vs Sin Búsqueda Local Or-opt
 *Fuente: Resultados oficiales consolidados en `parte_2/resultados/comparacion_oropt.json`.*
 
 | Métrica | ACO con Or-opt | ACO sin Or-opt | ACO sin Or-opt (Alto Presupuesto: 50h $\times$ 300it) | Diferencia / Ahorro con Or-opt |
@@ -222,10 +450,12 @@ $$\text{Costo}_{ij} = (\text{ValorHora} \times T_{ij}) + \text{Peajes}_{ij} + \t
 | **Iteración Convergencia**| **Iteración 20** | Iteración 85 | Iteración 31 | **Convergencia 4x más rápida** |
 | **Tiempo de Cómputo (s)**| **4,77 s** | 3,97 s | 19,81 s | Óptimo balance calidad/tiempo |
 
+La descomposición de la Sección 2.1.2 se verifica sobre el mejor recorrido: $Z = hT + P + \kappa D = 338{,}42 + 0{,}00 + 506{,}67 = 845{,}09$ €. La mejora del 3,46% respecto al ACO puro se obtiene con un costo de cómputo similar (4,77 s frente a 3,97 s), mientras que dar al ACO puro un presupuesto cuatro veces mayor (19,81 s) no cierra la brecha (867,51 € frente a 845,09 €), lo que indica que la ventaja proviene del refinamiento local de Or-opt (Or, 1976) sobre la construcción de Dorigo y Stützle (2004), y no solo de un mayor esfuerzo de búsqueda.
+
 ![Figura 7 Convergencia ACO](assets/img/figura7_convergencia_aco.png)  
 *Figura 7 — Convergencia comparativa de ACO: Con Or-opt vs Sin Or-opt.*
 
-### Secuencia del Tour Óptimo Peninsular (845,09 €):
+### Secuencia del Mejor Tour Peninsular Encontrado (845,09 €):
 ```text
 Logroño -> Soria -> Zaragoza -> Huesca -> Lleida -> Girona -> Barcelona -> 
 Tarragona -> Castellón de la Plana -> Valencia -> Teruel -> Cuenca -> 
@@ -239,15 +469,13 @@ San Sebastián -> Pamplona -> (retorno a Logroño)
 
 ---
 
-## 2.3 Algoritmo Genético (DEAP) para el TSP
+## 2.4 Comparación del Algoritmo Genético (DEAP) y ACO
 
-Se implementó un algoritmo genético en DEAP empleando:
-* Inicialización de matriz con `np.inf` para tramos no conectados y diagonal en 0.
-* Operador de cruce $OX$ (*Order Crossover*), que preserva secuencias de subrutas sin duplicar ciudades.
-* Mutación $mutShuffleIndexes$ con $indpb = 0,05$.
-* Selección por torneo de tamaño $k = 3$.
+El algoritmo genético descrito en la Sección 2.2.3 se comparó con ACO + Or-opt en las animaciones de la Parte 2 (**Tabla 8**).
 
-#### Tabla 19: Resultados Comparativos de las Animaciones (GA vs ACO)
+#### Tabla 8: Resultados Comparativos de las Animaciones (GA vs ACO)
+*Fuente: Elaboración propia a partir de las ejecuciones que generan las animaciones de la Parte 2 (`python main.py -e gifs`), con semilla 42.*
+
 | Concepto | Algoritmo Genético (DEAP) | Colonia de Hormigas (ACO + Or-opt) |
 | :--- | :---: | :---: |
 | **Fotogramas del GIF** | 72 | 101 |
@@ -255,18 +483,32 @@ Se implementó un algoritmo genético en DEAP empleando:
 | **Mejor Costo Final** | **1.024,28 EUR** | **845,09 EUR** |
 | **Generaciones / Iteraciones** | 1.000 generaciones | 150 iteraciones |
 
----
-
-## 2.4 Animaciones GIF de la Parte 2
-
-| Colonia de Hormigas con Or-opt (845,09 €) | Algoritmo Genético DEAP (1.024,28 €) |
-| :---: | :---: |
-| ![GIF ACO](assets/img/evolucion_aco_con_oropt.gif) | ![GIF GA](assets/img/evolucion_ga.gif) |
-| *Figura 8 — Evolución del tour con ACO + Or-opt (150 iteraciones).* | *Figura 9 — Evolución del tour con Algoritmo Genético (1.000 gen).* |
+Partiendo del mismo costo inicial, ACO + Or-opt reduce el costo en un 65,9% frente a un 58,7% del GA, de modo que el recorrido del GA resulta un 21,2% más costoso que el de ACO + Or-opt (1.024,28 € frente a 845,09 €) pese a usar más generaciones. Esta comparación debe leerse con cautela: una generación del GA y una iteración de ACO no representan el mismo número de evaluaciones de $Z$, y los hiperparámetros del GA no se ajustaron (Tabla 6).
 
 ---
 
-## 2.5 Estudio de Sensibilidad del Valor de la Hora del Vendedor
+## 2.5 Animaciones GIF de la Parte 2
+
+![GIF ACO](assets/img/evolucion_aco_con_oropt.gif)  
+*Figura 8 — Evolución del tour con ACO + Or-opt (150 iteraciones), costo final 845,09 €.*
+
+![GIF GA](assets/img/evolucion_ga.gif)  
+*Figura 9 — Evolución del tour con Algoritmo Genético (1.000 gen), costo final 1.024,28 €.*
+
+---
+
+## 2.6 Estudio de Sensibilidad del Valor de la Hora del Vendedor
+
+### 2.6.1 Fundamento matemático
+
+Como $Z(\pi) = h\,T(\pi) + K(\pi)$, con $K(\pi) = P(\pi) + \kappa D(\pi)$ independiente de $h$, el costo óptimo en función del valor horario es
+
+$$Z^*(h) = \min_{\pi \in \Pi_n} \bigl[\, h\,T(\pi) + K(\pi) \,\bigr], \qquad h \in [0, \infty),$$
+
+es decir, el mínimo punto a punto de funciones afines en $h$: $Z^*(h)$ es **cóncava, lineal por tramos y no decreciente**. Cada tramo corresponde a un recorrido y el recorrido óptimo cambia solo en los puntos de quiebre $h_{ab} = (K_b - K_a)/(T_a - T_b)$. Si $\pi_1$ y $\pi_2$ son óptimos para $h_1 < h_2$, sumando las desigualdades de optimalidad $h_1 T_1 + K_1 \le h_1 T_2 + K_2$ y $h_2 T_2 + K_2 \le h_2 T_1 + K_1$ se obtiene $(h_2 - h_1)(T_2 - T_1) \le 0$, es decir, **el tiempo óptimo $T^*(h)$ es no creciente en $h$** (y, de forma complementaria, $K^*(h)$ es no decreciente). En los extremos, $h = 0$ minimiza el gasto de combustible y peajes y $h \to \infty$ minimiza el tiempo de conducción. Esto explica los "regímenes" de la **Tabla 9**: la ruta se mantiene invariante en intervalos de $h$ y cambia al cruzar un punto de quiebre.
+
+#### Tabla 9: Sensibilidad del Mejor Recorrido al Valor de la Hora del Vendedor
+*Fuente: Elaboración propia a partir de la ejecución `python main.py -e sensibilidad` (ACO + Or-opt, semilla 42) para $h \in [0, 100]$ €/h.*
 
 | Valor Hora (€/h) | Costo Total (€) | Distancia (km) | Tiempo (h) | Combustible (€) | ¿Idéntica al Tour Base? | Régimen Operativo Predominante |
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
@@ -282,11 +524,13 @@ Se implementó un algoritmo genético en DEAP empleando:
 * **Zona de Estabilidad**: Entre 4,5 €/h y 12 €/h la ruta es estrictamente invariante.
 * **Umbral Crítico de Transición**: A partir de **15 - 20 €/h**, la colonia reorganiza el orden interprovincial para favorecer autovías de 120 km/h, reduciendo el tiempo de viaje a **65,65 horas (un ahorro directo de 50 minutos de conducción)**.
 
+### 2.6.2 Verificación de consistencia con la teoría
+
+Las propiedades de monotonía de la Sección 2.6.1 valen para óptimos exactos, por lo que sirven para auditar la calidad de las soluciones de una metaheurística. En la Tabla 9, varias rutas con $h \ge 20$ €/h presentan **simultáneamente** menor tiempo y menor costo de combustible que la ruta base (por ejemplo, 65,82 h y 500,98 € a 50 €/h, frente a 66,49 h y 506,67 €); evaluadas con $h = 5{,}09$ €/h tendrían un costo total inferior a 845,09 €. Igualmente, el combustible a 0 €/h (507,06 €) es mayor que el de la ruta base (506,67 €), y el tiempo no es monótono entre 20 y 100 €/h. Estos hallazgos son coherentes con la naturaleza heurística del método: 845,09 € es el **mejor valor encontrado** (cota superior del óptimo, Sección 2.1.3) y la gestión de la brecha respecto al óptimo real requeriría un cálculo exacto o una cota inferior del TSP.
+
 ---
 
-# 3. USO DE INTELIGENCIA ARTIFICIAL Y CACERÍA DE LA ALUCINACIÓN
-
-### 3.1 Prompts Principales Empleados
+# SECCIÓN DE USO DE INTELIGENCIA ARTIFICIAL
 
 * **Primer Prompt**:  
   *“Necesito tomar la api de geoapify y realizar requests automáticas para obtener los datos de la matriz”*  
@@ -295,7 +539,9 @@ Se implementó un algoritmo genético en DEAP empleando:
   *“Ayúdame a realizar la documentación de los GIF y la comparación de los algoritmos de optimización.”*  
   *Impacto*: Facilitó la estructuración pedagógica del informe y la selección de métricas (tasa de éxito, mediana logarítmica y evaluaciones directas de función).
 
-### 3.2 Cacería de la Alucinación
+---
+
+# CACERÍA DE LA ALUCINACIÓN
 
 1. **Alucinación 1 (Pathlib y Rutas Relativas Asumidas)**:  
    La IA asumió nombres de directorios inventados (`/datos/rutas_costes.csv`), generando errores `FileNotFoundError`. Se corrigió implementando resolución dinámica anclada a la raíz con `Path(__file__).resolve().parent`.
@@ -308,21 +554,7 @@ Se implementó un algoritmo genético en DEAP empleando:
 
 ---
 
-# 4. VIDEOS DE CONTRIBUCIÓN INDIVIDUAL
-
-Cada integrante grabó un video de 2 a 3 minutos hablando en primera persona sobre sus aportes específicos. El video muestra evidencia concreta: un fragmento de código que escribió, un commit, una figura que elaboró o una sección del reporte que redactó, y explica brevemente cómo funciona. Lo que cada persona declare en su video podrá ser preguntado en la sustentación.
-
-| Integrante | Documento | Aportes Específicos Sustentados | Enlace Directo al Video |
-| :--- | :---: | :--- | :---: |
-| **Alejandro Agudelo Anaya** | CC: 1017271139 | Descenso por Gradiente (GD) y Optimización por Enjambre de Partículas (PSO) | [https://www.youtube.com/watch?v=0caV8OajlQM](https://www.youtube.com/watch?v=0caV8OajlQM) |
-| **David Agudelo Arboleda** | CC: 1000899797 | Colonia de Hormigas (ACO) con Or-opt, modelado económico del TSP y animaciones | [https://youtu.be/xvnyp074I1E](https://youtu.be/xvnyp074I1E) |
-| **Santiago Álvarez Martínez** | CC: 1022142463 | Formulación metodológica, diseño experimental y comparativa estadística | [https://youtu.be/QNHQFw3YrUI](https://youtu.be/QNHQFw3YrUI) |
-| **Daniel Felipe López Zapata** | CC: 1045046468 | Arquitectura modular de código, validación de datos viales y estructuración | [https://youtu.be/_6JfD148hN4](https://youtu.be/_6JfD148hN4) |
-| **Sara Osorio Piñerez** | CC: 1001370113 | Verificación empírica, redacción técnica y auditoría en cacería de alucinaciones | [https://www.youtube.com/watch?v=W_dBpcZ_9g4](https://www.youtube.com/watch?v=W_dBpcZ_9g4) |
-
----
-
-# 5. GUÍA DE EJECUCIÓN EN UN SOLO COMANDO
+# GUÍA DE EJECUCIÓN EN UN SOLO COMANDO
 
 Cualquier evaluador puede ejecutar el proyecto completo o cualquier ejercicio aislado con un solo comando:
 
@@ -360,12 +592,14 @@ python main.py -e gifs          # Regenera animaciones GIF
 # REFERENCIAS BIBLIOGRÁFICAS (Formato APA 7.ª Edición)
 
 * Anfac. (s. f.). *Matriculaciones turismos y todoterreno*. https://anfac.com/cifras-clave/matriculaciones-turismos-y-todoterreno/
+* Dantzig, G., Fulkerson, R., & Johnson, S. (1954). Solution of a large-scale traveling-salesman problem. *Journal of the Operations Research Society of America*, 2(4), 393–410. https://doi.org/10.1287/opre.2.4.393
 * Dorigo, M., & Stützle, T. (2004). *Ant colony optimization*. MIT Press. https://doi.org/10.7551/mitpress/1290.001.0001
 * Eberhart, R., & Kennedy, J. (1995). A new optimizer using particle swarm theory. En *MHS'95. Proceedings of the Sixth International Symposium on Micro Machine and Human Science* (pp. 39–43). IEEE. https://doi.org/10.1109/MHS.1995.494215
 * España. Ministerio de Trabajo y Economía Social. (2026). Real Decreto 126/2026, de 18 de febrero, por el que se fija el salario mínimo interprofesional para 2026. *Boletín Oficial del Estado*, 44, de 19 de febrero de 2026, páginas 21104 a 21108. https://www.boe.es/eli/es/rd/2026/02/18/126
 * España. Ministerio de Transportes y Movilidad Sostenible. (s. f.). *Peajes dependientes de la AGE*. https://www.transportes.gob.es/carreteras/nuestra-red/autopistas-peaje/peajes-dependientes-de-la-age
 * Fortin, F.-A., De Rainville, F.-M., Gardner, M.-A., Parizeau, M., & Gagné, C. (2012). DEAP: Evolutionary algorithms made easy. *Journal of Machine Learning Research*, 13(70), 2171–2175.
 * Km77. (s. f.). *Toyota Corolla 140H Style Plus (2023): Datos técnicos y equipamiento*. https://www.km77.com/coches/toyota/corolla/2023/5-puertas/estandar/corolla-140h-style-plus/datos
+* Miller, C. E., Tucker, A. W., & Zemlin, R. A. (1960). Integer programming formulations and traveling salesman problems. *Journal of the ACM*, 7(4), 326–329. https://doi.org/10.1145/321043.321046
 * Ministerio para la Transición Ecológica y el Reto Demográfico. (s. f.). *Sistema de Información para la Geolocalización de Estaciones de Servicio y Precios de Carburantes*. https://energia.serviciosmin.gob.es/shpCarburantes/
 * Nocedal, J., & Wright, S. J. (2006). *Numerical optimization* (2.ª ed.). Springer. https://doi.org/10.1007/978-0-387-40065-5
 * Or, I. (1976). *Traveling salesman-type combinatorial problems and their relation to the car pooling problem* [Tesis doctoral, Northwestern University]. ProQuest Dissertations Publishing.
