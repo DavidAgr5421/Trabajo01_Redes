@@ -138,8 +138,12 @@ def correr_ga_individual(datos, M, cfg, vh: float, hacer_gif: bool = True):
         "tiempo_total_h": round(desglose["tiempo_h"], 2),
         "peajes_total_eur": round(desglose["tax_eur"], 2),
         "combustible_total_eur": round(desglose["gas_eur"], 2),
+        "evaluaciones_tour": int(res.get("evaluaciones_tour", 0)),
+        "pasadas_or_opt": int(res.get("pasadas_or_opt", 0)),
         "tiempo_ejecucion_s": round(dt, 2),
         "historia_mejor": res["historia_mejor"],
+        "historia_evals_tour": res.get("historia_evals_tour", []),
+        "historia_tiempos": res.get("historia_tiempos", []),
         "orden_ciudades": datos.tour_a_nombres(res["tour"]),
     }
     with open(DIR_RESULTADOS / "resumen_ga.json", "w", encoding="utf-8") as f:
@@ -213,6 +217,151 @@ def generar_grafica_comparativa_parte2(res_aco, res_ga, vh: float, salida: Path)
     print(f"[Parte 2] Grafica comparativa guardada: {salida}")
 
 
+def comparar_aco_vs_ga_justo(datos, M, cfg: dict, vh: float):
+    """Compara ACO y GA bajo igualdad de esfuerzo (evaluaciones de tour, Or-opt y tiempo)."""
+    import csv
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+
+    aco_cfg = cfg.get("aco", {})
+    ga_cfg = cfg.get("ga", {})
+    semilla = int(cfg.get("semilla", 42))
+    alfa = float(aco_cfg.get("alfa", 1.0))
+    beta = float(aco_cfg.get("beta", 3.0))
+    evap = float(aco_cfg.get("evaporacion", 0.4))
+    pc = float(ga_cfg.get("probabilidad_cruce", 0.8))
+    pm = float(ga_cfg.get("probabilidad_mutacion", 0.2))
+
+    print("\n" + "=" * 78)
+    print("PARTE 2: COMPARATIVA ACO vs GA EN IGUALDAD DE ESFUERZO")
+    print("=" * 78)
+
+    escenarios = [
+        # 1. Sin Or-opt, 3.000 tours (20x150 ACO)
+        ("Sin Or-opt (3.000 tours)", "ACO", dict(
+            hormigas=20, iteraciones=150, alfa=alfa, beta=beta, evaporacion=evap,
+            semilla=semilla, usar_or_opt=False,
+        )),
+        ("Sin Or-opt (3.000 tours)", "GA", dict(
+            tam_poblacion=50, generaciones=100, prob_cruce=pc, prob_mutacion=pm,
+            semilla=semilla, usar_or_opt=False, max_evaluaciones=3000,
+        )),
+        # 2. Sin Or-opt, 15.000 tours (50x300 ACO)
+        ("Sin Or-opt (15.000 tours)", "ACO", dict(
+            hormigas=50, iteraciones=300, alfa=alfa, beta=beta, evaporacion=evap,
+            semilla=semilla, usar_or_opt=False,
+        )),
+        ("Sin Or-opt (15.000 tours)", "GA", dict(
+            tam_poblacion=100, generaciones=250, prob_cruce=pc, prob_mutacion=pm,
+            semilla=semilla, usar_or_opt=False, max_evaluaciones=15000,
+        )),
+        # 3. Con Or-opt, 3.000 tours + ~150 pasadas Or-opt
+        ("Con Or-opt (3.000 tours + Or-opt)", "ACO", dict(
+            hormigas=20, iteraciones=150, alfa=alfa, beta=beta, evaporacion=evap,
+            semilla=semilla, usar_or_opt=True,
+        )),
+        ("Con Or-opt (3.000 tours + Or-opt)", "GA", dict(
+            tam_poblacion=20, generaciones=150, prob_cruce=pc, prob_mutacion=pm,
+            semilla=semilla, usar_or_opt=True, max_evaluaciones=3000,
+        )),
+        # 4. Tiempo de computo comparable (configuracion principal)
+        ("Configuracion principal (tiempo ~6-7s)", "ACO+Or-opt", dict(
+            hormigas=int(aco_cfg.get("hormigas", 20)),
+            iteraciones=int(aco_cfg.get("iteraciones", 150)),
+            alfa=alfa, beta=beta, evaporacion=evap, semilla=semilla, usar_or_opt=True,
+        )),
+        ("Configuracion principal (tiempo ~6-7s)", "GA (100x1000)", dict(
+            tam_poblacion=int(ga_cfg.get("poblacion", 100)),
+            generaciones=int(ga_cfg.get("generaciones", 1000)),
+            prob_cruce=pc, prob_mutacion=pm, semilla=semilla, usar_or_opt=False,
+        )),
+    ]
+
+    filas = []
+    curvas_3k_15k = {}
+    for regimen, metodo, kwargs in escenarios:
+        t0 = time.perf_counter()
+        if metodo.startswith("ACO"):
+            res = ejecutar_aco(M, **kwargs, verbose=False)
+        else:
+            res = ejecutar_ga(M, **kwargs, verbose=False)
+        dt = time.perf_counter() - t0
+        desg = datos.desglose_tour(res["tour"], vh)
+        fila = {
+            "regimen": regimen,
+            "algoritmo": metodo,
+            "usar_or_opt": bool(res.get("usar_or_opt", False)),
+            "evaluaciones_tour": int(res.get("evaluaciones_tour", 0)),
+            "pasadas_or_opt": int(res.get("pasadas_or_opt", 0)),
+            "coste_eur": round(desg["coste_eur"], 2),
+            "distancia_km": round(desg["distancia_km"], 2),
+            "tiempo_h": round(desg["tiempo_h"], 2),
+            "peajes_eur": round(desg["tax_eur"], 2),
+            "gas_eur": round(desg["gas_eur"], 2),
+            "tiempo_computo_s": round(dt, 2),
+        }
+        filas.append(fila)
+        curvas_3k_15k[(regimen, metodo)] = (
+            res.get("historia_evals_tour", []),
+            res.get("historia_mejor", []),
+            res.get("historia_tiempos", []),
+            fila["coste_eur"],
+        )
+        print(f"  [{regimen:36s}] {metodo:12s}: {fila['coste_eur']:7.2f} EUR | "
+              f"evals={fila['evaluaciones_tour']:6d} | oropt={fila['pasadas_or_opt']:3d} | "
+              f"t={fila['tiempo_computo_s']:5.2f}s")
+
+    out_json = DIR_RESULTADOS / "comparacion_justa_aco_ga.json"
+    with open(out_json, "w", encoding="utf-8") as f:
+        json.dump({"valor_hora_eur": vh, "semilla": semilla, "resultados": filas}, f, ensure_ascii=False, indent=2)
+
+    out_csv = DIR_RESULTADOS / "comparacion_justa_aco_ga.csv"
+    with open(out_csv, "w", encoding="utf-8-sig", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=list(filas[0].keys()))
+        w.writeheader()
+        w.writerows(filas)
+
+    # Grafica comparativa en eje comun de esfuerzo: evaluaciones de tour y tiempo de computo
+    fig, axes = plt.subplots(1, 2, figsize=(14, 5.5))
+    series = [
+        ("Sin Or-opt (15.000 tours)", "ACO", "ACO sin Or-opt (15k tours)", "#d62728", "--"),
+        ("Sin Or-opt (15.000 tours)", "GA", "GA sin Or-opt (15k tours)", "#2980b9", "--"),
+        ("Con Or-opt (3.000 tours + Or-opt)", "ACO", "ACO + Or-opt (3k tours)", "#27ae60", "-"),
+        ("Con Or-opt (3.000 tours + Or-opt)", "GA", "GA + Or-opt (3k tours)", "#8e44ad", "-."),
+    ]
+    for reg, met, lbl, col, ls in series:
+        he, hm, ht, cf = curvas_3k_15k[(reg, met)]
+        if he and hm:
+            axes[0].plot(he, hm, label=f"{lbl}: {cf:.2f} €", color=col, linestyle=ls, linewidth=2.1)
+        if ht and hm:
+            axes[1].plot(ht, hm, label=f"{lbl}: {cf:.2f} €", color=col, linestyle=ls, linewidth=2.1)
+
+    axes[0].set_title("Convergencia por Evaluaciones de Tour", fontsize=11, fontweight="bold")
+    axes[0].set_xlabel("Evaluaciones de recorrido construidas / evaluadas", fontsize=10)
+    axes[0].set_ylabel("Mejor Costo del Tour (EUR)", fontsize=10)
+    axes[0].grid(True, linestyle=":", alpha=0.6)
+    axes[0].legend(fontsize=8.5, loc="upper right")
+
+    axes[1].set_title("Convergencia por Tiempo de Cómputo", fontsize=11, fontweight="bold")
+    axes[1].set_xlabel("Tiempo acumulado (s)", fontsize=10)
+    axes[1].set_ylabel("Mejor Costo del Tour (EUR)", fontsize=10)
+    axes[1].grid(True, linestyle=":", alpha=0.6)
+    axes[1].legend(fontsize=8.5, loc="upper right")
+
+    fig.suptitle(
+        f"Comparación ACO vs GA en Igualdad de Esfuerzo (TSP 47 Capitales, h={vh:.2f} EUR/h, semilla={semilla})",
+        fontsize=12.5, fontweight="bold", y=0.98,
+    )
+    fig.tight_layout()
+    out_png = DIR_RESULTADOS / "comparacion_convergencia_aco_ga.png"
+    fig.savefig(out_png, dpi=140)
+    plt.close(fig)
+    _sincronizar_asset(out_png)
+    print(f"[Parte 2] Comparativa justa guardada en {out_json} y {out_png}")
+    return filas
+
+
 def main():
     parser = argparse.ArgumentParser(description="Runner Parte 2: Optimizacion Combinatoria (TSP 47 Capitales)")
     parser.add_argument("--demo", action="store_true", help="Perfil rapido (<15 s)")
@@ -221,6 +370,7 @@ def main():
     parser.add_argument("--valor-hora", type=float, default=None, help="Valor de la hora del vendedor (EUR/h)")
     parser.add_argument("--sin-or-opt", action="store_true", help="Desactiva Or-opt en ACO")
     parser.add_argument("--comparar-oropt", action="store_true", help="Ejecuta comparativa Con vs Sin Or-opt")
+    parser.add_argument("--comparar-justo", action="store_true", help="Ejecuta comparativa ACO vs GA en igualdad de esfuerzo")
     parser.add_argument("--sensibilidad", action="store_true", help="Ejecuta estudio de sensibilidad del valor de hora")
     parser.add_argument("--barrido", action="store_true", help="Barrido completo de parametros ACO")
     parser.add_argument("--sin-gif", action="store_true", help="Omite generacion de GIF")
@@ -255,6 +405,11 @@ def main():
         print(f"\nComparativa guardada en {DIR_RESULTADOS} ({time.time()-t0:.2f}s)")
         return
 
+    if args.comparar_justo:
+        comparar_aco_vs_ga_justo(datos, M, cfg, vh)
+        print(f"\nComparativa justa guardada en {DIR_RESULTADOS} ({time.time()-t0:.2f}s)")
+        return
+
     resultados = {}
     if args.algoritmo in ("aco", "ambos"):
         resultados["aco"] = correr_aco_individual(datos, M, cfg, vh, usar_or_opt=not args.sin_or_opt, hacer_gif=not args.sin_gif)
@@ -265,6 +420,8 @@ def main():
     if "aco" in resultados and "ga" in resultados:
         generar_grafica_comparativa_parte2(resultados["aco"], resultados["ga"], vh,
                                            DIR_RESULTADOS / "comparacion_convergencia.png")
+        if not args.demo:
+            comparar_aco_vs_ga_justo(datos, M, cfg, vh)
 
     print(f"\nTOTAL PARTE 2: {time.time()-t0:.2f}s | Resultados en {DIR_RESULTADOS}")
 

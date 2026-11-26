@@ -6,30 +6,31 @@
     "n_corridas": 30,
     "semilla_base": 2026,
     "umbral_exito": 1e-3,
+    "presupuesto_evaluaciones_equiv": 15000,
     "gradiente_descendente": {
       "punto_inicial": null,
       "max_iter": 10000,
-      "tolerancia": 1e-4,
-      "alpha_rosenbrock": 0.00085,
-      "alpha_rastrigin": 0.001
+      "tolerancia": 1e-8,
+      "alpha_rosenbrock": 0.001,
+      "alpha_rastrigin": 0.002
     },
     "pso": {
       "n_particulas": 30,
-      "max_iter": 500,
+      "max_iter": 499,
       "w": 0.7,
       "c1": 1.5,
       "c2": 1.5
     },
     "algoritmo_evolutivo": {
-      "poblacion": 50,
-      "generaciones": 100,
+      "poblacion": 40,
+      "generaciones": 440,
       "elitismo": 0.15,
       "mutacion": 0.2,
       "cruzamiento": 0.65
     },
     "evolucion_diferencial": {
       "poblacion": 40,
-      "generaciones": 100,
+      "generaciones": 374,
       "F": 0.7,
       "CR": 0.8
     }
@@ -72,20 +73,21 @@
     "_comentario": "Perfil rapido para sustentacion en vivo (< 2 min) que ejecuta Parte 1 y Parte 2.",
     "parte_1": {
       "n_corridas": 3,
+      "presupuesto_evaluaciones_equiv": 1500,
       "gradiente_descendente": {
-        "max_iter": 500
+        "max_iter": 299
       },
       "pso": {
-        "n_particulas": 15,
-        "max_iter": 50
+        "n_particulas": 30,
+        "max_iter": 49
       },
       "algoritmo_evolutivo": {
-        "poblacion": 20,
-        "generaciones": 30
+        "poblacion": 40,
+        "generaciones": 43
       },
       "evolucion_diferencial": {
-        "poblacion": 20,
-        "generaciones": 30
+        "poblacion": 30,
+        "generaciones": 49
       }
     },
     "parte_2": {

@@ -79,55 +79,39 @@ def generar_figura1_3d():
 
 
 # -----------------------------------------------------------------------------
-# DATOS CANONICOS DE LA COMPARACION PARTE 1 (30 CORRIDAS INDEPENDIENTES)
-# Correspondientes a los datos empiricos oficiales reportados en Tabla 12
+# CARGA DINAMICA DE LA COMPARACION PARTE 1 (IGUALDAD DE ESFUERZO, 30 CORRIDAS)
+# Fuente unica: parte_1/resultados/resumen_comparativo_parte1.json
 # -----------------------------------------------------------------------------
-DATOS_PARTE1 = [
-    # Rastrigin 2D
-    {"Funcion": "Rastrigin", "Dimension": "2D", "Algoritmo": "Descenso por gradiente",
-     "Media": 15.82, "Mediana": 16.42, "Std": 10.03, "Mejor": 0.995, "Peor": 31.84, "Exito": 0.0, "Evals_f": 33, "Evals_grad": 33},
-    {"Funcion": "Rastrigin", "Dimension": "2D", "Algoritmo": "PSO",
-     "Media": 0.000, "Mediana": 0.000, "Std": 0.000, "Mejor": 0.000, "Peor": 0.000, "Exito": 100.0, "Evals_f": 15030, "Evals_grad": 0},
-    {"Funcion": "Rastrigin", "Dimension": "2D", "Algoritmo": "Algoritmo evolutivo",
-     "Media": 0.2985, "Mediana": 0.000, "Std": 0.4582, "Mejor": 0.000, "Peor": 0.995, "Exito": 70.0, "Evals_f": 4250, "Evals_grad": 0},
-    {"Funcion": "Rastrigin", "Dimension": "2D", "Algoritmo": "Evolucion diferencial",
-     "Media": 0.000, "Mediana": 0.000, "Std": 0.000, "Mejor": 0.000, "Peor": 0.000, "Exito": 100.0, "Evals_f": 4040, "Evals_grad": 0},
+MAPA_NOMBRES_P1 = {
+    "GD": "Descenso por gradiente",
+    "PSO": "PSO",
+    "EA": "Algoritmo evolutivo",
+    "DE": "Evolucion diferencial",
+}
 
-    # Rastrigin 3D
-    {"Funcion": "Rastrigin", "Dimension": "3D", "Algoritmo": "Descenso por gradiente",
-     "Media": 24.48, "Mediana": 22.88, "Std": 14.16, "Mejor": 1.990, "Peor": 53.73, "Exito": 0.0, "Evals_f": 34, "Evals_grad": 34},
-    {"Funcion": "Rastrigin", "Dimension": "3D", "Algoritmo": "PSO",
-     "Media": 0.0663, "Mediana": 0.000, "Std": 0.2482, "Mejor": 0.000, "Peor": 0.995, "Exito": 93.33, "Evals_f": 15030, "Evals_grad": 0},
-    {"Funcion": "Rastrigin", "Dimension": "3D", "Algoritmo": "Algoritmo evolutivo",
-     "Media": 1.426, "Mediana": 0.995, "Std": 0.8914, "Mejor": 0.000, "Peor": 3.980, "Exito": 16.67, "Evals_f": 4250, "Evals_grad": 0},
-    {"Funcion": "Rastrigin", "Dimension": "3D", "Algoritmo": "Evolucion diferencial",
-     "Media": 3.316e-11, "Mediana": 0.000, "Std": 1.792e-10, "Mejor": 0.000, "Peor": 0.995, "Exito": 96.67, "Evals_f": 4040, "Evals_grad": 0},
 
-    # Rosenbrock 2D
-    {"Funcion": "Rosenbrock", "Dimension": "2D", "Algoritmo": "Descenso por gradiente",
-     "Media": 2.796e-5, "Mediana": 3.159e-5, "Std": 1.611e-5, "Mejor": 2.637e-10, "Peor": 6.565e-5, "Exito": 100.0, "Evals_f": 2227, "Evals_grad": 2226},
-    {"Funcion": "Rosenbrock", "Dimension": "2D", "Algoritmo": "PSO",
-     "Media": 3.374e-18, "Mediana": 4.015e-21, "Std": 1.196e-17, "Mejor": 5.841e-26, "Peor": 5.834e-17, "Exito": 100.0, "Evals_f": 15030, "Evals_grad": 0},
-    {"Funcion": "Rosenbrock", "Dimension": "2D", "Algoritmo": "Algoritmo evolutivo",
-     "Media": 1.842e-2, "Mediana": 3.150e-3, "Std": 3.891e-2, "Mejor": 4.218e-5, "Peor": 1.854e-1, "Exito": 40.0, "Evals_f": 4250, "Evals_grad": 0},
-    {"Funcion": "Rosenbrock", "Dimension": "2D", "Algoritmo": "Evolucion diferencial",
-     "Media": 1.205e-8, "Mediana": 3.118e-10, "Std": 2.140e-8, "Mejor": 4.812e-14, "Peor": 8.951e-8, "Exito": 100.0, "Evals_f": 4040, "Evals_grad": 0},
-
-    # Rosenbrock 3D
-    {"Funcion": "Rosenbrock", "Dimension": "3D", "Algoritmo": "Descenso por gradiente",
-     "Media": 1.161e-5, "Mediana": 9.223e-6, "Std": 7.309e-6, "Mejor": 1.922e-7, "Peor": 3.892e-5, "Exito": 90.0, "Evals_f": 339, "Evals_grad": 338},
-    {"Funcion": "Rosenbrock", "Dimension": "3D", "Algoritmo": "PSO",
-     "Media": 7.398e-4, "Mediana": 3.842e-4, "Std": 1.062e-3, "Mejor": 6.931e-8, "Peor": 4.784e-3, "Exito": 76.67, "Evals_f": 15030, "Evals_grad": 0},
-    {"Funcion": "Rosenbrock", "Dimension": "3D", "Algoritmo": "Algoritmo evolutivo",
-     "Media": 3.125e-1, "Mediana": 1.841e-1, "Std": 3.421e-1, "Mejor": 1.450e-3, "Peor": 1.458, "Exito": 3.33, "Evals_f": 4250, "Evals_grad": 0},
-    {"Funcion": "Rosenbrock", "Dimension": "3D", "Algoritmo": "Evolucion diferencial",
-     "Media": 4.182e-2, "Mediana": 1.204e-2, "Std": 6.851e-2, "Mejor": 8.125e-5, "Peor": 2.418e-1, "Exito": 26.67, "Evals_f": 4040, "Evals_grad": 0},
-]
+def cargar_datos_parte1() -> pd.DataFrame:
+    ruta_json = P1_RES / "resumen_comparativo_parte1.json"
+    if not ruta_json.exists():
+        raise FileNotFoundError(
+            f"No existe {ruta_json}. Ejecute primero 'python main.py -e parte1'."
+        )
+    with open(ruta_json, encoding="utf-8") as f:
+        filas = json.load(f)
+    df = pd.DataFrame(filas)
+    df["Algoritmo"] = df["Metodo"].map(MAPA_NOMBRES_P1)
+    df["Exito"] = df["Tasa_Exito_%"].astype(float)
+    df["Mediana"] = df["Mediana_f"].astype(float)
+    df["Evals_f"] = df["Media_Evals_f"].astype(int)
+    df["Evals_grad"] = df["Media_Evals_grad"].astype(int)
+    df["Evals_Equiv"] = df["Media_Evals_Equiv"].astype(int)
+    df["Presupuesto"] = df["Presupuesto_Equiv"].astype(int) if "Presupuesto_Equiv" in df else 15000
+    return df
 
 
 def generar_figura4_tasa_exito():
     print("Generando Figura 4: Comparacion de la Tasa de Exito...")
-    df = pd.DataFrame(DATOS_PARTE1)
+    df = cargar_datos_parte1()
     orden_algoritmos = ["Descenso por gradiente", "PSO", "Algoritmo evolutivo", "Evolucion diferencial"]
     etiquetas_x = ["Gradiente", "PSO", "Evolutivo", "Dif. Evolution"]
     colores = ["#4472C4", "#ED7D31", "#70AD47", "#A5A5A5"]
@@ -154,8 +138,11 @@ def generar_figura4_tasa_exito():
             ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height() + 2,
                     f"{val:.1f}%", ha="center", va="bottom", fontsize=9, fontweight="bold")
 
-    fig.suptitle("Figura 4 - Comparacion de la Tasa de Exito de los Algoritmos de Optimizacion",
-                 fontsize=13, fontweight="bold", y=0.98)
+    presupuesto = int(df["Presupuesto"].iloc[0])
+    fig.suptitle(
+        f"Figura 4 - Tasa de Exito en Igualdad de Esfuerzo ($E_{{\\mathrm{{equiv}}}} \\leq {presupuesto:,}$)",
+        fontsize=13, fontweight="bold", y=0.98,
+    )
     plt.tight_layout()
     fig.savefig(P1_RES / "figura4_tasa_exito.png", dpi=140)
     fig.savefig(ASSETS_DIR / "figura4_tasa_exito.png", dpi=140)
@@ -165,7 +152,7 @@ def generar_figura4_tasa_exito():
 
 def generar_figura5_mediana():
     print("Generando Figura 5: Comparacion de la Mediana del Valor Final...")
-    df = pd.DataFrame(DATOS_PARTE1)
+    df = cargar_datos_parte1()
     orden_algoritmos = ["Descenso por gradiente", "PSO", "Algoritmo evolutivo", "Evolucion diferencial"]
     etiquetas_x = ["Gradiente", "PSO", "Evolutivo", "Dif. Evolution"]
     colores = ["#4472C4", "#ED7D31", "#70AD47", "#A5A5A5"]
@@ -182,25 +169,34 @@ def generar_figura5_mediana():
         sub["Algoritmo"] = pd.Categorical(sub["Algoritmo"], categories=orden_algoritmos, ordered=True)
         sub = sub.sort_values("Algoritmo")
 
-        # Escala logaritmica con limite inferior 1e-8 para valores exactos a cero
+        # Escala logaritmica con limite inferior 1e-26 para valores muy pequenos o cero
         vals = sub["Mediana"].to_numpy()
-        vals_graf = np.clip(vals, 1e-8, None)
+        vals_graf = np.clip(np.where(np.isfinite(vals), vals, 1e-26), 1e-26, None)
 
         barras = ax.bar(etiquetas_x, vals_graf, color=colores, edgecolor="black", linewidth=0.7)
         ax.set_yscale("log")
+        ax.set_ylim(1e-27, 1e4)
         ax.set_title(f"{f_nom} - {dim}", fontsize=11, fontweight="bold")
         ax.set_ylabel("Mediana final (escala logaritmica)", fontsize=10)
         ax.grid(axis="y", linestyle=":", alpha=0.5)
 
         for bar, real_val in zip(barras, vals):
-            label = f"{real_val:.2e}" if real_val > 0 else "0.0"
+            if not np.isfinite(real_val):
+                label = "div."
+            elif real_val == 0:
+                label = "0.0"
+            else:
+                label = f"{real_val:.2e}"
             ax.annotate(label,
                         xy=(bar.get_x() + bar.get_width() / 2, bar.get_height()),
                         xytext=(0, 4), textcoords="offset points",
                         ha="center", fontsize=8.5, fontweight="bold")
 
-    fig.suptitle("Figura 5 - Comparacion de la Mediana del Valor Final de la Funcion Objetivo",
-                 fontsize=13, fontweight="bold", y=0.98)
+    presupuesto = int(df["Presupuesto"].iloc[0])
+    fig.suptitle(
+        f"Figura 5 - Mediana del Valor Final en Igualdad de Esfuerzo ($E_{{\\mathrm{{equiv}}}} \\leq {presupuesto:,}$)",
+        fontsize=13, fontweight="bold", y=0.98,
+    )
     plt.tight_layout()
     fig.savefig(P1_RES / "figura5_mediana_valor_final.png", dpi=140)
     fig.savefig(ASSETS_DIR / "figura5_mediana_valor_final.png", dpi=140)
@@ -209,8 +205,8 @@ def generar_figura5_mediana():
 
 
 def generar_figura6_costo():
-    print("Generando Figura 6: Comparacion del Costo Computacional...")
-    df = pd.DataFrame(DATOS_PARTE1)
+    print("Generando Figura 6: Comparacion del Costo Computacional Equivalente...")
+    df = cargar_datos_parte1()
     orden_algoritmos = ["Descenso por gradiente", "PSO", "Algoritmo evolutivo", "Evolucion diferencial"]
     etiquetas_x = ["Gradiente", "PSO", "Evolutivo", "Dif. Evolution"]
     colores = ["#4472C4", "#ED7D31", "#70AD47", "#A5A5A5"]
@@ -220,6 +216,7 @@ def generar_figura6_costo():
         ("Rosenbrock", "2D"), ("Rosenbrock", "3D"),
     ]
 
+    presupuesto = int(df["Presupuesto"].iloc[0])
     fig, axes = plt.subplots(2, 2, figsize=(13, 8))
 
     for ax, (f_nom, dim) in zip(axes.flat, combinaciones):
@@ -227,11 +224,14 @@ def generar_figura6_costo():
         sub["Algoritmo"] = pd.Categorical(sub["Algoritmo"], categories=orden_algoritmos, ordered=True)
         sub = sub.sort_values("Algoritmo")
 
-        barras = ax.bar(etiquetas_x, sub["Evals_f"], color=colores, edgecolor="black", linewidth=0.7)
+        barras = ax.bar(etiquetas_x, sub["Evals_Equiv"], color=colores, edgecolor="black", linewidth=0.7)
+        ax.axhline(presupuesto, color="#c0392b", linestyle="--", linewidth=1.4,
+                   label=f"Tope comun ({presupuesto:,} E_equiv)")
         ax.set_title(f"{f_nom} - {dim}", fontsize=11, fontweight="bold")
-        ax.set_ylabel("Evaluaciones promedio de f(x)", fontsize=10)
-        ax.set_ylim(0, 16500)
+        ax.set_ylabel("Evals equivalentes promedio ($E_{equiv}$)", fontsize=10)
+        ax.set_ylim(0, presupuesto * 1.15)
         ax.grid(axis="y", linestyle=":", alpha=0.5)
+        ax.legend(fontsize=8.5, loc="upper left")
 
         for bar in barras:
             h = bar.get_height()
@@ -240,8 +240,10 @@ def generar_figura6_costo():
                         xytext=(0, 4), textcoords="offset points",
                         ha="center", fontsize=8.5, fontweight="bold")
 
-    fig.suptitle("Figura 6 - Comparacion del Numero Promedio de Evaluaciones de la Funcion Objetivo",
-                 fontsize=13, fontweight="bold", y=0.98)
+    fig.suptitle(
+        "Figura 6 - Evaluaciones Equivalentes ($E_{\\mathrm{equiv}} = E_f + 2n\\,E_{\\nabla}$) bajo Presupuesto Comun",
+        fontsize=13, fontweight="bold", y=0.98,
+    )
     plt.tight_layout()
     fig.savefig(P1_RES / "figura6_costo_computacional.png", dpi=140)
     fig.savefig(ASSETS_DIR / "figura6_costo_computacional.png", dpi=140)
@@ -326,10 +328,12 @@ def copiar_gifs_a_assets():
     recursos = [
         (P1_RES / "animacion_gd_rosenbrock_2d.gif", ASSETS_DIR / "animacion_gd_rosenbrock_2d.gif"),
         (P1_RES / "animacion_pso_rosenbrock_2d.gif", ASSETS_DIR / "animacion_pso_rosenbrock_2d.gif"),
+        (P1_RES / "convergencia_comparativa_parte1.png", ASSETS_DIR / "convergencia_comparativa_parte1.png"),
         (P2_RES / "evolucion_aco_con_oropt.gif", ASSETS_DIR / "evolucion_aco_con_oropt.gif"),
         (P2_RES / "evolucion_ga.gif", ASSETS_DIR / "evolucion_ga.gif"),
         (P2_RES / "mapa_aco_con_oropt.png", ASSETS_DIR / "mapa_aco_con_oropt.png"),
         (P2_RES / "mapa_ga.png", ASSETS_DIR / "mapa_ga.png"),
+        (P2_RES / "comparacion_convergencia_aco_ga.png", ASSETS_DIR / "comparacion_convergencia_aco_ga.png"),
     ]
     for src, dst in recursos:
         if src.exists():

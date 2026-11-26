@@ -106,10 +106,19 @@ def optimizar_evolucion_diferencial(
         nueva_pob = pob.copy()
         
         for i in range(n_pop):
-            # A. Mutación diferencial: selección de 3 vectores r1 != r2 != r3 != i
-            candidatos = [idx for idx in range(n_pop) if idx != i]
-            r1, r2, r3 = np.random.choice(candidatos, size=3, replace=False)
-            
+            # A. Mutación diferencial: selección de 3 vectores r1 != r2 != r3 != i sin reemplazo
+            r1 = np.random.randint(0, n_pop - 1)
+            if r1 >= i:
+                r1 += 1
+            r2 = np.random.randint(0, n_pop - 2)
+            for prev in (min(i, r1), max(i, r1)):
+                if r2 >= prev:
+                    r2 += 1
+            r3 = np.random.randint(0, n_pop - 3)
+            for prev in sorted((i, r1, r2)):
+                if r3 >= prev:
+                    r3 += 1
+
             v_mutante = pob[r1] + F * (pob[r2] - pob[r3])
             v_mutante = np.clip(v_mutante, lim_inf, lim_sup)
             

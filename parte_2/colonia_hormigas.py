@@ -26,6 +26,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import time
 from pathlib import Path
 
 import numpy as np
@@ -142,6 +143,9 @@ def ejecutar_aco(
     coste_global = float("inf")
     historia_mejor: list[float] = []
     historia_media: list[float] = []
+    historia_evals_tour: list[int] = []
+    historia_tiempos: list[float] = []
+    t_inicio = time.perf_counter()
 
     if registro is not None:
         registro.append((0, float("inf"), None))
@@ -178,6 +182,8 @@ def ejecutar_aco(
 
         historia_mejor.append(float(coste_global))
         historia_media.append(float(costes.mean()))
+        historia_evals_tour.append((it + 1) * hormigas)
+        historia_tiempos.append(round(time.perf_counter() - t_inicio, 4))
         if registro is not None and (
             (it + 1) % grabar_cada == 0 or it == iteraciones - 1
         ):
@@ -194,6 +200,10 @@ def ejecutar_aco(
         "coste": float(coste_global),
         "historia_mejor": historia_mejor,
         "historia_media": historia_media,
+        "historia_evals_tour": historia_evals_tour,
+        "historia_tiempos": historia_tiempos,
+        "evaluaciones_tour": int(hormigas * iteraciones),
+        "pasadas_or_opt": int(iteraciones if usar_or_opt else 0),
         "hormigas": hormigas,
         "iteraciones": iteraciones,
         "alfa": alfa,
@@ -258,6 +268,8 @@ def guardar_resultados(datos, tour, valor_hora, historia,
         "tiempo_total_h": round(desglose["tiempo_h"], 6),
         "peajes_total_eur": round(desglose["tax_eur"], 4),
         "combustible_total_eur": round(desglose["gas_eur"], 4),
+        "evaluaciones_tour": int(historia.get("evaluaciones_tour", historia["hormigas"] * historia["iteraciones"])),
+        "pasadas_or_opt": int(historia.get("pasadas_or_opt", historia["iteraciones"] if historia.get("usar_or_opt", True) else 0)),
         "orden_ciudades": nombres,
         "fuente_datos": "datos_rutas/rutas_costes.csv + ciudades.csv",
     }

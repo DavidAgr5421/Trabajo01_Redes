@@ -28,11 +28,14 @@ def ejecutar_ga(
     verbose: bool = False,
     registro: list | None = None,
     grabar_cada: int = 10,
+    usar_or_opt: bool = False,
+    max_evaluaciones: int | None = None,
 ) -> dict:
     """Ejecuta el Algoritmo Genetico con DEAP sobre la matriz de costos dirigida."""
     random.seed(semilla)
     np.random.seed(semilla)
     n = M.shape[0]
+    t_inicio = time.perf_counter()
 
     # Limpiar definiciones previas de clases DEAP si existen
     if hasattr(creator, "FitnessMin"):
@@ -48,7 +51,10 @@ def ejecutar_ga(
     toolbox.register("individual", tools.initIterate, creator.Individual, toolbox.indices)
     toolbox.register("population", tools.initRepeat, list, toolbox.individual)
 
+    contador = {"evals": 0}
+
     def evaluar_ruta(individual):
+        contador["evals"] += 1
         costo_viaje = 0.0
         for i in range(n - 1):
             costo_viaje += M[individual[i], individual[i + 1]]
@@ -72,14 +78,31 @@ def ejecutar_ga(
 
     mejor_historico = tools.selBest(poblacion, k=1)[0]
     mejor_coste_global = mejor_historico.fitness.values[0]
+    pasadas_or_opt = 0
+
+    if usar_or_opt:
+        from colonia_hormigas import coste_tour, or_opt
+        tour_opt = or_opt(mejor_historico, M)
+        pasadas_or_opt += 1
+        coste_opt = coste_tour(M, tour_opt)
+        if coste_opt < mejor_coste_global:
+            mejor_coste_global = coste_opt
+            mejor_historico[:] = tour_opt.tolist()
+            mejor_historico.fitness.values = (coste_opt,)
+            mejor_historico = toolbox.clone(mejor_historico)
 
     historia_mejor = [mejor_coste_global]
     historia_media = [np.mean([ind.fitness.values[0] for ind in poblacion])]
+    historia_evals_tour = [contador["evals"]]
+    historia_tiempos = [round(time.perf_counter() - t_inicio, 4)]
 
     if registro is not None:
         registro.append((0, mejor_coste_global, list(mejor_historico)))
 
     for gen in range(1, generaciones + 1):
+        if max_evaluaciones is not None and contador["evals"] >= max_evaluaciones:
+            break
+
         # Seleccion
         offspring = toolbox.select(poblacion, len(poblacion))
         offspring = list(map(toolbox.clone, offspring))
@@ -97,22 +120,37 @@ def ejecutar_ga(
                 toolbox.mutate(mutant)
                 del mutant.fitness.values
 
-        # Evaluar modificados
+        # Evaluar modificados respetando max_evaluaciones si esta definido
         invalid_ind = [ind for ind in offspring if not ind.fitness.valid]
-        fitnesses = map(toolbox.evaluate, invalid_ind)
-        for ind, fit in zip(invalid_ind, fitnesses):
-            ind.fitness.values = fit
+        for ind in invalid_ind:
+            if max_evaluaciones is not None and contador["evals"] >= max_evaluaciones:
+                ind.fitness.values = (1e12,)
+            else:
+                ind.fitness.values = toolbox.evaluate(ind)
 
         poblacion[:] = offspring
 
         gen_best = tools.selBest(poblacion, k=1)[0]
         gen_best_cost = gen_best.fitness.values[0]
+        if usar_or_opt and gen_best_cost < 1e11:
+            from colonia_hormigas import coste_tour, or_opt
+            tour_opt = or_opt(gen_best, M)
+            pasadas_or_opt += 1
+            coste_opt = coste_tour(M, tour_opt)
+            if coste_opt < gen_best_cost:
+                gen_best_cost = coste_opt
+                gen_best[:] = tour_opt.tolist()
+                gen_best.fitness.values = (coste_opt,)
+
         if gen_best_cost < mejor_coste_global:
             mejor_coste_global = gen_best_cost
             mejor_historico = toolbox.clone(gen_best)
 
         historia_mejor.append(mejor_coste_global)
-        historia_media.append(np.mean([ind.fitness.values[0] for ind in poblacion]))
+        vals_validos = [ind.fitness.values[0] for ind in poblacion if ind.fitness.values[0] < 1e11]
+        historia_media.append(float(np.mean(vals_validos)) if vals_validos else float(mejor_coste_global))
+        historia_evals_tour.append(contador["evals"])
+        historia_tiempos.append(round(time.perf_counter() - t_inicio, 4))
 
         if registro is not None and (gen % grabar_cada == 0 or gen == generaciones):
             registro.append((gen, mejor_coste_global, list(mejor_historico)))
@@ -126,6 +164,11 @@ def ejecutar_ga(
         "coste": float(mejor_coste_global),
         "historia_mejor": historia_mejor,
         "historia_media": historia_media,
+        "historia_evals_tour": historia_evals_tour,
+        "historia_tiempos": historia_tiempos,
+        "evaluaciones_tour": int(contador["evals"]),
+        "pasadas_or_opt": int(pasadas_or_opt),
+        "usar_or_opt": bool(usar_or_opt),
         "poblacion": tam_poblacion,
         "generaciones": generaciones,
         "semilla": semilla,
