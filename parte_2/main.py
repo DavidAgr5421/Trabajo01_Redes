@@ -324,16 +324,25 @@ def comparar_aco_vs_ga_justo(datos, M, cfg: dict, vh: float):
 
     # Grafica comparativa en eje comun de esfuerzo: evaluaciones de tour y tiempo de computo
     fig, axes = plt.subplots(1, 2, figsize=(14, 5.5))
-    series = [
+    series_evals = [
         ("Sin Or-opt (15.000 tours)", "ACO", "ACO sin Or-opt (15k tours)", "#d62728", "--"),
         ("Sin Or-opt (15.000 tours)", "GA", "GA sin Or-opt (15k tours)", "#2980b9", "--"),
         ("Con Or-opt (3.000 tours + Or-opt)", "ACO", "ACO + Or-opt (3k tours)", "#27ae60", "-"),
         ("Con Or-opt (3.000 tours + Or-opt)", "GA", "GA + Or-opt (3k tours)", "#8e44ad", "-."),
     ]
-    for reg, met, lbl, col, ls in series:
-        he, hm, ht, cf = curvas_3k_15k[(reg, met)]
+    for reg, met, lbl, col, ls in series_evals:
+        he, hm, _, cf = curvas_3k_15k[(reg, met)]
         if he and hm:
             axes[0].plot(he, hm, label=f"{lbl}: {cf:.2f} €", color=col, linestyle=ls, linewidth=2.1)
+
+    series_tiempo = [
+        ("Configuracion principal (tiempo ~6-7s)", "ACO+Or-opt", "ACO + Or-opt (3k tours)", "#27ae60", "-"),
+        ("Configuracion principal (tiempo ~6-7s)", "GA (100x1000)", "GA sin Or-opt (84.1k tours)", "#2980b9", "--"),
+        ("Sin Or-opt (3.000 tours)", "ACO", "ACO sin Or-opt (3k tours)", "#d62728", ":"),
+        ("Con Or-opt (3.000 tours + Or-opt)", "GA", "GA + Or-opt (2.6k tours)", "#8e44ad", "-."),
+    ]
+    for reg, met, lbl, col, ls in series_tiempo:
+        _, hm, ht, cf = curvas_3k_15k[(reg, met)]
         if ht and hm:
             axes[1].plot(ht, hm, label=f"{lbl}: {cf:.2f} €", color=col, linestyle=ls, linewidth=2.1)
 
@@ -343,7 +352,7 @@ def comparar_aco_vs_ga_justo(datos, M, cfg: dict, vh: float):
     axes[0].grid(True, linestyle=":", alpha=0.6)
     axes[0].legend(fontsize=8.5, loc="upper right")
 
-    axes[1].set_title("Convergencia por Tiempo de Cómputo", fontsize=11, fontweight="bold")
+    axes[1].set_title("Convergencia por Tiempo de Cómputo (<= 7.5 s)", fontsize=11, fontweight="bold")
     axes[1].set_xlabel("Tiempo acumulado (s)", fontsize=10)
     axes[1].set_ylabel("Mejor Costo del Tour (EUR)", fontsize=10)
     axes[1].grid(True, linestyle=":", alpha=0.6)

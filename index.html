@@ -655,7 +655,7 @@
           El presente trabajo aborda de manera experimental y teórica dos pilares fundamentales de la optimización computacional: la <strong>optimización numérica en espacios continuos</strong> sobre superficies no convexas y la <strong>optimización combinatoria en grafos dirigidos asimétricos</strong> mediante el Problema del Vendedor Viajero Asimétrico (ATSP), aplicado a las 47 capitales de provincia de la España peninsular.
         </p>
         <p>
-          En la <strong>Parte 1</strong>, se contrasta el rendimiento del método determinista de primer orden Descenso por Gradiente (GD; Nocedal &amp; Wright, 2006) frente a tres metaheurísticas poblacionales —Optimización por Enjambre de Partículas (PSO; Eberhart &amp; Kennedy, 1995), Algoritmo Evolutivo Continuo (EA; Eiben &amp; Smith, 2015) y Evolución Diferencial (DE; Storn &amp; Price, 1997)— sobre las funciones de Rosenbrock (1960) y Rastrigin (1974) en 2D y 3D. Se aplica una regla de comparación computacionalmente justa donde aproximar el gradiente en dimensión $n$ equivale a $2n$ evaluaciones por diferencias finitas centrales ($E_{\text{equiv}} = E_f + 2n\,E_{\nabla}$).
+          En la <strong>Parte 1</strong>, se contrasta el rendimiento del método determinista de primer orden Descenso por Gradiente (GD; Nocedal &amp; Wright, 2006) frente a tres metaheurísticas poblacionales —Optimización por Enjambre de Partículas (PSO; Eberhart &amp; Kennedy, 1995), Algoritmo Evolutivo Continuo (EA; Eiben &amp; Smith, 2015) y Evolución Diferencial (DE; Storn &amp; Price, 1997)— sobre las funciones de Rosenbrock (1960) y Rastrigin (1974) en 2D y 3D bajo <strong>igualdad estricta de esfuerzo computacional</strong> (tope común de $15.000$ evaluaciones equivalentes bajo la regla $E_{\text{equiv}} = E_f + 2n\,E_{\nabla}$).
         </p>
         <p>
           En la <strong>Parte 2</strong>, se formula el TSP cerrado peninsular con costos monetarios reales: valor horario laboral derivado del Salario Mínimo Interprofesional fijado por el <strong>Real Decreto 126/2026 (5,09 €/h</strong>; España. Ministerio de Trabajo y Economía Social, 2026), consumo homologado WLTP de un <strong>Toyota Corolla 140H (4,5 L/100 km</strong>; Toyota España, 2026; Km77, 2023), precio oficial de Gasolina 95 E5 (<strong>1,785 €/L</strong>; MITECO, 2026) y peajes oficiales vigentes en 2026 sobre la totalidad de los 2.162 arcos dirigidos (872 arcos con peaje oficial valorado y 1.290 sin peaje). La Colonia de Hormigas (ACO; Dorigo &amp; Stützle, 2004) acoplada con búsqueda local <strong>Or-opt</strong> (Or, 1976) alcanza un recorrido de <strong>879,35 €</strong> (<strong>6.452,60 km</strong>, <strong>67,73 h</strong>, <strong>16,28 €</strong> en cuatro tramos de peaje y <strong>518,31 €</strong> en combustible), ahorrando un 2,43% total y <strong>21,70 € en peajes</strong> frente a ACO sin Or-opt (901,24 €), y superando al Algoritmo Genético implementado en DEAP (977,79 €; Fortin et al., 2012).
@@ -778,28 +778,28 @@
         <div id="p1-algoritmos">
           <h3>1.2 Métodos de Optimización Implementados</h3>
           <p>
-            Se implementaron en Python con NumPy cuatro solucionadores cuyas especificaciones, dominios admisibles y presupuestos se detallan en la <strong>Tabla 2</strong>:
+            Se implementaron en Python con NumPy cuatro solucionadores cuyas especificaciones, dominios admisibles y presupuesto común ($B = 15.000\ E_{\text{equiv}}$) se detallan en la <strong>Tabla 2</strong>:
           </p>
           <ul>
             <li>
-              <strong>Descenso por Gradiente (GD; Nocedal &amp; Wright, 2006):</strong> A partir de $\mathbf{x}_0 \sim \mathcal{U}(-D, D)^n$, actualiza $\mathbf{x}_{k+1} = \mathbf{x}_k - \alpha \nabla f(\mathbf{x}_k)$, con parada por $\|\nabla f\|_2 &lt; 10^{-8}$, 10.000 iteraciones o detección de divergencia. Cerca de un punto estacionario con Hessiana $H$, el error sigue $\mathbf{e}_{k+1} \approx (I - \alpha H)\mathbf{e}_k$ y exige $\alpha &lt; 2/\lambda_{\max}(H)$ para estabilidad local, con factor de contracción $\rho = \max_i |1 - \alpha\lambda_i|$. En Rosenbrock, $2/\lambda_{\max} \approx 0{,}0020$ ($n=2$) y $\approx 0{,}0014$ ($n=3$), por lo que $\alpha = 0{,}001$ es estable pero induce $\rho \approx 0{,}9996$ a lo largo del valle. En Rastrigin, $2/\lambda_{\max} \approx 0{,}0050$, de modo que $\alpha = 0{,}002$ converge velozmente ($\rho \approx 0{,}21$) hacia la cuenca local más cercana. <em>Nota:</em> el módulo experimental canónico <code>parte_1/comparacion_y_gifs_parte1.py</code> emplea estos valores ($\alpha = 0{,}001$ / $0{,}002$, tolerancia $10^{-8}$), mientras que <code>configuracion.json</code> reserva un perfil alternativo para <code>parte_1/main.py</code>.
+              <strong>Descenso por Gradiente (GD; Nocedal &amp; Wright, 2006):</strong> A partir de $\mathbf{x}_0 \sim \mathcal{U}(-D, D)^n$, actualiza $\mathbf{x}_{k+1} = \mathbf{x}_k - \alpha \nabla f(\mathbf{x}_k)$, con parada por $\|\nabla f\|_2 &lt; 10^{-8}$, tope común de esfuerzo $E_{\text{equiv}} \le 15.000$ (2.999 iteraciones en 2D y 2.142 en 3D; hasta 10.000 en ejecuciones aisladas) o detección de divergencia. Cerca de un punto estacionario con Hessiana $H$, el error sigue $\mathbf{e}_{k+1} \approx (I - \alpha H)\mathbf{e}_k$ y exige $\alpha &lt; 2/\lambda_{\max}(H)$ para estabilidad local, con factor de contracción $\rho = \max_i |1 - \alpha\lambda_i|$. En Rosenbrock, $2/\lambda_{\max} \approx 0{,}0020$ ($n=2$) y $\approx 0{,}0014$ ($n=3$), por lo que $\alpha = 0{,}001$ es estable localmente pero induce $\rho \approx 0{,}9996$ en el valle y puede divergir desde gradientes iniciales $\sim 10^4$ en $[-5,5]^n$ sin recorte de paso. En Rastrigin, $2/\lambda_{\max} \approx 0{,}0050$, de modo que $\alpha = 0{,}002$ converge velozmente ($\rho \approx 0{,}21$) hacia la cuenca local más cercana.
             </li>
             <li>
-              <strong>Optimización por Enjambre de Partículas (PSO; Eberhart &amp; Kennedy, 1995):</strong> Esquema <em>gbest</em> con $S=30$ partículas, $K=500$ iteraciones, inercia $w=0{,}7 \in [0, 1)$, y coeficientes $c_1=1{,}5$, $c_2=1{,}5$:
+              <strong>Optimización por Enjambre de Partículas (PSO; Eberhart &amp; Kennedy, 1995):</strong> Esquema <em>gbest</em> con $S=30$ partículas, $K=499$ iteraciones, inercia $w=0{,}7 \in [0, 1)$, y coeficientes $c_1=1{,}5$, $c_2=1{,}5$:
               $$\mathbf{v}_i^{k+1} = w\,\mathbf{v}_i^k + c_1\,\mathbf{r}_1 \odot (\mathbf{p}_i - \mathbf{x}_i^k) + c_2\,\mathbf{r}_2 \odot (\mathbf{g} - \mathbf{x}_i^k), \qquad \mathbf{x}_i^{k+1} = \mathbf{x}_i^k + \mathbf{v}_i^{k+1},$$
-              donde $\mathbf{r}_1, \mathbf{r}_2 \sim \mathcal{U}(0,1)^n$, $\mathbf{p}_i$ es la mejor posición personal y $\mathbf{g} = \arg\min_i f(\mathbf{p}_i)$. Presupuesto fijo: $S + KS = 15.030$ evaluaciones.
+              donde $\mathbf{r}_1, \mathbf{r}_2 \sim \mathcal{U}(0,1)^n$, $\mathbf{p}_i$ es la mejor posición personal y $\mathbf{g} = \arg\min_i f(\mathbf{p}_i)$. Presupuesto fijo: $S + KS = 30 + 499 \times 30 = \mathbf{15.000}$ evaluaciones.
             </li>
             <li>
-              <strong>Algoritmo Evolutivo Continuo (EA; Eiben &amp; Smith, 2015):</strong> Población $X_t \in \mathbb{R}^{N \times n}$ ($N=50$, $G_{\max}=100$) que construye $X_{t+1} = \mathcal{E}_t \cup \mathcal{C}_t \cup \mathcal{M}_t$ mediante elitismo del 15% ($\mathcal{E}_t$, 8 mejores), cruzamiento por corte aleatorio de coordenadas del 65% ($\mathcal{C}_t$, 32 hijos $\mathbf{c} = (p_1, \dots, p_\kappa, q_{\kappa+1}, \dots, q_n)$) y mutación gaussiana adaptativa del 20% ($\mathcal{M}_t$, 10 mutantes $\mathbf{x}' = \mathbf{x} + \boldsymbol{\varepsilon}$ con $\varepsilon_j \sim \mathcal{N}(0, \sigma_j^2)$ y $\sigma_j = \text{std}(X_{:,j})$). Presupuesto: $50 + 100 \times 42 = 4.250$ evaluaciones.
+              <strong>Algoritmo Evolutivo Continuo (EA; Eiben &amp; Smith, 2015):</strong> Población $X_t \in \mathbb{R}^{N \times n}$ ($N=40$, $G_{\max}=440$) que construye $X_{t+1} = \mathcal{E}_t \cup \mathcal{C}_t \cup \mathcal{M}_t$ mediante elitismo del 15% ($\mathcal{E}_t$, 6 mejores), cruzamiento por corte aleatorio de coordenadas del 65% ($\mathcal{C}_t$, 26 hijos $\mathbf{c} = (p_1, \dots, p_\kappa, q_{\kappa+1}, \dots, q_n)$) y mutación gaussiana adaptativa del 20% ($\mathcal{M}_t$, 8 mutantes $\mathbf{x}' = \mathbf{x} + \boldsymbol{\varepsilon}$ con $\varepsilon_j \sim \mathcal{N}(0, \sigma_j^2)$ y $\sigma_j = \text{std}(X_{:,j})$). Presupuesto exacto: $40 + 440 \times 34 = \mathbf{15.000}$ evaluaciones.
             </li>
             <li>
-              <strong>Evolución Diferencial (DE/rand/1/bin; Storn &amp; Price, 1997):</strong> Con $N=40$ individuos ($N \ge 4$), $G_{\max}=100$, factor de escala $F=0{,}7 \in (0,2]$ y cruce binomial $CR=0{,}8 \in [0,1]$, genera el vector mutante, recombina y aplica selección codiciosa 1 a 1:
+              <strong>Evolución Diferencial (DE/rand/1/bin; Storn &amp; Price, 1997):</strong> Con $N=40$ individuos ($N \ge 4$), $G_{\max}=374$, factor de escala $F=0{,}7 \in (0,2]$ y cruce binomial $CR=0{,}8 \in [0,1]$, genera el vector mutante, recombina y aplica selección codiciosa 1 a 1:
               $$\mathbf{v}_i = \mathbf{x}_{r_1} + F(\mathbf{x}_{r_2} - \mathbf{x}_{r_3}), \qquad u_{i,j} = \begin{cases} v_{i,j} &amp; \text{si } \text{rand}_j \le CR \;\text{ o }\; j = j_{\text{rand}} \\ x_{i,j} &amp; \text{en otro caso} \end{cases}, \qquad \mathbf{x}_i^{g+1} = \begin{cases} \mathbf{u}_i &amp; \text{si } f(\mathbf{u}_i) \le f(\mathbf{x}_i^g) \\ \mathbf{x}_i^g &amp; \text{en otro caso} \end{cases}.$$
-              Presupuesto fijo: $N(G_{\max} + 1) = 4.040$ evaluaciones.
+              Presupuesto exacto: $N(G_{\max} + 1) = 40 \times 375 = \mathbf{15.000}$ evaluaciones.
             </li>
           </ul>
 
-          <div class="table-title">Tabla 2: Hiperparámetros, Dominios Admisibles y Presupuesto de los Algoritmos Continuos</div>
+          <div class="table-title">Tabla 2: Hiperparámetros, Dominios Admisibles y Presupuesto Común de los Algoritmos Continuos</div>
           <div class="table-container">
             <table>
               <thead>
@@ -808,7 +808,7 @@
                   <th>Parámetro</th>
                   <th>Valor empleado</th>
                   <th>Dominio admisible</th>
-                  <th>Evaluaciones de $f$ por corrida</th>
+                  <th>Presupuesto por corrida ($E_{\text{equiv}}$)</th>
                 </tr>
               </thead>
               <tbody>
@@ -817,21 +817,21 @@
                   <td>$\alpha$ (Rosenbrock / Rastrigin)</td>
                   <td>0,001 / 0,002</td>
                   <td>$0 &lt; \alpha &lt; 2/\lambda_{\max}(H)$ (estabilidad local)</td>
-                  <td>Variable ($E_f$ y $E_{\nabla}$ por separado)</td>
+                  <td>$\le 15.000$ (2.999 iter. 2D; 2.142 iter. 3D)</td>
                 </tr>
                 <tr>
                   <td>GD</td>
                   <td>Tolerancia $\|\nabla f\|_2$ / iter. máx.</td>
-                  <td>$10^{-8}$ / 10.000</td>
+                  <td>$10^{-8}$ / 2.999 (2D), 2.142 (3D)</td>
                   <td>$\mathbb{R}_{&gt;0}$ / $\mathbb{N}$</td>
                   <td>—</td>
                 </tr>
                 <tr>
                   <td>PSO</td>
                   <td>$S$ / $K$</td>
-                  <td>30 / 500</td>
+                  <td>30 / 499</td>
                   <td>$\mathbb{N}$</td>
-                  <td>$S + KS = 15.030$</td>
+                  <td>$S + KS = \mathbf{15.000}$</td>
                 </tr>
                 <tr>
                   <td>PSO</td>
@@ -843,9 +843,9 @@
                 <tr>
                   <td>EA</td>
                   <td>$N$ / $G_{\max}$</td>
-                  <td>50 / 100</td>
+                  <td>40 / 440</td>
                   <td>$\mathbb{N}$</td>
-                  <td>$N + G_{\max}(N - N_{\text{élites}}) = 4.250$</td>
+                  <td>$N + G_{\max}(N - N_{\text{élites}}) = \mathbf{15.000}$</td>
                 </tr>
                 <tr>
                   <td>EA</td>
@@ -857,9 +857,9 @@
                 <tr>
                   <td>DE</td>
                   <td>$N$ / $G_{\max}$</td>
-                  <td>40 / 100</td>
+                  <td>40 / 374</td>
                   <td>$N \ge 4$ / $\mathbb{N}$</td>
-                  <td>$N(G_{\max}+1) = 4.040$</td>
+                  <td>$N(G_{\max}+1) = \mathbf{15.000}$</td>
                 </tr>
                 <tr>
                   <td>DE</td>
@@ -913,12 +913,12 @@
         </div>
 
         <div id="p1-resultados">
-          <h3>1.5 Comparación General de Resultados</h3>
+          <h3>1.5 Comparación General de Resultados en Igualdad de Esfuerzo</h3>
           <p>
-            A partir de 30 corridas independientes por algoritmo, función y dimensión (480 ejecuciones en total), bajo el umbral de éxito estricto $|f(\mathbf{x}) - f^*| \le 10^{-3}$, se consolidó la <strong>Tabla 3</strong>, cuyas métricas se representan visualmente en las <strong>Figuras 4, 5 y 6</strong>.
+            A partir de 30 corridas independientes por algoritmo, función y dimensión (480 ejecuciones en total) bajo un <strong>presupuesto común de $B = 15.000$ evaluaciones equivalentes</strong> ($E_{\text{equiv}} = E_f + 2n\,E_{\nabla} \le 15.000$) y el umbral de éxito estricto $|f(\mathbf{x}) - f^*| \le 10^{-3}$, se consolidó la <strong>Tabla 3</strong>, cuyas métricas se representan visualmente en las <strong>Figuras 4, 5, 6 y 6b</strong>.
           </p>
 
-          <div class="table-title">Tabla 3: Comparación General de Resultados en 30 Corridas Independientes (480 ejecuciones)</div>
+          <div class="table-title">Tabla 3: Comparación General de Resultados en 30 Corridas Independientes ($E_{\text{equiv}} \le 15.000$)</div>
           <div class="table-container">
             <table>
               <thead>
@@ -926,7 +926,7 @@
                   <th>Función</th>
                   <th>Dim</th>
                   <th>Algoritmo</th>
-                  <th>Media $f(\mathbf{x}^*)$</th>
+                  <th>Media $f(\mathbf{x}^*)$ (finitas)</th>
                   <th>Mediana $f(\mathbf{x}^*)$</th>
                   <th>Desv. Estándar</th>
                   <th>Mejor</th>
@@ -939,96 +939,96 @@
               <tbody>
                 <tr>
                   <td>Rastrigin</td><td>2D</td><td>Descenso por gradiente</td>
-                  <td>15,82</td><td>16,42</td><td>10,03</td><td>0,995</td><td>31,84</td>
-                  <td><span class="badge-fail">0/30 (0%)</span></td><td>33</td><td>33</td>
+                  <td>19,87</td><td>17,41</td><td>11,42</td><td>0,995</td><td>49,75</td>
+                  <td><span class="badge-fail">0/30 (0%)</span></td><td>19</td><td>19</td>
                 </tr>
                 <tr>
                   <td>Rastrigin</td><td>2D</td><td>PSO</td>
                   <td>0,000</td><td>0,000</td><td>0,000</td><td>0,000</td><td>0,000</td>
-                  <td><span class="badge-success">30/30 (100%)</span></td><td>15.030</td><td>0</td>
+                  <td><span class="badge-success">30/30 (100%)</span></td><td>15.000</td><td>0</td>
                 </tr>
                 <tr>
                   <td>Rastrigin</td><td>2D</td><td>Algoritmo evolutivo</td>
-                  <td>0,298</td><td>0,000</td><td>0,458</td><td>0,000</td><td>0,995</td>
-                  <td><span class="badge-success">21/30 (70%)</span></td><td>4.250</td><td>0</td>
+                  <td>3,32e-2</td><td>8,56e-10</td><td>0,179</td><td>1,33e-11</td><td>0,995</td>
+                  <td><span class="badge-success">29/30 (96,67%)</span></td><td>15.000</td><td>0</td>
                 </tr>
                 <tr>
                   <td>Rastrigin</td><td>2D</td><td>Evolución diferencial</td>
                   <td>0,000</td><td>0,000</td><td>0,000</td><td>0,000</td><td>0,000</td>
-                  <td><span class="badge-success">30/30 (100%)</span></td><td>4.040</td><td>0</td>
+                  <td><span class="badge-success">30/30 (100%)</span></td><td>15.000</td><td>0</td>
                 </tr>
                 <tr style="border-top: 2px solid var(--border);">
                   <td>Rastrigin</td><td>3D</td><td>Descenso por gradiente</td>
-                  <td>24,48</td><td>22,88</td><td>14,16</td><td>1,990</td><td>53,73</td>
-                  <td><span class="badge-fail">0/30 (0%)</span></td><td>34</td><td>34</td>
+                  <td>25,17</td><td>25,87</td><td>12,19</td><td>1,990</td><td>58,70</td>
+                  <td><span class="badge-fail">0/30 (0%)</span></td><td>19</td><td>19</td>
                 </tr>
                 <tr>
                   <td>Rastrigin</td><td>3D</td><td>PSO</td>
-                  <td>0,066</td><td>0,000</td><td>0,248</td><td>0,000</td><td>0,995</td>
-                  <td><span class="badge-success">28/30 (93,33%)</span></td><td>15.030</td><td>0</td>
+                  <td>0,133</td><td>0,000</td><td>0,338</td><td>0,000</td><td>0,995</td>
+                  <td><span class="badge-success">26/30 (86,67%)</span></td><td>15.000</td><td>0</td>
                 </tr>
                 <tr>
                   <td>Rastrigin</td><td>3D</td><td>Algoritmo evolutivo</td>
-                  <td>1,426</td><td>0,995</td><td>0,891</td><td>0,000</td><td>3,980</td>
-                  <td><span class="badge-fail">5/30 (16,67%)</span></td><td>4.250</td><td>0</td>
+                  <td>0,639</td><td>0,995</td><td>0,649</td><td>3,19e-10</td><td>1,990</td>
+                  <td><span class="badge-fail">13/30 (43,33%)</span></td><td>15.000</td><td>0</td>
                 </tr>
                 <tr>
                   <td>Rastrigin</td><td>3D</td><td>Evolución diferencial</td>
-                  <td>3,31e-11</td><td>0,000</td><td>1,79e-10</td><td>0,000</td><td>0,995</td>
-                  <td><span class="badge-success">29/30 (96,67%)</span></td><td>4.040</td><td>0</td>
+                  <td>0,000</td><td>0,000</td><td>0,000</td><td>0,000</td><td>0,000</td>
+                  <td><span class="badge-success">30/30 (100%)</span></td><td>15.000</td><td>0</td>
                 </tr>
                 <tr style="border-top: 2px solid var(--border);">
-                  <td>Rosenbrock</td><td>2D</td><td>Descenso por gradiente</td>
-                  <td>2,79e-5</td><td>3,16e-5</td><td>1,61e-5</td><td>2,64e-10</td><td>6,56e-5</td>
-                  <td><span class="badge-success">30/30 (100%)</span></td><td>2.227</td><td>2.226</td>
+                  <td>Rosenbrock</td><td>2D</td><td>Descenso por gradiente*</td>
+                  <td>2,98e-2</td><td>2,02e-2</td><td>2,00e-2</td><td>9,53e-3</td><td>5,81e-2</td>
+                  <td><span class="badge-fail">0/30 (0%)</span></td><td>803</td><td>802</td>
                 </tr>
                 <tr>
                   <td>Rosenbrock</td><td>2D</td><td>PSO</td>
-                  <td>3,37e-18</td><td>4,01e-21</td><td>1,19e-17</td><td>5,84e-26</td><td>5,83e-17</td>
-                  <td><span class="badge-success">30/30 (100%)</span></td><td>15.030</td><td>0</td>
+                  <td>4,29e-17</td><td>2,69e-20</td><td>1,82e-16</td><td>1,97e-22</td><td>1,00e-15</td>
+                  <td><span class="badge-success">30/30 (100%)</span></td><td>15.000</td><td>0</td>
                 </tr>
                 <tr>
                   <td>Rosenbrock</td><td>2D</td><td>Algoritmo evolutivo</td>
-                  <td>1,84e-2</td><td>3,15e-3</td><td>3,89e-2</td><td>4,22e-5</td><td>1,85e-1</td>
-                  <td><span class="badge-fail">12/30 (40%)</span></td><td>4.250</td><td>0</td>
+                  <td>2,78e-2</td><td>7,09e-3</td><td>3,49e-2</td><td>4,38e-8</td><td>0,110</td>
+                  <td><span class="badge-fail">10/30 (33,33%)</span></td><td>15.000</td><td>0</td>
                 </tr>
                 <tr>
                   <td>Rosenbrock</td><td>2D</td><td>Evolución diferencial</td>
-                  <td>1,20e-8</td><td>3,12e-10</td><td>2,14e-8</td><td>4,81e-14</td><td>8,95e-8</td>
-                  <td><span class="badge-success">30/30 (100%)</span></td><td>4.040</td><td>0</td>
+                  <td>0,000</td><td>0,000</td><td>0,000</td><td>0,000</td><td>0,000</td>
+                  <td><span class="badge-success">30/30 (100%)</span></td><td>15.000</td><td>0</td>
                 </tr>
                 <tr style="border-top: 2px solid var(--border);">
-                  <td>Rosenbrock</td><td>3D</td><td>Descenso por gradiente</td>
-                  <td>1,16e-5</td><td>9,22e-6</td><td>7,31e-6</td><td>1,92e-7</td><td>3,89e-5</td>
-                  <td><span class="badge-success">27/30 (90%)</span></td><td>339</td><td>338</td>
+                  <td>Rosenbrock</td><td>3D</td><td>Descenso por gradiente*</td>
+                  <td>5,25e-2</td><td>2,97e-2</td><td>4,97e-2</td><td>2,39e-2</td><td>0,152</td>
+                  <td><span class="badge-fail">0/30 (0%)</span></td><td>360</td><td>359</td>
                 </tr>
                 <tr>
                   <td>Rosenbrock</td><td>3D</td><td>PSO</td>
-                  <td>7,39e-4</td><td>3,84e-4</td><td>1,06e-3</td><td>6,93e-8</td><td>4,78e-3</td>
-                  <td><span class="badge-success">23/30 (76,67%)</span></td><td>15.030</td><td>0</td>
+                  <td>7,17e-2</td><td>9,07e-4</td><td>0,318</td><td>4,84e-5</td><td>1,772</td>
+                  <td><span class="badge-fail">16/30 (53,33%)</span></td><td>15.000</td><td>0</td>
                 </tr>
                 <tr>
                   <td>Rosenbrock</td><td>3D</td><td>Algoritmo evolutivo</td>
-                  <td>0,312</td><td>0,184</td><td>0,342</td><td>1,45e-3</td><td>1,458</td>
-                  <td><span class="badge-fail">1/30 (3,33%)</span></td><td>4.250</td><td>0</td>
+                  <td>0,962</td><td>0,476</td><td>1,690</td><td>1,81e-4</td><td>6,944</td>
+                  <td><span class="badge-fail">2/30 (6,67%)</span></td><td>15.000</td><td>0</td>
                 </tr>
                 <tr>
                   <td>Rosenbrock</td><td>3D</td><td>Evolución diferencial</td>
-                  <td>4,18e-2</td><td>1,20e-2</td><td>6,85e-2</td><td>8,12e-5</td><td>0,242</td>
-                  <td><span class="badge-fail">8/30 (26,67%)</span></td><td>4.040</td><td>0</td>
+                  <td>2,28e-24</td><td>1,62e-25</td><td>5,25e-24</td><td>1,98e-28</td><td>2,41e-23</td>
+                  <td><span class="badge-success">30/30 (100%)</span></td><td>15.000</td><td>0</td>
                 </tr>
               </tbody>
             </table>
           </div>
           <div class="table-source" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">
-            <em>Fuente: Elaboración propia a partir de <code>parte_1/comparacion_y_gifs_parte1.py</code>.</em>
+            <em>Fuente: Elaboración propia a partir de <code>parte_1/resultados/resumen_comparativo_parte1.json</code> (<code>python main.py -e parte1</code>). *En Rosenbrock $[-5,5]^n$, GD diverge en 22/30 corridas (2D) y 25/30 (3D) por gradientes iniciales elevados; los estadísticos se reportan sobre las corridas finitas restantes.</em>
           </div>
 
-          <!-- Figuras 4, 5, 6 -->
+          <!-- Figuras 4, 5, 6, 6b -->
           <div class="figure-box">
             <img src="assets/img/figura4_tasa_exito.png" alt="Comparación de Tasa de Éxito">
             <div class="figure-caption">
-              <strong>Figura 4</strong> — Comparación de la tasa de éxito de los cuatro algoritmos en los cuatro problemas de prueba. <em>Fuente: Elaboración propia a partir de la Tabla 3 mediante <code>generar_graficas.py</code>.</em>
+              <strong>Figura 4</strong> — Comparación de la tasa de éxito bajo presupuesto común ($E_{\text{equiv}} \le 15.000$). <em>Fuente: Elaboración propia a partir de la Tabla 3 mediante <code>generar_graficas.py</code>.</em>
             </div>
           </div>
 
@@ -1036,14 +1036,21 @@
             <div class="figure-box">
               <img src="assets/img/figura5_mediana_valor_final.png" alt="Mediana del valor final en escala logarítmica">
               <div class="figure-caption">
-                <strong>Figura 5</strong> — Comparación de la mediana del valor final (escala logarítmica). <em>Fuente: Elaboración propia a partir de la Tabla 3 mediante <code>generar_graficas.py</code>.</em>
+                <strong>Figura 5</strong> — Comparación de la mediana del valor final (escala logarítmica) bajo presupuesto común ($E_{\text{equiv}} \le 15.000$). <em>Fuente: Elaboración propia a partir de la Tabla 3 mediante <code>generar_graficas.py</code>.</em>
               </div>
             </div>
             <div class="figure-box">
-              <img src="assets/img/figura6_costo_computacional.png" alt="Evaluaciones promedio de la función">
+              <img src="assets/img/figura6_costo_computacional.png" alt="Evaluaciones equivalentes promedio">
               <div class="figure-caption">
-                <strong>Figura 6</strong> — Comparación del costo computacional (evaluaciones de $f$). <em>Fuente: Elaboración propia a partir de la Tabla 3 mediante <code>generar_graficas.py</code>.</em>
+                <strong>Figura 6</strong> — Evaluaciones equivalentes promedio ($E_{\text{equiv}} = E_f + 2n\,E_\nabla$) frente al tope común de 15.000. <em>Fuente: Elaboración propia a partir de la Tabla 3 mediante <code>generar_graficas.py</code>.</em>
               </div>
+            </div>
+          </div>
+
+          <div class="figure-box">
+            <img src="assets/img/convergencia_comparativa_parte1.png" alt="Convergencia comparativa en igualdad de esfuerzo">
+            <div class="figure-caption">
+              <strong>Figura 6b</strong> — Curvas de convergencia mediana frente al esfuerzo unificado ($E_{\text{equiv}} \in [1, 15.000]$) en los cuatro escenarios de la Parte 1. <em>Fuente: Elaboración propia mediante <code>parte_1/main.py</code>.</em>
             </div>
           </div>
         </div>
@@ -1053,12 +1060,12 @@
 
           <h4>1.6.1 Multimodalidad vs. información local (Rastrigin)</h4>
           <p>
-            Con $\alpha = 0{,}002$ y curvatura local $\lambda \approx 396{,}8$, GD contrae con $\rho \approx 0{,}21$ en apenas 33–34 pasos, pero queda atrapado en la cuenca del punto inicial (Nocedal &amp; Wright, 2006). La cuenca del mínimo global cubre aproximadamente $(-0{,}5,\, 0{,}5)^n$, de modo que la probabilidad de caer en ella con inicialización uniforme es $(1/10{,}24)^n$ ($\approx 0{,}95\%$ en 2D y $0{,}09\%$ en 3D), congruente con 0/30 éxitos; su valor final esperado teórico $n(D^2/3 + 1/12) \approx 17{,}6$ (2D) y $26{,}5$ (3D) concuerda con las medias observadas (15,82 y 24,48). Por el contrario, PSO (100% en 2D; 93,33% en 3D) y DE (100%; 96,67%) preservan diversidad espacial mediante la inercia $w=0{,}7$ y los vectores diferencia $F(\mathbf{x}_{r_2}-\mathbf{x}_{r_3})$ (Eberhart &amp; Kennedy, 1995; Storn &amp; Price, 1997). El Algoritmo Evolutivo cae del 70% al 16,67% porque su mutación adaptativa $\sigma_j = \text{std}(X_{:,j})$ colapsa junto con el elitismo del 15% cuando la población se concentra en una cuenca (Eiben &amp; Smith, 2015).
+            Con $\alpha = 0{,}002$ y curvatura local $\lambda \approx 396{,}8$, GD contrae con $\rho \approx 0{,}21$ en apenas 19 pasos ($95\ E_{\text{equiv}}$ en 2D y $135\ E_{\text{equiv}}$ en 3D), pero queda atrapado en la cuenca del punto inicial (Nocedal &amp; Wright, 2006). La cuenca del mínimo global cubre aproximadamente $(-0{,}5,\, 0{,}5)^n$, de modo que la probabilidad de caer en ella con inicialización uniforme es $(1/10{,}24)^n$ ($\approx 0{,}95\%$ en 2D y $0{,}09\%$ en 3D), congruente con 0/30 éxitos; su valor final esperado teórico $n(D^2/3 + 1/12) \approx 17{,}6$ (2D) y $26{,}5$ (3D) concuerda con las medias observadas (19,87 y 25,17). Al igualar el esfuerzo en $15.000$ evaluaciones, <strong>DE alcanza el 100% en 2D y 3D</strong>, superando en 3D a PSO (86,67%, con 4 fallas en el mínimo local $f = 0{,}995$) y a EA (96,67% en 2D y 43,33% en 3D), cuya desviación $\sigma_j = \text{std}(X_{:,j})$ colapsa cuando la población converge hacia una cuenca local (Eberhart &amp; Kennedy, 1995; Eiben &amp; Smith, 2015; Storn &amp; Price, 1997).
           </p>
 
           <h4>1.6.2 Valle mal condicionado (Rosenbrock)</h4>
           <p>
-            En 2D, GD converge el 100% de las veces a costa de 2.227 pasos ($\rho \approx 0{,}9996$); en 3D, el límite de estabilidad se estrecha a $2/\lambda_{\max} \approx 0{,}0014$ y 3 de 30 corridas divergen (90% de éxito). PSO alcanza mediana $4{,}01 \times 10^{-21}$ en 2D, pero en 3D requiere más iteraciones para recorrer el valle (76,67%). En EA, el cruce por corte de coordenadas rompe el acoplamiento no lineal $x_{i+1} \approx x_i^2$ y expulsa a los hijos del valle (40% y 3,33%), mientras que las diferencias $\mathbf{x}_{r_2} - \mathbf{x}_{r_3}$ de DE se alinean tangencialmente con el fondo en 2D (100%), aunque 100 generaciones resultan insuficientes en 3D (26,67%).
+            En $[-5,5]^n$ con $E_{\text{equiv}} \le 15.000$, GD con paso fijo diverge en 22/30 corridas (2D) y 25/30 (3D) desde gradientes iniciales $\sim 10^4$, y las corridas estables agotan las 2.999 / 2.142 iteraciones alcanzando medianas de $2{,}02\times 10^{-2}$ y $2{,}97\times 10^{-2}$ sin cruzar $10^{-3}$ ($\rho \approx 0{,}9996$). El cambio más decisivo respecto a comparaciones con presupuestos dispares aparece entre PSO y DE en 3D: bajo las mismas 15.000 evaluaciones, <strong>DE logra 30/30 (100%, mediana $1{,}62\times 10^{-25}$)</strong> frente a <strong>16/30 (53,33%, mediana $9{,}07\times 10^{-4}$) de PSO</strong> y <strong>2/30 (6,67%) de EA</strong>, porque los vectores diferencia $\mathbf{x}_{r_2} - \mathbf{x}_{r_3}$ se alinean tangencialmente con el fondo del valle parabólico mientras el cruce por corte de EA expulsa a los hijos fuera del valle.
           </p>
 
           <h4>1.6.3 Evaluaciones equivalentes y costo esperado por éxito</h4>
@@ -1066,7 +1073,7 @@
             La <strong>Tabla 4</strong> convierte los conteos de la Tabla 3 a la métrica justa $E_{\text{equiv}} = E_f + 2n\,E_{\nabla}$ e incorpora el <strong>costo esperado por éxito</strong> $E_{\text{equiv}}/\hat{p}$, que mide cuántas evaluaciones equivalentes se requieren en promedio al reiniciar independientemente hasta obtener un éxito.
           </p>
 
-          <div class="table-title">Tabla 4: Evaluaciones Equivalentes ($E_{\text{equiv}} = E_f + 2n\,E_{\nabla}$) y Costo Esperado por Éxito</div>
+          <div class="table-title">Tabla 4: Evaluaciones Equivalentes ($E_{\text{equiv}} = E_f + 2n\,E_{\nabla}$) y Costo Esperado por Éxito bajo Tope Común ($B = 15.000$)</div>
           <div class="table-container">
             <table>
               <thead>
@@ -1082,22 +1089,22 @@
                 </tr>
               </thead>
               <tbody>
-                <tr><td>Rastrigin</td><td>2D</td><td>Descenso por gradiente</td><td>33</td><td>33</td><td>165</td><td>0,0%</td><td>—</td></tr>
-                <tr><td>Rastrigin</td><td>2D</td><td>PSO</td><td>15.030</td><td>0</td><td>15.030</td><td>100,0%</td><td>15.030</td></tr>
-                <tr><td>Rastrigin</td><td>2D</td><td>Algoritmo evolutivo</td><td>4.250</td><td>0</td><td>4.250</td><td>70,0%</td><td>6.071</td></tr>
-                <tr><td>Rastrigin</td><td>2D</td><td>Evolución diferencial</td><td>4.040</td><td>0</td><td>4.040</td><td>100,0%</td><td><strong>4.040</strong></td></tr>
-                <tr style="border-top: 2px solid var(--border);"><td>Rastrigin</td><td>3D</td><td>Descenso por gradiente</td><td>34</td><td>34</td><td>238</td><td>0,0%</td><td>—</td></tr>
-                <tr><td>Rastrigin</td><td>3D</td><td>PSO</td><td>15.030</td><td>0</td><td>15.030</td><td>93,33%</td><td>16.104</td></tr>
-                <tr><td>Rastrigin</td><td>3D</td><td>Algoritmo evolutivo</td><td>4.250</td><td>0</td><td>4.250</td><td>16,67%</td><td>25.500</td></tr>
-                <tr><td>Rastrigin</td><td>3D</td><td>Evolución diferencial</td><td>4.040</td><td>0</td><td>4.040</td><td>96,67%</td><td><strong>4.179</strong></td></tr>
-                <tr style="border-top: 2px solid var(--border);"><td>Rosenbrock</td><td>2D</td><td>Descenso por gradiente</td><td>2.227</td><td>2.226</td><td>11.131</td><td>100,0%</td><td>11.131</td></tr>
-                <tr><td>Rosenbrock</td><td>2D</td><td>PSO</td><td>15.030</td><td>0</td><td>15.030</td><td>100,0%</td><td>15.030</td></tr>
-                <tr><td>Rosenbrock</td><td>2D</td><td>Algoritmo evolutivo</td><td>4.250</td><td>0</td><td>4.250</td><td>40,0%</td><td>10.625</td></tr>
-                <tr><td>Rosenbrock</td><td>2D</td><td>Evolución diferencial</td><td>4.040</td><td>0</td><td>4.040</td><td>100,0%</td><td><strong>4.040</strong></td></tr>
-                <tr style="border-top: 2px solid var(--border);"><td>Rosenbrock</td><td>3D</td><td>Descenso por gradiente</td><td>339</td><td>338</td><td>2.367</td><td>90,0%</td><td><strong>2.630</strong></td></tr>
-                <tr><td>Rosenbrock</td><td>3D</td><td>PSO</td><td>15.030</td><td>0</td><td>15.030</td><td>76,67%</td><td>19.604</td></tr>
-                <tr><td>Rosenbrock</td><td>3D</td><td>Algoritmo evolutivo</td><td>4.250</td><td>0</td><td>4.250</td><td>3,33%</td><td>127.500</td></tr>
-                <tr><td>Rosenbrock</td><td>3D</td><td>Evolución diferencial</td><td>4.040</td><td>0</td><td>4.040</td><td>26,67%</td><td>15.150</td></tr>
+                <tr><td>Rastrigin</td><td>2D</td><td>Descenso por gradiente</td><td>19</td><td>19</td><td>95</td><td>0,0%</td><td>—</td></tr>
+                <tr><td>Rastrigin</td><td>2D</td><td>PSO</td><td>15.000</td><td>0</td><td>15.000</td><td>100,0%</td><td><strong>15.000</strong></td></tr>
+                <tr><td>Rastrigin</td><td>2D</td><td>Algoritmo evolutivo</td><td>15.000</td><td>0</td><td>15.000</td><td>96,67%</td><td>15.517</td></tr>
+                <tr><td>Rastrigin</td><td>2D</td><td>Evolución diferencial</td><td>15.000</td><td>0</td><td>15.000</td><td>100,0%</td><td><strong>15.000</strong></td></tr>
+                <tr style="border-top: 2px solid var(--border);"><td>Rastrigin</td><td>3D</td><td>Descenso por gradiente</td><td>19</td><td>19</td><td>135</td><td>0,0%</td><td>—</td></tr>
+                <tr><td>Rastrigin</td><td>3D</td><td>PSO</td><td>15.000</td><td>0</td><td>15.000</td><td>86,67%</td><td>17.308</td></tr>
+                <tr><td>Rastrigin</td><td>3D</td><td>Algoritmo evolutivo</td><td>15.000</td><td>0</td><td>15.000</td><td>43,33%</td><td>34.615</td></tr>
+                <tr><td>Rastrigin</td><td>3D</td><td>Evolución diferencial</td><td>15.000</td><td>0</td><td>15.000</td><td>100,0%</td><td><strong>15.000</strong></td></tr>
+                <tr style="border-top: 2px solid var(--border);"><td>Rosenbrock</td><td>2D</td><td>Descenso por gradiente</td><td>803</td><td>802</td><td>4.011</td><td>0,0%</td><td>—</td></tr>
+                <tr><td>Rosenbrock</td><td>2D</td><td>PSO</td><td>15.000</td><td>0</td><td>15.000</td><td>100,0%</td><td><strong>15.000</strong></td></tr>
+                <tr><td>Rosenbrock</td><td>2D</td><td>Algoritmo evolutivo</td><td>15.000</td><td>0</td><td>15.000</td><td>33,33%</td><td>45.000</td></tr>
+                <tr><td>Rosenbrock</td><td>2D</td><td>Evolución diferencial</td><td>15.000</td><td>0</td><td>15.000</td><td>100,0%</td><td><strong>15.000</strong></td></tr>
+                <tr style="border-top: 2px solid var(--border);"><td>Rosenbrock</td><td>3D</td><td>Descenso por gradiente</td><td>360</td><td>359</td><td>2.513</td><td>0,0%</td><td>—</td></tr>
+                <tr><td>Rosenbrock</td><td>3D</td><td>PSO</td><td>15.000</td><td>0</td><td>15.000</td><td>53,33%</td><td>28.125</td></tr>
+                <tr><td>Rosenbrock</td><td>3D</td><td>Algoritmo evolutivo</td><td>15.000</td><td>0</td><td>15.000</td><td>6,67%</td><td>225.000</td></tr>
+                <tr><td>Rosenbrock</td><td>3D</td><td>Evolución diferencial</td><td>15.000</td><td>0</td><td>15.000</td><td>100,0%</td><td><strong>15.000</strong></td></tr>
               </tbody>
             </table>
           </div>
@@ -1107,9 +1114,9 @@
 
           <h4>1.6.4 Efecto de dimensión y limitaciones</h4>
           <ul>
-            <li><strong>Eficiencia relativa:</strong> DE domina en costo esperado por éxito en Rastrigin 2D/3D (4.040–4.179) y Rosenbrock 2D (4.040), mientras PSO parte con un presupuesto $3{,}7\times$ mayor (15.030 vs. 4.040). GD resulta el más eficiente en Rosenbrock 3D (2.630 bajo regla $2n$; 677 si cada $\nabla f$ analítico cuenta como 1 evaluación).</li>
-            <li><strong>Efecto de dimensión ($n=2 \to 3$):</strong> Todas las tasas de éxito caen al aumentar $n$; la degradación es moderada en Rastrigin para PSO/DE pese a multiplicarse los mínimos locales ($\approx 121 \to 1.331$), pero severa en Rosenbrock por el acoplamiento del valle.</li>
-            <li><strong>Limitaciones:</strong> El estudio evalúa dimensiones bajas ($n \in \{2,3\}$), hiperparámetros fijos por algoritmo (Tabla 2), presupuestos asimétricos y muestras de $N=30$ corridas donde diferencias de 1–2 éxitos (3–7 puntos porcentuales) no son estadísticamente concluyentes.</li>
+            <li><strong>Eficiencia relativa en igualdad de esfuerzo:</strong> DE domina en los cuatro escenarios con 100% de éxito y costo esperado mínimo (15.000 $E_{\text{equiv}}$), alcanzando precisión de máquina antes de agotar el presupuesto (<strong>Figura 6b</strong>); PSO cuesta casi el doble en Rosenbrock 3D (28.125) y EA alcanza 225.000 ($15\times$ más costoso).</li>
+            <li><strong>Efecto de dimensión ($n=2 \to 3$):</strong> Con presupuesto fijo de 15.000, DE conserva el 100%, mientras PSO cae 13,3 puntos en Rastrigin y 46,7 en Rosenbrock, y EA cae 53,3 y 26,7 puntos respectivamente.</li>
+            <li><strong>Limitaciones:</strong> El estudio evalúa dimensiones bajas ($n \in \{2,3\}$), configuración única por algoritmo (Tabla 2; variantes de GD con búsqueda lineal o recorte de paso evitarían divergencias en $[-5,5]^n$) y muestras de $N=30$ corridas.</li>
           </ul>
         </div>
       </section>
@@ -1434,9 +1441,9 @@ Castellón de la Plana -> Tarragona -> Girona -> (retorno a Barcelona)</code></p
         </div>
 
         <div id="p2-ga">
-          <h3>2.4 Algoritmo Genético (DEAP) frente a ACO + Or-opt</h3>
+          <h3>2.4 Algoritmo Genético (DEAP) frente a ACO en Igualdad de Esfuerzo</h3>
           <p>
-            El Algoritmo Genético en DEAP (Fortin et al., 2012) alcanza un costo final de <strong>977,79 €</strong> tras 1.000 generaciones, frente a los <strong>879,35 €</strong> obtenidos por ACO + Or-opt en 150 iteraciones (<strong>Tabla 10</strong>). El recorrido del GA resulta un 11,19% más costoso (+98,44 €), con +688,80 km adicionales, +6,58 h más de conducción y +9,58 € extra en peajes (25,86 € frente a 16,28 €), porque el cruce $OX$ (Davis, 1985) y <code>mutShuffleIndexes</code> operan a ciegas respecto a la matriz asimétrica de costos viales mientras ACO explota la heurística $\eta_{ij} = 1/C_{ij}$ y el refinamiento Or-opt (Or, 1976).
+            El Algoritmo Genético en DEAP (Fortin et al., 2012) alcanza un costo final de <strong>977,79 €</strong> tras 1.000 generaciones (84.103 evaluaciones de tour, sin Or-opt), frente a los <strong>879,35 €</strong> obtenidos por ACO + Or-opt en 150 iteraciones (3.000 tours + 150 pasadas Or-opt; <strong>Tabla 10</strong>). Para evitar cualquier sesgo por asimetría en evaluaciones o búsqueda local, se ejecutó adicionalmente la comparativa controlada de la <strong>Tabla 10b</strong> y la <strong>Figura 7b</strong>, donde ACO supera de forma consistente al GA a igual número de evaluaciones sin Or-opt (901,23 € vs 1.694,09 € en 3.000 tours; 910,96 € vs 1.103,10 € en 15.000 tours) y bajo idéntica hibridación con Or-opt (879,35 € vs 930,14 €).
           </p>
 
           <div class="table-title">Tabla 10: Comparación Directa Algoritmo Genético (DEAP) vs ACO + Or-opt ($h = 5{,}09$ €/h)</div>
@@ -1457,12 +1464,52 @@ Castellón de la Plana -> Tarragona -> Girona -> (retorno a Barcelona)</code></p
                 <tr><td><strong>Tiempo Total (h)</strong></td><td>74,31 h</td><td>67,73 h</td></tr>
                 <tr><td><strong>Peajes Totales (€)</strong></td><td><strong>25,86 €</strong></td><td><strong>16,28 €</strong></td></tr>
                 <tr><td><strong>Combustible Total (€)</strong></td><td>573,67 €</td><td>518,31 €</td></tr>
-                <tr><td><strong>Tiempo de Cómputo (s)</strong></td><td>4,31 s</td><td>4,22 s</td></tr>
+                <tr><td><strong>Evaluaciones de tour / Or-opt</strong></td><td>84.103 evals / 0 Or-opt</td><td>3.000 tours / 150 Or-opt</td></tr>
+                <tr><td><strong>Tiempo de Cómputo (s)</strong></td><td>4,31 s (ref.) / 3,47 s</td><td>4,22 s (ref.) / 4,41 s</td></tr>
               </tbody>
             </table>
           </div>
           <div class="table-source" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">
             <em>Fuente: Elaboración propia a partir de <code>parte_2/resultados/resumen_ga.json</code> y <code>parte_2/resultados/resumen_aco.json</code>.</em>
+          </div>
+
+          <div class="table-title" style="margin-top: 1.5rem;">Tabla 10b: Comparación Controlada ACO vs GA en Igualdad de Esfuerzo ($h = 5{,}09$ €/h, semilla 42)</div>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Régimen Controlado</th>
+                  <th>Algoritmo</th>
+                  <th>Evals Tour</th>
+                  <th>Pasadas Or-opt</th>
+                  <th>Costo (€)</th>
+                  <th>Distancia (km)</th>
+                  <th>Tiempo (h)</th>
+                  <th>Peajes (€)</th>
+                  <th>Tiempo (s)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Sin Or-opt (3.000 tours)</td><td><strong>ACO sin Or-opt</strong></td><td>3.000</td><td>0</td><td><strong>901,23 €</strong></td><td>6.494,85</td><td>67,10</td><td>37,98 €</td><td>5,38 s</td></tr>
+                <tr><td>Sin Or-opt (3.000 tours)</td><td>GA sin Or-opt</td><td>3.000</td><td>0</td><td>1.694,09 €</td><td>12.210,60</td><td>117,61</td><td>114,62 €</td><td>0,21 s</td></tr>
+                <tr style="border-top: 2px solid var(--border);"><td>Sin Or-opt (15.000 tours)</td><td><strong>ACO sin Or-opt</strong></td><td>15.000</td><td>0</td><td><strong>910,96 €</strong></td><td>6.488,14</td><td>67,51</td><td>46,12 €</td><td>26,98 s</td></tr>
+                <tr><td>Sin Or-opt (15.000 tours)</td><td>GA sin Or-opt</td><td>15.000</td><td>0</td><td>1.103,10 €</td><td>8.234,32</td><td>83,50</td><td>16,62 €</td><td>0,95 s</td></tr>
+                <tr style="border-top: 2px solid var(--border);"><td>Con Or-opt (~3.000 tours)</td><td><strong>ACO + Or-opt</strong></td><td>3.000</td><td>150</td><td><strong>879,35 €</strong></td><td>6.452,60</td><td>67,73</td><td><strong>16,28 €</strong></td><td>6,12 s</td></tr>
+                <tr><td>Con Or-opt (~3.000 tours)</td><td>GA + Or-opt</td><td>2.563</td><td>151</td><td>930,14 €</td><td>6.781,90</td><td>71,46</td><td>21,68 €</td><td>0,38 s</td></tr>
+                <tr style="border-top: 2px solid var(--border);"><td>Tiempo comparable</td><td><strong>ACO + Or-opt</strong></td><td>3.000</td><td>150</td><td><strong>879,35 €</strong></td><td>6.452,60</td><td>67,73</td><td><strong>16,28 €</strong></td><td>4,41 s</td></tr>
+                <tr><td>Tiempo comparable</td><td>GA (100×1.000)</td><td>84.103</td><td>0</td><td>977,79 €</td><td>7.141,42</td><td>74,31</td><td>25,86 €</td><td>3,47 s</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="table-source" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">
+            <em>Fuente: Elaboración propia a partir de <code>parte_2/resultados/comparacion_justa_aco_ga.json</code> (<code>python parte_2/main.py --comparar-justo</code>).</em>
+          </div>
+
+          <div class="figure-box">
+            <img src="assets/img/comparacion_convergencia_aco_ga.png" alt="Comparación ACO vs GA en igualdad de esfuerzo">
+            <div class="figure-caption">
+              <strong>Figura 7b</strong> — Convergencia de ACO y GA bajo ejes comunes de esfuerzo: evaluaciones de recorrido (izquierda) y tiempo de cómputo (derecha). <em>Fuente: Elaboración propia mediante <code>parte_2/main.py --comparar-justo</code>.</em>
+            </div>
           </div>
         </div>
 
@@ -1630,7 +1677,7 @@ Castellón de la Plana -> Tarragona -> Girona -> (retorno a Barcelona)</code></p
             <p><strong>1. Prompt utilizado (literal):</strong> <em>“Ayúdame a comparar los cuatro algoritmos de optimización según sus resultados...”</em></p>
             <p><strong>2. Parte relevante de la respuesta de la IA:</strong> Redactó un párrafo de síntesis afirmando literalmente que <em>“PSO obtuvo una tasa de éxito del 86,67 % en Rastrigin, mientras que la evolución diferencial alcanzó el 96,67 % en Rosenbrock”</em>.</p>
             <p><strong>3. Cómo se sospechó del error:</strong> Al contrastar la redacción frente a la salida tabular de las 30 corridas independientes de cada escenario, las tasas de éxito y el comportamiento conocido de Evolución Diferencial en el valle de Rosenbrock 3D no concordaban con la afirmación.</p>
-            <p><strong>4. Evidencia que lo demuestra:</strong> La <strong>Tabla 3</strong> (generada a partir de <code>parte_1/comparacion_y_gifs_parte1.py</code> con 30 corridas independientes bajo el criterio $|f(\mathbf{x}) - f^*| \le 10^{-3}$) registra que <strong>PSO en Rastrigin 3D alcanzó 28/30 éxitos (93,33%)</strong>, <strong>DE en Rastrigin 3D alcanzó 29/30 (96,67%)</strong> y <strong>DE en Rosenbrock 3D alcanzó 8/30 (26,67%)</strong>.</p>
+            <p><strong>4. Evidencia que lo demuestra:</strong> La tabla comparativa de la primera fase experimental (generada a partir de <code>parte_1/comparacion_y_gifs_parte1.py</code> con 30 corridas independientes antes de la unificación presupuestaria) registraba que <strong>PSO en Rastrigin 3D alcanzó 28/30 éxitos (93,33%)</strong>, <strong>DE en Rastrigin 3D alcanzó 29/30 (96,67%)</strong> y <strong>DE en Rosenbrock 3D alcanzó 8/30 (26,67%)</strong>; posteriormente, al igualar el presupuesto de todos los métodos a $15.000\ E_{\text{equiv}}$ (<strong>Tablas 3 y 4</strong>), DE alcanzó <strong>30/30 (100,0%)</strong> en los cuatro escenarios.</p>
             <p><strong>5. Corrección aplicada:</strong> Se descartó el párrafo generado y se redactó el análisis comparativo de la Sección 1.6 directamente a partir de las cifras verificadas en las <strong>Tablas 3 y 4</strong>.</p>
             <p><strong>6. Lección aprendida:</strong> Toda cifra numérica, porcentaje o comparación redactada por un asistente de IA debe cotejarse línea por línea contra las tablas y archivos experimentales generados por el código.</p>
           </div>

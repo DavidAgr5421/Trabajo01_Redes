@@ -235,9 +235,11 @@ def ejecutar_estudio_estadistico(cfg: dict, n_corridas: int = 30) -> tuple[pd.Da
                         exitos += 1
 
                     # Curva del mejor acumulado vs E_equiv para graficar en eje comun
+                    # (para metodos con divergencias, se grafica la mediana sobre corridas finitas
+                    # para mantener consistencia con la mediana finita reportada en las tablas)
                     hf = np.asarray(res["historial_f"], dtype=float)
                     he = np.asarray(res["evals_equiv_hist"], dtype=float)
-                    if len(hf) > 0 and np.isfinite(hf[0]):
+                    if np.isfinite(val) and len(hf) > 0 and np.isfinite(hf[0]):
                         mejor_acum = np.minimum.accumulate(np.where(np.isfinite(hf), hf, np.inf))
                         curvas_interp.append(np.interp(eje_comun, he, mejor_acum))
 

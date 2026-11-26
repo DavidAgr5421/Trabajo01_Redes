@@ -1,0 +1,9 @@
+﻿regimen,algoritmo,usar_or_opt,evaluaciones_tour,pasadas_or_opt,coste_eur,distancia_km,tiempo_h,peajes_eur,gas_eur,tiempo_computo_s
+Sin Or-opt (3.000 tours),ACO,False,3000,0,901.23,6494.85,67.1,37.98,521.74,5.38
+Sin Or-opt (3.000 tours),GA,False,3000,0,1694.09,12210.6,117.61,114.62,980.84,0.21
+Sin Or-opt (15.000 tours),ACO,False,15000,0,910.96,6488.14,67.51,46.12,521.2,26.98
+Sin Or-opt (15.000 tours),GA,False,15000,0,1103.1,8234.32,83.5,16.62,661.45,0.95
+Con Or-opt (3.000 tours + Or-opt),ACO,True,3000,150,879.35,6452.6,67.73,16.28,518.31,6.12
+Con Or-opt (3.000 tours + Or-opt),GA,True,2563,151,930.14,6781.9,71.46,21.68,544.75,0.38
+Configuracion principal (tiempo ~6-7s),ACO+Or-opt,True,3000,150,879.35,6452.6,67.73,16.28,518.31,4.41
+Configuracion principal (tiempo ~6-7s),GA (100x1000),False,84103,0,977.79,7141.42,74.31,25.86,573.67,3.47

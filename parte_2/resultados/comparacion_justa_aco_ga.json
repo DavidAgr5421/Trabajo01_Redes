@@ -1,0 +1,110 @@
+{
+  "valor_hora_eur": 5.09,
+  "semilla": 42,
+  "resultados": [
+    {
+      "regimen": "Sin Or-opt (3.000 tours)",
+      "algoritmo": "ACO",
+      "usar_or_opt": false,
+      "evaluaciones_tour": 3000,
+      "pasadas_or_opt": 0,
+      "coste_eur": 901.23,
+      "distancia_km": 6494.85,
+      "tiempo_h": 67.1,
+      "peajes_eur": 37.98,
+      "gas_eur": 521.74,
+      "tiempo_computo_s": 5.38
+    },
+    {
+      "regimen": "Sin Or-opt (3.000 tours)",
+      "algoritmo": "GA",
+      "usar_or_opt": false,
+      "evaluaciones_tour": 3000,
+      "pasadas_or_opt": 0,
+      "coste_eur": 1694.09,
+      "distancia_km": 12210.6,
+      "tiempo_h": 117.61,
+      "peajes_eur": 114.62,
+      "gas_eur": 980.84,
+      "tiempo_computo_s": 0.21
+    },
+    {
+      "regimen": "Sin Or-opt (15.000 tours)",
+      "algoritmo": "ACO",
+      "usar_or_opt": false,
+      "evaluaciones_tour": 15000,
+      "pasadas_or_opt": 0,
+      "coste_eur": 910.96,
+      "distancia_km": 6488.14,
+      "tiempo_h": 67.51,
+      "peajes_eur": 46.12,
+      "gas_eur": 521.2,
+      "tiempo_computo_s": 26.98
+    },
+    {
+      "regimen": "Sin Or-opt (15.000 tours)",
+      "algoritmo": "GA",
+      "usar_or_opt": false,
+      "evaluaciones_tour": 15000,
+      "pasadas_or_opt": 0,
+      "coste_eur": 1103.1,
+      "distancia_km": 8234.32,
+      "tiempo_h": 83.5,
+      "peajes_eur": 16.62,
+      "gas_eur": 661.45,
+      "tiempo_computo_s": 0.95
+    },
+    {
+      "regimen": "Con Or-opt (3.000 tours + Or-opt)",
+      "algoritmo": "ACO",
+      "usar_or_opt": true,
+      "evaluaciones_tour": 3000,
+      "pasadas_or_opt": 150,
+      "coste_eur": 879.35,
+      "distancia_km": 6452.6,
+      "tiempo_h": 67.73,
+      "peajes_eur": 16.28,
+      "gas_eur": 518.31,
+      "tiempo_computo_s": 6.12
+    },
+    {
+      "regimen": "Con Or-opt (3.000 tours + Or-opt)",
+      "algoritmo": "GA",
+      "usar_or_opt": true,
+      "evaluaciones_tour": 2563,
+      "pasadas_or_opt": 151,
+      "coste_eur": 930.14,
+      "distancia_km": 6781.9,
+      "tiempo_h": 71.46,
+      "peajes_eur": 21.68,
+      "gas_eur": 544.75,
+      "tiempo_computo_s": 0.38
+    },
+    {
+      "regimen": "Configuracion principal (tiempo ~6-7s)",
+      "algoritmo": "ACO+Or-opt",
+      "usar_or_opt": true,
+      "evaluaciones_tour": 3000,
+      "pasadas_or_opt": 150,
+      "coste_eur": 879.35,
+      "distancia_km": 6452.6,
+      "tiempo_h": 67.73,
+      "peajes_eur": 16.28,
+      "gas_eur": 518.31,
+      "tiempo_computo_s": 4.41
+    },
+    {
+      "regimen": "Configuracion principal (tiempo ~6-7s)",
+      "algoritmo": "GA (100x1000)",
+      "usar_or_opt": false,
+      "evaluaciones_tour": 84103,
+      "pasadas_or_opt": 0,
+      "coste_eur": 977.79,
+      "distancia_km": 7141.42,
+      "tiempo_h": 74.31,
+      "peajes_eur": 25.86,
+      "gas_eur": 573.67,
+      "tiempo_computo_s": 3.47
+    }
+  ]
+}

@@ -112,17 +112,17 @@ Entrega1/
 
 ## 🔬 Resumen de Resultados Principales
 
-### Parte 1: Optimización Numérica
-* **Regla de Comparación Justa**: $E_{\text{equiv}} = E_f + 2d \times E_{\nabla}$, fundamentada en el costo de aproximar el gradiente analítico mediante diferencias finitas centrales.
-* **Rastrigin**: Descenso por Gradiente falló en el 100% de los casos (0% de éxito en 2D y 3D) por atrapamiento en mínimos locales. PSO (100% en 2D, **93,33% en 3D**) y Evolución Diferencial (100% en 2D, **96,67% en 3D**) superaron ampliamente la barrera multimodal.
-* **Rosenbrock**: GD converge en 2D con $\alpha=0,001$ requiriendo más de 2.200 pasos, pero sufre divergencias en 3D por mal condicionamiento del valle. La Evolución Diferencial demostró el mejor comportamiento local ($f_{\text{mediana}} \approx 3,12 \times 10^{-10}$) debido a la alineación intrínseca de los vectores de mutación a lo largo del lecho parabólico.
+### Parte 1: Optimización Numérica (Igualdad de Esfuerzo: $E_{\text{equiv}} \le 15.000$)
+* **Regla de Comparación Justa e Igualdad de Presupuesto**: $E_{\text{equiv}} = E_f + 2n \times E_{\nabla} \le 15.000$, evaluando GD, PSO ($30\times 499 + 30 = 15.000$), EA ($40 + 440\times 34 = 15.000$) y DE ($40\times 375 = 15.000$) bajo exactamente el mismo esfuerzo máximo.
+* **Rastrigin**: Descenso por Gradiente falló en el 100% de los casos (0% de éxito en 2D y 3D) por atrapamiento en mínimos locales en ~19 pasos. Evolución Diferencial (**100% en 2D y 3D**) y PSO (**100% en 2D, 86,67% en 3D**) superaron ampliamente la barrera multimodal; EA obtuvo **96,67% en 2D** y **43,33% en 3D**.
+* **Rosenbrock**: Bajo el dominio $[-5,5]^n$ y tope común de $15.000\ E_{\text{equiv}}$, GD diverge desde gradientes iniciales elevados (22/30 en 2D; 25/30 en 3D) o agota el presupuesto antes de cruzar $10^{-3}$ (0/30). **Evolución Diferencial domina de forma absoluta (100% en 2D y 3D, mediana $1{,}62\times 10^{-25}$ en 3D)** frente a PSO (**100% en 2D, 53,33% en 3D**) y EA (**33,33% en 2D, 6,67% en 3D**).
 
 ### Parte 2: Optimización Combinatoria (TSP 47 Capitales)
 * **Función de Costo Real**: Integra salario mínimo interprofesional (**5,09 €/h**, RD 126/2026), combustible de un **Toyota Corolla 140H híbrido (4,5 L/100 km)** y peajes oficiales vigentes de 2026 sin APIs de pago ni valores provisionales (**16,28 €** en la ruta base sobre una matriz de 872 arcos con peaje valorado y 1.290 sin peaje).
 * **Impacto de la Búsqueda Local Or-opt**:
   * **Costo Óptimo**: **879,35 €** (vs 901,24 € de ACO sin Or-opt), representando un **ahorro de 21,89 € (-2,43%)** y un ahorro de **21,70 € solo en peajes** (16,28 € vs 37,98 €).
   * **Distancia y Tiempo**: **6.452,60 km** (-42,26 km) y **67,73 h** (+0,64 h al volante para evitar peajes troncales como `AP-66`, `AP-6` y el eje completo de `AP-9`).
-  * **Convergencia y Comparativa GA**: Se alcanza el mejor tour en la **iteración 30** (3,8 veces más rápido que ACO sin Or-opt en iteración 115), superando ampliamente al Algoritmo Genético DEAP (**977,79 €**, 7.141,40 km, 74,31 h y 25,86 € en peajes).
+  * **Convergencia y Comparativa en Igualdad de Esfuerzo**: Se alcanza el mejor tour en la **iteración 30** (3,8 veces más rápido que ACO sin Or-opt en iteración 115), superando al Algoritmo Genético DEAP en su configuración principal (**977,79 €**, 84.103 evals), con igual presupuesto de evaluaciones sin Or-opt (**901,23 €** vs 1.694,09 € en 3.000 tours; **910,96 €** vs 1.103,10 € en 15.000 tours) y bajo idéntica hibridación con Or-opt (**879,35 €** vs 930,14 €).
 * **Sensibilidad Salarial**: La ruta base es invariante entre 2,00 y 5,09 €/h (16,28 € en peajes). Los puntos de quiebre analíticos exactos ocurren en $h_1^* = 11{,}55$ €/h (peajes de 31,20 € para bajar a 66,73 h) y $h_2^* = 21{,}85$ €/h (peajes de 54,84–69,10 € para comprimir el viaje hasta 65,91 h).
 
 ---
