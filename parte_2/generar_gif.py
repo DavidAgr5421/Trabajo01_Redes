@@ -15,6 +15,7 @@ Uso:
 from __future__ import annotations
 
 import argparse
+import shutil
 from pathlib import Path
 
 import matplotlib
@@ -26,6 +27,13 @@ import numpy as np
 from costes_comunes import BASE_DIR, VALOR_HORA_POR_DEFECTO, cargar_costes
 
 DIR_RESULTADOS = BASE_DIR / "resultados"
+ASSETS_DIR = BASE_DIR.parent / "assets" / "img"
+ASSETS_BLOG = {
+    "evolucion_aco_con_oropt.gif",
+    "mapa_aco_con_oropt.png",
+    "evolucion_ga.gif",
+    "mapa_ga.png",
+}
 
 # Contorno simplificado de la peninsula iberica (Espana peninsular), en
 # (longitud, latitud). Fuente: geo.json publico de fronteras (johan/world.geo.json,
@@ -219,6 +227,14 @@ def _main():
     print(f"Mejor coste final: {resultado['coste']:.2f} EUR")
     print(f"GIF guardado: {salida}")
     print(f"Mapa guardado: {png}")
+
+    if args.salida is None:
+        ASSETS_DIR.mkdir(parents=True, exist_ok=True)
+        for src in (salida, png):
+            if src.name in ASSETS_BLOG:
+                dst = ASSETS_DIR / src.name
+                shutil.copy2(src, dst)
+                print(f"Sincronizado en assets/img/: {dst}")
 
 
 if __name__ == "__main__":

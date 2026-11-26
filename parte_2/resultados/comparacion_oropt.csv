@@ -1,4 +1,4 @@
 ﻿fase,etiqueta,hormigas,iteraciones,alfa,beta,evaporacion,semilla,usar_or_opt,coste_eur,distancia_km,tiempo_total_h,coste_tiempo_eur,peajes_eur,gas_eur,coste_medio_final_eur,iteracion_convergencia,tiempo_ejecucion_s
-comparativa,ganador_con_oropt,10,30,1.0,3.0,0.4,42,True,863.2261,6446.572,67.857778,345.3961,0.0,517.83,1098.767,25,0.563
-comparativa,mismo_sin_oropt,10,30,1.0,3.0,0.4,42,False,920.0126,6918.228,71.572224,364.3026,0.0,555.71,1080.0293,22,0.372
-comparativa,sin_oropt_alto_presupuesto,50,300,1.0,3.0,0.4,42,False,867.5118,6499.574,67.858893,345.4018,0.0,522.11,1046.7962,31,18.897
+comparativa,ganador_con_oropt,20,150,1.0,3.0,0.4,42,True,879.347,6452.596,67.732223,344.757,16.28,518.31,1153.9003,30,4.193
+comparativa,mismo_sin_oropt,20,150,1.0,3.0,0.4,42,False,901.235,6494.853,67.095277,341.515,37.98,521.74,1098.2936,115,3.495
+comparativa,sin_oropt_alto_presupuesto,50,300,1.0,3.0,0.4,42,False,910.9572,6488.138,67.512223,343.6372,46.12,521.2,1119.839,18,17.791

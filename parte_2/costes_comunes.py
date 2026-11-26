@@ -174,7 +174,7 @@ def _main():
     print(f"Peajes valorados: {(datos.tax_eur > 0).sum()} arcos")
     tour = list(range(datos.n))
     desglose = datos.desglose_tour(tour, VALOR_HORA_POR_DEFECTO)
-    print(f"Tour trivial (orden canonico) a 20 EUR/h: "
+    print(f"Tour trivial (orden canonico) a {VALOR_HORA_POR_DEFECTO:.2f} EUR/h: "
           f"{desglose['coste_eur']:.2f} EUR")
 
 

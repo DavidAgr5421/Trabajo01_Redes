@@ -16,40 +16,55 @@ import numpy as np
 import pandas as pd
 
 from colonia_hormigas import ejecutar_aco
+from config import cargar_config
 from costes_comunes import BASE_DIR, VALOR_HORA_POR_DEFECTO, cargar_costes
 
 DIR_RESULTADOS = BASE_DIR / "resultados"
 DIR_RESULTADOS.mkdir(parents=True, exist_ok=True)
+VALORES_HORA_DEFECTO = [0.0, 2.0, 5.09, 10.0, 15.0, 20.0, 35.0, 50.0, 100.0]
+VALORES_HORA_DEMO = [0.0, 5.09, 20.0, 50.0]
 
 
 def analizar_sensibilidad(valores_hora: list[float] | None = None, demo: bool = False) -> pd.DataFrame:
+    cfg = cargar_config(parte="parte_2", demo=demo)
+    aco_cfg = cfg.get("aco", {})
+    vh_base = float(cfg.get("valor_hora", VALOR_HORA_POR_DEFECTO))
+
     if valores_hora is None:
-        if demo:
-            valores_hora = [0.0, 5.09, 20.0, 50.0]
+        valores_config = cfg.get("valores_hora_sensibilidad")
+        if valores_config:
+            valores_hora = [float(v) for v in valores_config]
+        elif demo:
+            valores_hora = list(VALORES_HORA_DEMO)
         else:
-            valores_hora = [0.0, 2.0, 5.09, 10.0, 20.0, 35.0, 50.0, 100.0]
+            valores_hora = list(VALORES_HORA_DEFECTO)
 
     datos = cargar_costes()
-    hormigas = 10 if demo else 20
-    iteraciones = 30 if demo else 150
-    semilla = 42
+    hormigas = int(aco_cfg.get("hormigas", 10 if demo else 20))
+    iteraciones = int(aco_cfg.get("iteraciones", 30 if demo else 150))
+    alfa = float(aco_cfg.get("alfa", 1.0))
+    beta = float(aco_cfg.get("beta", 3.0))
+    evaporacion = float(aco_cfg.get("evaporacion", 0.4))
+    usar_or_opt = bool(aco_cfg.get("usar_or_opt", True))
+    semilla = int(aco_cfg.get("semilla", cfg.get("semilla", 42)))
 
     print("=" * 78)
     print("ESTUDIO DE SENSIBILIDAD DEL VALOR DE LA HORA DEL VENDEDOR (TSP 47 CAPITALES)")
-    print(f"Configuracion: {hormigas} hormigas, {iteraciones} iteraciones, semilla={semilla}")
+    print(f"Configuracion: {hormigas} hormigas, {iteraciones} iteraciones, "
+          f"alfa={alfa}, beta={beta}, evaporacion={evaporacion}, semilla={semilla}")
     print("=" * 78)
 
-    # 1. Obtener primero el tour base de 5.09 EUR/h
-    M_base = datos.matriz_coste(VALOR_HORA_POR_DEFECTO)
+    # 1. Obtener primero el tour base de referencia (por defecto 5.09 EUR/h)
+    M_base = datos.matriz_coste(vh_base)
     res_base = ejecutar_aco(
         M_base,
         hormigas=hormigas,
         iteraciones=iteraciones,
-        alfa=1.0,
-        beta=3.0,
-        evaporacion=0.4,
+        alfa=alfa,
+        beta=beta,
+        evaporacion=evaporacion,
         semilla=semilla,
-        usar_or_opt=True,
+        usar_or_opt=usar_or_opt,
         verbose=False,
     )
     firma_base = datos.firma(res_base["tour"])
@@ -62,11 +77,11 @@ def analizar_sensibilidad(valores_hora: list[float] | None = None, demo: bool = 
             M,
             hormigas=hormigas,
             iteraciones=iteraciones,
-            alfa=1.0,
-            beta=3.0,
-            evaporacion=0.4,
+            alfa=alfa,
+            beta=beta,
+            evaporacion=evaporacion,
             semilla=semilla,
-            usar_or_opt=True,
+            usar_or_opt=usar_or_opt,
             verbose=False,
         )
         desglose = datos.desglose_tour(res["tour"], vh)
@@ -74,7 +89,7 @@ def analizar_sensibilidad(valores_hora: list[float] | None = None, demo: bool = 
         es_identica = (firma_actual == firma_base)
 
         if vh == 0.0:
-            regimen = "Minima distancia / Combustible puro"
+            regimen = "Minima distancia / Coste directo (combustible + peajes)"
         elif vh < 15.0:
             regimen = "Equilibrio Economico Laboral (Base)"
         elif vh < 40.0:
@@ -83,19 +98,22 @@ def analizar_sensibilidad(valores_hora: list[float] | None = None, demo: bool = 
             regimen = "Dominancia Severa del Tiempo Laboral"
 
         dt = time.time() - t0
+        costo_tiempo_eur = float(vh) * float(desglose["tiempo_h"])
         filas.append({
-            "Valor_Hora_EUR_h": vh,
-            "Coste_Total_EUR": round(desglose["coste_eur"], 2),
-            "Distancia_km": round(desglose["distancia_km"], 2),
-            "Tiempo_h": round(desglose["tiempo_h"], 2),
-            "Coste_Combustible_EUR": round(desglose["gas_eur"], 2),
-            "Coste_Tiempo_EUR": round(desglose["coste_eur"] - desglose["gas_eur"] - desglose["tax_eur"], 2),
-            "Ruta_Identica_a_Base": "Si" if es_identica else "No",
-            "Regimen_Operativo": regimen,
-            "Tiempo_Calculo_s": round(dt, 2),
+            "valor_hora_eur": float(vh),
+            "coste_eur": round(desglose["coste_eur"], 2),
+            "distancia_km": round(desglose["distancia_km"], 2),
+            "tiempo_h": round(desglose["tiempo_h"], 4),
+            "tax_eur": round(desglose["tax_eur"], 2),
+            "gas_eur": round(desglose["gas_eur"], 2),
+            "costo_tiempo_eur": round(costo_tiempo_eur, 2),
+            "ruta_identica_a_base": "Si" if es_identica else "No",
+            "regimen_operativo": regimen,
+            "tiempo_calculo_s": round(dt, 2),
         })
         print(f"  [VH = {vh:6.2f} EUR/h] Coste: {desglose['coste_eur']:8.2f} EUR | "
               f"Dist: {desglose['distancia_km']:7.1f} km | Tiempo: {desglose['tiempo_h']:5.2f} h | "
+              f"Peajes: {desglose['tax_eur']:6.2f} EUR | Gas: {desglose['gas_eur']:6.2f} EUR | "
               f"Identica al base: {'SI' if es_identica else 'NO'}")
 
     df = pd.DataFrame(filas)

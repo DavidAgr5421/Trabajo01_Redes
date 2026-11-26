@@ -3,11 +3,11 @@
 **Universidad Nacional de Colombia — Facultad de Minas, Sede Medellín**  
 
 **Equipo Investigador**:
-* Alejandro Agudelo Anaya — CC: 1017271139
-* David Agudelo Arboleda — CC: 1000899797
-* Santiago Álvarez Martínez — CC: 1022142463
-* Daniel Felipe López Zapata — CC: 1045046468
-* Sara Osorio Piñerez — CC: 1001370113
+* Alejandro Agudelo Anaya
+* David Agudelo Arboleda
+* Santiago Álvarez Martínez
+* Daniel Felipe López Zapata
+* Sara Osorio Piñerez
 
 **Docente Tutor**: Prof. Juan David Ospina Arango (`jdospina@unal.edu.co`)  
 **Repositorio GitHub**: [https://github.com/DavidAgr5421/Trabajo01_Redes.git](https://github.com/DavidAgr5421/Trabajo01_Redes.git)  
@@ -42,7 +42,7 @@ python main.py -e de            # Evolución Diferencial (DE)
 python main.py -e parte1        # Protocolo estadístico completo (30 corridas independientes)
 
 # --- PARTE 2: OPTIMIZACIÓN COMBINATORIA (TSP 47 CAPITALES) ---
-python main.py -e aco           # Colonia de Hormigas con Or-opt (Ruta óptima peninsular 845,09 €)
+python main.py -e aco           # Colonia de Hormigas con Or-opt (Ruta óptima peninsular 879,35 €)
 python main.py -e ga            # Algoritmo Genético DEAP (TSP permutacional)
 python main.py -e oropt         # Comparativa directa Con vs Sin búsqueda local Or-opt
 python main.py -e sensibilidad  # Estudio de sensibilidad salario horario del vendedor [0 - 100 €/h]
@@ -118,12 +118,12 @@ Entrega1/
 * **Rosenbrock**: GD converge en 2D con $\alpha=0,001$ requiriendo más de 2.200 pasos, pero sufre divergencias en 3D por mal condicionamiento del valle. La Evolución Diferencial demostró el mejor comportamiento local ($f_{\text{mediana}} \approx 3,12 \times 10^{-10}$) debido a la alineación intrínseca de los vectores de mutación a lo largo del lecho parabólico.
 
 ### Parte 2: Optimización Combinatoria (TSP 47 Capitales)
-* **Función de Costo Real**: Integra salario mínimo interprofesional (**5,09 €/h**, RD 126/2026), combustible de un **Toyota Corolla híbrido (4,5 L/100 km)** y peajes (0,00 € por autovías de alta capacidad).
+* **Función de Costo Real**: Integra salario mínimo interprofesional (**5,09 €/h**, RD 126/2026), combustible de un **Toyota Corolla 140H híbrido (4,5 L/100 km)** y peajes oficiales vigentes de 2026 sin APIs de pago ni valores provisionales (**16,28 €** en la ruta base sobre una matriz de 872 arcos con peaje valorado y 1.290 sin peaje).
 * **Impacto de la Búsqueda Local Or-opt**:
-  * **Costo Óptimo**: **845,09 €** (vs 875,41 € de ACO puro), representando un **ahorro de 30,32 € (-3,46%)**.
-  * **Distancia y Tiempo**: **6.307,79 km** (-209,74 km) y **66,49 h** (-2h 39m al volante).
-  * **Convergencia**: Se alcanza el óptimo en la **iteración 20** (4 veces más rápido que ACO sin Or-opt).
-* **Sensibilidad Salarial**: La ruta óptima es invariante entre 4,5 y 12 €/h. A partir de 20 €/h, el tiempo de conducción se reduce a 65,65 h priorizando autovías de 120 km/h.
+  * **Costo Óptimo**: **879,35 €** (vs 901,24 € de ACO sin Or-opt), representando un **ahorro de 21,89 € (-2,43%)** y un ahorro de **21,70 € solo en peajes** (16,28 € vs 37,98 €).
+  * **Distancia y Tiempo**: **6.452,60 km** (-42,26 km) y **67,73 h** (+0,64 h al volante para evitar peajes troncales como `AP-66`, `AP-6` y el eje completo de `AP-9`).
+  * **Convergencia y Comparativa GA**: Se alcanza el mejor tour en la **iteración 30** (3,8 veces más rápido que ACO sin Or-opt en iteración 115), superando ampliamente al Algoritmo Genético DEAP (**977,79 €**, 7.141,40 km, 74,31 h y 25,86 € en peajes).
+* **Sensibilidad Salarial**: La ruta base es invariante entre 2,00 y 5,09 €/h (16,28 € en peajes). Los puntos de quiebre analíticos exactos ocurren en $h_1^* = 11{,}55$ €/h (peajes de 31,20 € para bajar a 66,73 h) y $h_2^* = 21{,}85$ €/h (peajes de 54,84–69,10 € para comprimir el viaje hasta 65,91 h).
 
 ---
 
@@ -131,7 +131,7 @@ Entrega1/
 El proyecto documenta formalmente la asistencia de LLMs y expone cuatro casos de alucinaciones refutadas con rigurosidad:
 1. **Rutas fijas inventadas por Pathlib**: Corregidas con resolución dinámica anclada.
 2. **Coordenadas falsas de OSRM**: Rechazadas y reemplazadas por coordenadas oficiales del IGN.
-3. **Re-consulta redundante a Geoapify**: Purgada al demostrar que las matrices ya estaban calculadas.
+3. **TollGuru obsoleto (`AP-2`) y peajes provisionales en 0,00 €**: Refutado el cobro de 13,45 € en `AP-2` (liberada en 2021) y eliminados los valores provisionales cruzando Geoapify + OSRM contra el inventario oficial MITMA/BOE 2026 (16,28 € de peaje real).
 4. **Porcentajes de éxito falsos (86,67% y 96,67%)**: Rectificados con los datos empíricos reales (93,33% para PSO en Rastrigin 3D y 26,67% para DE en Rosenbrock 3D).
 
 ---
@@ -140,11 +140,11 @@ El proyecto documenta formalmente la asistencia de LLMs y expone cuatro casos de
 
 Cada integrante grabó un video de 2 a 3 minutos hablando en primera persona sobre sus aportes específicos con evidencia concreta (código, commits, figuras y secciones del reporte):
 
-| Integrante | Documento | Aportes Específicos Sustentados | Enlace al Video |
-| :--- | :---: | :--- | :---: |
-| **Alejandro Agudelo Anaya** | CC: 1017271139 | Descenso por Gradiente (GD) y Optimización por Enjambre de Partículas (PSO) | [Ver en YouTube](https://www.youtube.com/watch?v=0caV8OajlQM) |
-| **David Agudelo Arboleda** | CC: 1000899797 | Colonia de Hormigas (ACO) con Or-opt, modelado económico del TSP y animaciones | [Ver en YouTube](https://youtu.be/xvnyp074I1E) |
-| **Santiago Álvarez Martínez** | CC: 1022142463 | Formulación metodológica, diseño experimental y comparativa estadística | [Ver en YouTube](https://youtu.be/QNHQFw3YrUI) |
-| **Daniel Felipe López Zapata** | CC: 1045046468 | Arquitectura modular de código, validación de datos viales y estructuración | [Ver en YouTube](https://youtu.be/_6JfD148hN4) |
-| **Sara Osorio Piñerez** | CC: 1001370113 | Verificación empírica, redacción técnica y auditoría en cacería de alucinaciones | [Ver en YouTube](https://www.youtube.com/watch?v=W_dBpcZ_9g4) |
+| Integrante | Aportes Específicos Sustentados | Enlace al Video |
+| :--- | :--- | :---: |
+| **Alejandro Agudelo Anaya** | Descenso por Gradiente (GD) y Optimización por Enjambre de Partículas (PSO) | [Ver en YouTube](https://www.youtube.com/watch?v=0caV8OajlQM) |
+| **David Agudelo Arboleda** | Colonia de Hormigas (ACO) con Or-opt, modelado económico del TSP y animaciones | [Ver en YouTube](https://youtu.be/xvnyp074I1E) |
+| **Santiago Álvarez Martínez** | Formulación metodológica, diseño experimental y comparativa estadística | [Ver en YouTube](https://youtu.be/QNHQFw3YrUI) |
+| **Daniel Felipe López Zapata** | Arquitectura modular de código, validación de datos viales y estructuración | [Ver en YouTube](https://youtu.be/_6JfD148hN4) |
+| **Sara Osorio Piñerez** | Verificación empírica, redacción técnica y auditoría en cacería de alucinaciones | [Ver en YouTube](https://www.youtube.com/watch?v=W_dBpcZ_9g4) |
 

@@ -333,12 +333,25 @@
     .figure-caption strong { color: var(--text); }
 
     /* Responsive Data Tables */
+    .table-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+      margin: 1.5rem 0 0.5rem;
+    }
     .table-container {
       overflow-x: auto;
-      margin: 1.5rem 0 2rem;
+      margin: 0.5rem 0 0.5rem;
       border: 1px solid var(--border);
       border-radius: 8px;
       background: var(--bg-surface);
+    }
+    .table-source {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+      margin-bottom: 1.75rem;
+      line-height: 1.45;
     }
     table {
       width: 100%;
@@ -579,23 +592,23 @@
     <div class="authors-grid">
       <div class="author-card">
         <div class="author-name">Alejandro Agudelo Anaya</div>
-        <div class="author-id">CC: 1017271139</div>
+        <div class="author-id">Universidad Nacional de Colombia</div>
       </div>
       <div class="author-card">
         <div class="author-name">David Agudelo Arboleda</div>
-        <div class="author-id">CC: 1000899797</div>
+        <div class="author-id">Universidad Nacional de Colombia</div>
       </div>
       <div class="author-card">
         <div class="author-name">Santiago Álvarez Martínez</div>
-        <div class="author-id">CC: 1022142463</div>
+        <div class="author-id">Universidad Nacional de Colombia</div>
       </div>
       <div class="author-card">
         <div class="author-name">Daniel Felipe López Zapata</div>
-        <div class="author-id">CC: 1045046468</div>
+        <div class="author-id">Universidad Nacional de Colombia</div>
       </div>
       <div class="author-card">
         <div class="author-name">Sara Osorio Piñerez</div>
-        <div class="author-id">CC: 1001370113</div>
+        <div class="author-id">Universidad Nacional de Colombia</div>
       </div>
     </div>
     <div class="advisor-box">
@@ -648,13 +661,13 @@
       <section id="resumen">
         <h2>📌 Resumen Ejecutivo</h2>
         <p>
-          El presente trabajo aborda de manera experimental y teórica los dos pilares cardinales de la computación bioinspirada: la <strong>optimización numérica en espacios continuos</strong> sobre superficies no convexas y la <strong>optimización combinatoria en grafos dirigidos asimétricos</strong> a través del emblemático Problema del Vendedor Viajero (TSP), aplicado sobre las 47 capitales de provincia de la España peninsular.
+          El presente trabajo aborda de manera experimental y teórica dos pilares fundamentales de la optimización computacional: la <strong>optimización numérica en espacios continuos</strong> sobre superficies no convexas y la <strong>optimización combinatoria en grafos dirigidos asimétricos</strong> mediante el Problema del Vendedor Viajero Asimétrico (ATSP), aplicado a las 47 capitales de provincia de la España peninsular.
         </p>
         <p>
-          En la <strong>Parte 1</strong>, contrastamos el rendimiento de un método clásico determinista de primer orden —Descenso por Gradiente (GD)— frente a tres metaheurísticas poblacionales: Optimización por Enjambre de Partículas (PSO), Algoritmo Evolutivo Continuo (EA) y Evolución Diferencial (DE), sobre las funciones arquetípicas de Rosenbrock y Rastrigin en 2D y 3D. Aplicamos una regla de comparación computacionalmente justa donde evaluar el gradiente analítico en dimensión $d$ equivale al costo de diferencias finitas ($E_{\text{equiv}} = E_f + 2d \times E_{\nabla}$).
+          En la <strong>Parte 1</strong>, se contrasta el rendimiento del método determinista de primer orden Descenso por Gradiente (GD; Nocedal &amp; Wright, 2006) frente a tres metaheurísticas poblacionales —Optimización por Enjambre de Partículas (PSO; Eberhart &amp; Kennedy, 1995), Algoritmo Evolutivo Continuo (EA; Eiben &amp; Smith, 2015) y Evolución Diferencial (DE; Storn &amp; Price, 1997)— sobre las funciones de Rosenbrock (1960) y Rastrigin (1974) en 2D y 3D. Se aplica una regla de comparación computacionalmente justa donde aproximar el gradiente en dimensión $n$ equivale a $2n$ evaluaciones por diferencias finitas centrales ($E_{\text{equiv}} = E_f + 2n\,E_{\nabla}$).
         </p>
         <p>
-          En la <strong>Parte 2</strong>, formulamos el TSP peninsular con costos monetarios reales: valor horario del conductor extraído del Salario Mínimo Interprofesional fijado por el <strong>Real Decreto 126/2026 (5,09 €/h)</strong>, consumo homologado WLTP de un <strong>Toyota Corolla 140H (4,5 L/100 km)</strong> y consulta de peajes oficiales de la red viaria estatal. Demostramos cómo la incorporación del operador de búsqueda local <strong>Or-opt</strong> en la Colonia de Hormigas (ACO) abate el costo del recorrido a <strong>845,09 €</strong> (6.307,79 km y 66,49 h de viaje), logrando un ahorro neto del 3,46% y una convergencia 4 veces más acelerada respecto al ACO canónico.
+          En la <strong>Parte 2</strong>, se formula el TSP cerrado peninsular con costos monetarios reales: valor horario laboral derivado del Salario Mínimo Interprofesional fijado por el <strong>Real Decreto 126/2026 (5,09 €/h</strong>; España. Ministerio de Trabajo y Economía Social, 2026), consumo homologado WLTP de un <strong>Toyota Corolla 140H (4,5 L/100 km</strong>; Toyota España, 2026; Km77, 2023), precio oficial de Gasolina 95 E5 (<strong>1,785 €/L</strong>; MITECO, 2026) y peajes oficiales vigentes en 2026 sobre la totalidad de los 2.162 arcos dirigidos (872 arcos con peaje valorado y 0 valores provisionales). La Colonia de Hormigas (ACO; Dorigo &amp; Stützle, 2004) acoplada con búsqueda local <strong>Or-opt</strong> (Or, 1976) alcanza un recorrido de <strong>879,35 €</strong> (<strong>6.452,60 km</strong>, <strong>67,73 h</strong>, <strong>16,28 €</strong> en cuatro tramos de peaje y <strong>518,31 €</strong> en combustible), ahorrando un 2,43% total y <strong>21,70 € en peajes</strong> frente a ACO sin Or-opt (901,24 €), y superando al Algoritmo Genético implementado en DEAP (977,79 €; Fortin et al., 2012).
         </p>
       </section>
 
@@ -663,53 +676,213 @@
         <h2>1. Parte 1: Optimización Numérica Continua</h2>
 
         <div id="p1-funciones">
-          <h3>1.1 Funciones de Prueba</h3>
+          <h3>1.1 Fundamentación Matemática y Funciones de Prueba</h3>
           <p>
-            Para el desarrollo del trabajo se seleccionaron las funciones de <strong>Rosenbrock</strong> y <strong>Rastrigin</strong>. Ambas permiten evaluar las capacidades de los algoritmos frente a patologías topológicas diametralmente opuestas: un valle curvilíneo con matriz Hessiana mal condicionada frente a una cuadrícula hiper-densa de cientos de óptimos locales atractores.
+            Se aborda el problema de minimización continua con restricciones de caja:
+          </p>
+          $$\min_{\mathbf{x} \in \mathcal{D}} f(\mathbf{x}), \qquad \mathcal{D} = [-D, D]^n \subset \mathbb{R}^n, \qquad f : \mathbb{R}^n \to \mathbb{R}, \qquad n \in \{2, 3\},$$
+          <p>
+            donde $D$ es el semiancho del dominio de búsqueda, $n$ la dimensión, $\|\cdot\|_2$ la norma euclídea, $\mathbf{e}_j$ el $j$-ésimo vector canónico y $\odot$ el producto elemento a elemento. En concordancia con Nocedal y Wright (2006), se seleccionaron las funciones de <strong>Rosenbrock</strong> (Rosenbrock, 1960) y <strong>Rastrigin</strong> (Rastrigin, 1974), cuyas superficies tridimensionales se ilustran en la <strong>Figura 1</strong> y cuyas propiedades geométricas se consolidan en la <strong>Tabla 1</strong>.
           </p>
 
           <!-- Figura 1 -->
           <div class="figure-box">
             <img src="assets/img/figura1_superficies_3d.png" alt="Superficies 3D de Rosenbrock y Rastrigin">
             <div class="figure-caption">
-              <strong>Figura 1</strong> — Visualización 3D de las funciones de prueba de Rosenbrock (izquierda) y Rastrigin (derecha).
+              <strong>Figura 1</strong> — Visualización 3D de las funciones de prueba de Rosenbrock (izquierda) y Rastrigin (derecha). <em>Fuente: Elaboración propia a partir de <code>generar_graficas.py</code>, basada en Rosenbrock (1960) y Rastrigin (1974).</em>
             </div>
+          </div>
+
+          <div class="table-title">Tabla 1: Dominios, Óptimos Globales y Propiedades Geométricas de las Funciones de Prueba</div>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Propiedad</th>
+                  <th>Rosenbrock (1960)</th>
+                  <th>Rastrigin (1974)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Dominio natural de $f$</strong></td>
+                  <td>$\mathbb{R}^n$ ($f \in C^{\infty}$)</td>
+                  <td>$\mathbb{R}^n$ ($f \in C^{\infty}$)</td>
+                </tr>
+                <tr>
+                  <td><strong>Dominio de búsqueda $\mathcal{D}$</strong></td>
+                  <td>$[-5{,}0,\, 5{,}0]^n$ ($D = 5{,}0$)</td>
+                  <td>$[-5{,}12,\, 5{,}12]^n$ ($D = 5{,}12$)</td>
+                </tr>
+                <tr>
+                  <td><strong>Dominio del gradiente</strong></td>
+                  <td>$\nabla f : \mathbb{R}^n \to \mathbb{R}^n$</td>
+                  <td>$\nabla f : \mathbb{R}^n \to \mathbb{R}^n$</td>
+                </tr>
+                <tr>
+                  <td><strong>Imagen / cota inferior</strong></td>
+                  <td>$f(\mathbf{x}) \ge 0$</td>
+                  <td>$f(\mathbf{x}) \ge 0$</td>
+                </tr>
+                <tr>
+                  <td><strong>Mínimo global</strong></td>
+                  <td>$\mathbf{x}^* = (1,\dots,1)^T \in \mathrm{int}(\mathcal{D})$, $f(\mathbf{x}^*) = 0$</td>
+                  <td>$\mathbf{x}^* = \mathbf{0} \in \mathrm{int}(\mathcal{D})$, $f(\mathbf{x}^*) = 0$</td>
+                </tr>
+                <tr>
+                  <td><strong>Convexidad</strong></td>
+                  <td>No convexa</td>
+                  <td>No convexa</td>
+                </tr>
+                <tr>
+                  <td><strong>Modalidad</strong></td>
+                  <td>Un único punto estacionario en $n \in \{2,3\}$; valle parabólico estrecho</td>
+                  <td>$\approx 11^n$ mínimos locales en $\mathcal{D}$ ($\approx 121$ en 2D; $\approx 1.331$ en 3D)</td>
+                </tr>
+                <tr>
+                  <td><strong>Número de condición de $\nabla^2 f(\mathbf{x}^*)$</strong></td>
+                  <td>$\kappa \approx 2{,}5 \times 10^3$ ($n=2$); $\kappa \approx 2{,}9 \times 10^3$ ($n=3$)</td>
+                  <td>$\kappa = 1$</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="table-source" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">
+            <em>Fuente: Elaboración propia a partir de Rosenbrock (1960), Rastrigin (1974) y Nocedal y Wright (2006).</em>
           </div>
 
           <h4>Función de Rosenbrock ("Valle en Banana")</h4>
           <p>
-            Presenta una geometría donde la región que conduce al mínimo global es un valle estrecho y parabólico. Formulación general para $n$ variables:
+            Formulada en dimensión $n \ge 2$ (Rosenbrock, 1960) como suma no negativa de cuadrados:
           </p>
-          $$f(\mathbf{x}) = \sum_{i=1}^{n-1} \left[ 100\left(x_{i+1} - x_i^2\right)^2 + (1 - x_i)^2 \right]$$
+          $$f(\mathbf{x}) = \sum_{i=1}^{n-1} \left[ 100\left(x_{i+1} - x_i^2\right)^2 + (1 - x_i)^2 \right], \qquad \mathbf{x} \in [-5{,}0,\, 5{,}0]^n.$$
           <p>
-            El mínimo global único se encuentra en $\mathbf{x}^* = (1, 1, \dots, 1)$ con $f(\mathbf{x}^*) = 0$. Su gradiente analítico general se desglosa vectorialmente como:
+            La igualdad $f(\mathbf{x}) = 0$ exige $x_i = 1$ para $i = 1, \dots, n-1$ y $x_{i+1} = x_i^2$, de modo que $\mathbf{x}^* = (1, 1, \dots, 1)^T$ es el único mínimo global (y único punto estacionario para $n \in \{2,3\}$). Su dificultad radica en un valle parabólico estrecho ($x_{i+1} = x_i^2$) con matriz Hessiana fuertemente mal condicionada. Su gradiente analítico $\nabla f(\mathbf{x})$ se expresa como:
           </p>
           $$\frac{\partial f}{\partial x_1} = -400 x_1 (x_2 - x_1^2) - 2(1 - x_1)$$
-          $$\frac{\partial f}{\partial x_i} = 200(x_i - x_{i-1}^2) - 400 x_i (x_{i+1} - x_i^2) - 2(1 - x_i), \quad \text{para } 2 \le i \le n-1$$
+          $$\frac{\partial f}{\partial x_i} = 200(x_i - x_{i-1}^2) - 400 x_i (x_{i+1} - x_i^2) - 2(1 - x_i), \quad 2 \le i \le n-1$$
           $$\frac{\partial f}{\partial x_n} = 200(x_n - x_{n-1}^2)$$
+          <p>
+            La matriz Hessiana $\nabla^2 f(\mathbf{x})$ es simétrica y tridiagonal, con entradas:
+          </p>
+          $$H_{11} = 1200x_1^2 - 400x_2 + 2, \qquad H_{ii} = 202 + 1200x_i^2 - 400x_{i+1} \;\; (2 \le i \le n-1), \qquad H_{nn} = 200, \qquad H_{i,i+1} = H_{i+1,i} = -400\,x_i.$$
+          <p>
+            Evaluando en el óptimo para $n = 2$ se obtiene $\nabla^2 f(\mathbf{x}^*) = \begin{pmatrix} 802 &amp; -400 \\ -400 &amp; 200 \end{pmatrix}$, cuyos autovalores son $\lambda_{\max} \approx 1001{,}6$ y $\lambda_{\min} \approx 0{,}399$ ($\det = 400$), lo que arroja un número de condición $\kappa = \lambda_{\max}/\lambda_{\min} \approx 2{,}5 \times 10^3$. Para $n = 3$, $\lambda_{\max} \approx 1{,}40 \times 10^3$, $\lambda_{\min} \approx 0{,}475$ y $\kappa \approx 2{,}9 \times 10^3$. Ambas Hessianas son definidas positivas, confirmando que $\mathbf{x}^*$ es un mínimo estricto.
+          </p>
 
           <h4>Función de Rastrigin (Paisaje Altamente Multimodal)</h4>
           <p>
-            Generada por la modulación cosenoidal sobre una cuenca parabólica:
+            Propuesta por Rastrigin (1974), superpone una modulación cosenoidal de alta frecuencia sobre una cuenca cuadrática:
           </p>
-          $$f(\mathbf{x}) = 10n + \sum_{i=1}^n \left[ x_i^2 - 10\cos(2\pi x_i) \right]$$
+          $$f(\mathbf{x}) = 10n + \sum_{i=1}^n \left[ x_i^2 - 10\cos(2\pi x_i) \right] = \sum_{i=1}^n \left[ x_i^2 + 10\bigl(1 - \cos(2\pi x_i)\bigr) \right], \qquad \mathbf{x} \in [-5{,}12,\, 5{,}12]^n.$$
           <p>
-            El mínimo global se localiza en el origen $\mathbf{x}^* = (0, 0, \dots, 0)$ con $f(\mathbf{x}^*) = 0$. Su gradiente analítico es independiente en cada coordenada:
+            En la segunda forma cada sumando es no negativo y se anula únicamente en $x_i = 0$, luego el mínimo global único es $\mathbf{x}^* = (0, 0, \dots, 0)^T$ con $f(\mathbf{x}^*) = 0$. Cada coordenada introduce mínimos locales próximos a cada entero $k$ con $|k| \le 5$, generando cerca de $11^n$ atractores ($\approx 121$ en 2D y $\approx 1.331$ en 3D) con valor $f \approx \sum_i k_i^2$. Su gradiente y Hessiana (estrictamente diagonal por separabilidad) son:
           </p>
-          $$\nabla f(\mathbf{x}) = \left[ 2x_1 + 20\pi\sin(2\pi x_1), \; 2x_2 + 20\pi\sin(2\pi x_2), \; \dots, \; 2x_n + 20\pi\sin(2\pi x_n) \right]$$
+          $$\frac{\partial f}{\partial x_i} = 2x_i + 20\pi\sin(2\pi x_i), \qquad \frac{\partial^2 f}{\partial x_i^2} = 2 + 40\pi^2\cos(2\pi x_i), \qquad \frac{\partial^2 f}{\partial x_i \partial x_j} = 0 \;\; (i \ne j).$$
+          <p>
+            En el origen, $\nabla^2 f(\mathbf{0}) = (2 + 40\pi^2)\,I \approx 396{,}8\,I$, por lo que $\kappa = 1$: localmente está perfectamente condicionada y su dificultad obedece de manera pura a la multimodalidad masiva.
+          </p>
         </div>
 
         <div id="p1-algoritmos">
           <h3>1.2 Métodos de Optimización Implementados</h3>
           <p>
-            Se implementaron en Python con NumPy cuatro solucionadores:
+            Se implementaron en Python con NumPy cuatro solucionadores cuyas especificaciones, dominios admisibles y presupuestos se detallan en la <strong>Tabla 2</strong>:
           </p>
           <ul>
-            <li><strong>Descenso por Gradiente (GD):</strong> Avanza según $\mathbf{x}_{k+1} = \mathbf{x}_k - \alpha \nabla f(\mathbf{x}_k)$. Se parametrizó con $\alpha = 0,001$ para Rosenbrock y $\alpha = 0,002$ para Rastrigin, con parada por norma $\|\nabla f\|_2 < 10^{-8}$ o máximo de 10.000 iteraciones.</li>
-            <li><strong>Optimización por Enjambre de Partículas (PSO):</strong> Modelo <em>gbest</em> canónico con 30 partículas, 500 iteraciones, $w=0,7$, $c_1=1,5$, $c_2=1,5$. Ejecuta un total fijo de 15.030 evaluaciones de función.</li>
-            <li><strong>Algoritmo Evolutivo Continuo (EA):</strong> Población de $N=50$ individuos reales, 100 generaciones, elitismo de 8 individuos (15%), cruce por corte aleatorio (65%) y mutación gaussiana adaptativa (20%) basada en la dispersión $\sigma_j = \text{std}(X_{:,j})$. Total de evaluaciones: $50 + 100 \times 42 = 4.250$.</li>
-            <li><strong>Evolución Diferencial (DE):</strong> Estrategia <em>DE/rand/1/bin</em> con $N=40$ individuos, 100 generaciones, factor de escala $F=0,7$ y cruce binomial $CR=0,8$. Total de evaluaciones: $40 \times (100 + 1) = 4.040$.</li>
+            <li>
+              <strong>Descenso por Gradiente (GD; Nocedal &amp; Wright, 2006):</strong> A partir de $\mathbf{x}_0 \sim \mathcal{U}(-D, D)^n$, actualiza $\mathbf{x}_{k+1} = \mathbf{x}_k - \alpha \nabla f(\mathbf{x}_k)$, con parada por $\|\nabla f\|_2 &lt; 10^{-8}$, 10.000 iteraciones o detección de divergencia. Cerca de un punto estacionario con Hessiana $H$, el error sigue $\mathbf{e}_{k+1} \approx (I - \alpha H)\mathbf{e}_k$ y exige $\alpha &lt; 2/\lambda_{\max}(H)$ para estabilidad local, con factor de contracción $\rho = \max_i |1 - \alpha\lambda_i|$. En Rosenbrock, $2/\lambda_{\max} \approx 0{,}0020$ ($n=2$) y $\approx 0{,}0014$ ($n=3$), por lo que $\alpha = 0{,}001$ es estable pero induce $\rho \approx 0{,}9996$ a lo largo del valle. En Rastrigin, $2/\lambda_{\max} \approx 0{,}0050$, de modo que $\alpha = 0{,}002$ converge velozmente ($\rho \approx 0{,}21$) hacia la cuenca local más cercana. <em>Nota:</em> el módulo experimental canónico <code>parte_1/comparacion_y_gifs_parte1.py</code> emplea estos valores ($\alpha = 0{,}001$ / $0{,}002$, tolerancia $10^{-8}$), mientras que <code>configuracion.json</code> reserva un perfil alternativo para <code>parte_1/main.py</code>.
+            </li>
+            <li>
+              <strong>Optimización por Enjambre de Partículas (PSO; Eberhart &amp; Kennedy, 1995):</strong> Esquema <em>gbest</em> con $S=30$ partículas, $K=500$ iteraciones, inercia $w=0{,}7 \in [0, 1)$, y coeficientes $c_1=1{,}5$, $c_2=1{,}5$:
+              $$\mathbf{v}_i^{k+1} = w\,\mathbf{v}_i^k + c_1\,\mathbf{r}_1 \odot (\mathbf{p}_i - \mathbf{x}_i^k) + c_2\,\mathbf{r}_2 \odot (\mathbf{g} - \mathbf{x}_i^k), \qquad \mathbf{x}_i^{k+1} = \mathbf{x}_i^k + \mathbf{v}_i^{k+1},$$
+              donde $\mathbf{r}_1, \mathbf{r}_2 \sim \mathcal{U}(0,1)^n$, $\mathbf{p}_i$ es la mejor posición personal y $\mathbf{g} = \arg\min_i f(\mathbf{p}_i)$. Presupuesto fijo: $S + KS = 15.030$ evaluaciones.
+            </li>
+            <li>
+              <strong>Algoritmo Evolutivo Continuo (EA; Eiben &amp; Smith, 2015):</strong> Población $X_t \in \mathbb{R}^{N \times n}$ ($N=50$, $G_{\max}=100$) que construye $X_{t+1} = \mathcal{E}_t \cup \mathcal{C}_t \cup \mathcal{M}_t$ mediante elitismo del 15% ($\mathcal{E}_t$, 8 mejores), cruzamiento por corte aleatorio de coordenadas del 65% ($\mathcal{C}_t$, 32 hijos $\mathbf{c} = (p_1, \dots, p_\kappa, q_{\kappa+1}, \dots, q_n)$) y mutación gaussiana adaptativa del 20% ($\mathcal{M}_t$, 10 mutantes $\mathbf{x}' = \mathbf{x} + \boldsymbol{\varepsilon}$ con $\varepsilon_j \sim \mathcal{N}(0, \sigma_j^2)$ y $\sigma_j = \text{std}(X_{:,j})$). Presupuesto: $50 + 100 \times 42 = 4.250$ evaluaciones.
+            </li>
+            <li>
+              <strong>Evolución Diferencial (DE/rand/1/bin; Storn &amp; Price, 1997):</strong> Con $N=40$ individuos ($N \ge 4$), $G_{\max}=100$, factor de escala $F=0{,}7 \in (0,2]$ y cruce binomial $CR=0{,}8 \in [0,1]$, genera el vector mutante, recombina y aplica selección codiciosa 1 a 1:
+              $$\mathbf{v}_i = \mathbf{x}_{r_1} + F(\mathbf{x}_{r_2} - \mathbf{x}_{r_3}), \qquad u_{i,j} = \begin{cases} v_{i,j} &amp; \text{si } \text{rand}_j \le CR \;\text{ o }\; j = j_{\text{rand}} \\ x_{i,j} &amp; \text{en otro caso} \end{cases}, \qquad \mathbf{x}_i^{g+1} = \begin{cases} \mathbf{u}_i &amp; \text{si } f(\mathbf{u}_i) \le f(\mathbf{x}_i^g) \\ \mathbf{x}_i^g &amp; \text{en otro caso} \end{cases}.$$
+              Presupuesto fijo: $N(G_{\max} + 1) = 4.040$ evaluaciones.
+            </li>
           </ul>
+
+          <div class="table-title">Tabla 2: Hiperparámetros, Dominios Admisibles y Presupuesto de los Algoritmos Continuos</div>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Algoritmo</th>
+                  <th>Parámetro</th>
+                  <th>Valor empleado</th>
+                  <th>Dominio admisible</th>
+                  <th>Evaluaciones de $f$ por corrida</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>GD</td>
+                  <td>$\alpha$ (Rosenbrock / Rastrigin)</td>
+                  <td>0,001 / 0,002</td>
+                  <td>$0 &lt; \alpha &lt; 2/\lambda_{\max}(H)$ (estabilidad local)</td>
+                  <td>Variable ($E_f$ y $E_{\nabla}$ por separado)</td>
+                </tr>
+                <tr>
+                  <td>GD</td>
+                  <td>Tolerancia $\|\nabla f\|_2$ / iter. máx.</td>
+                  <td>$10^{-8}$ / 10.000</td>
+                  <td>$\mathbb{R}_{&gt;0}$ / $\mathbb{N}$</td>
+                  <td>—</td>
+                </tr>
+                <tr>
+                  <td>PSO</td>
+                  <td>$S$ / $K$</td>
+                  <td>30 / 500</td>
+                  <td>$\mathbb{N}$</td>
+                  <td>$S + KS = 15.030$</td>
+                </tr>
+                <tr>
+                  <td>PSO</td>
+                  <td>Inercia $w$ / coef. $c_1, c_2$</td>
+                  <td>0,7 / 1,5 y 1,5</td>
+                  <td>$0 \le w &lt; 1$ / $\mathbb{R}_{&gt;0}$</td>
+                  <td>—</td>
+                </tr>
+                <tr>
+                  <td>EA</td>
+                  <td>$N$ / $G_{\max}$</td>
+                  <td>50 / 100</td>
+                  <td>$\mathbb{N}$</td>
+                  <td>$N + G_{\max}(N - N_{\text{élites}}) = 4.250$</td>
+                </tr>
+                <tr>
+                  <td>EA</td>
+                  <td>Élites / cruce / mutación</td>
+                  <td>15% / 65% / 20%</td>
+                  <td>$[0, 1]$, suma 100%</td>
+                  <td>—</td>
+                </tr>
+                <tr>
+                  <td>DE</td>
+                  <td>$N$ / $G_{\max}$</td>
+                  <td>40 / 100</td>
+                  <td>$N \ge 4$ / $\mathbb{N}$</td>
+                  <td>$N(G_{\max}+1) = 4.040$</td>
+                </tr>
+                <tr>
+                  <td>DE</td>
+                  <td>$F$ / $CR$</td>
+                  <td>0,7 / 0,8</td>
+                  <td>$F \in (0, 2]$ / $CR \in [0, 1]$</td>
+                  <td>—</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="table-source" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">
+            <em>Fuente: Elaboración propia a partir de <code>configuracion.json</code> y módulos de <code>parte_1/</code>; dominios según Nocedal y Wright (2006), Eberhart y Kennedy (1995), Eiben y Smith (2015) y Storn y Price (1997).</em>
+          </div>
         </div>
 
         <div id="p1-justa">
@@ -717,11 +890,11 @@
           <div class="callout tip">
             <div class="callout-header">💡 Principio de Equivalencia Computacional</div>
             <p>
-              Evaluar el vector gradiente no es una operación sin costo. Si la función fuese una caja negra sin derivada analítica, aproximar el gradiente central exige $2d$ evaluaciones de función:
+              Comparar métodos de primer orden y metaheurísticas de orden cero únicamente por número de iteraciones es metodológicamente sesgado. Si $f$ fuese una caja negra sin derivadas analíticas, aproximar el gradiente por diferencias finitas centrales (error $\mathcal{O}(h^2)$; Nocedal &amp; Wright, 2006, cap. 8) exige dos evaluaciones por coordenada:
             </p>
-            $$E_{\text{equivalente}} = E_f + 2d \times E_{\text{gradiente}}$$
+            $$\frac{\partial f(\mathbf{x})}{\partial x_j} \approx \frac{f(\mathbf{x} + h\mathbf{e}_j) - f(\mathbf{x} - h\mathbf{e}_j)}{2h} \implies E_{\text{equiv}} = E_f + 2n\,E_{\nabla}.$$
             <p>
-              Por tanto, el costo real de Descenso por Gradiente debe considerar tanto las llamadas directas a $f(x)$ como las $2d$ evaluaciones implícitas en el cálculo del gradiente.
+              Con derivación analítica el costo real de $\nabla f$ es $\mathcal{O}(n)$, por lo que la regla $2n$ actúa como una cota conservadora desfavorable para GD. Se fija además como umbral estricto de éxito $|f(\mathbf{x}) - f^*| \le 10^{-3}$.
             </p>
           </div>
         </div>
@@ -729,20 +902,20 @@
         <div id="p1-animaciones">
           <h3>1.4 Animaciones GIF de la Parte 1</h3>
           <p>
-            Se registraron las trayectorias de convergencia en Rosenbrock 2D para Descenso por Gradiente y Enjambre de Partículas:
+            Las trayectorias de convergencia sobre curvas de nivel de Rosenbrock 2D se muestran en la <strong>Figura 2</strong> (Descenso por Gradiente desde $\mathbf{x}_0 = [-1{,}2,\, 1{,}0]$) y la <strong>Figura 3</strong> (30 partículas de PSO).
           </p>
 
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; margin: 1.5rem 0;">
             <div class="figure-box">
               <img src="assets/img/animacion_gd_rosenbrock_2d.gif" alt="GIF Descenso por Gradiente">
               <div class="figure-caption">
-                <strong>Figura 2</strong> — Animación de la trayectoria del Descenso por Gradiente sobre curvas de nivel de Rosenbrock 2D ($x_0 = [-1.2, 1.0]$, final $f \approx 1,81 \times 10^{-8}$).
+                <strong>Figura 2</strong> — Animación de la trayectoria del Descenso por Gradiente sobre curvas de nivel de Rosenbrock 2D ($\mathbf{x}_0 = [-1{,}2,\, 1{,}0]$, final $f \approx 1{,}81 \times 10^{-8}$). <em>Fuente: Elaboración propia a partir de <code>parte_1/comparacion_y_gifs_parte1.py</code>.</em>
               </div>
             </div>
             <div class="figure-box">
               <img src="assets/img/animacion_pso_rosenbrock_2d.gif" alt="GIF PSO">
               <div class="figure-caption">
-                <strong>Figura 3</strong> — Animación de las 30 partículas de PSO convergiendo hacia el mínimo global $(1, 1)$ en Rosenbrock 2D ($f_{\text{final}} \approx 3,38 \times 10^{-21}$).
+                <strong>Figura 3</strong> — Animación de las 30 partículas de PSO convergiendo hacia el mínimo global $(1, 1)$ en Rosenbrock 2D ($f_{\text{final}} \approx 3{,}38 \times 10^{-21}$). <em>Fuente: Elaboración propia a partir de <code>parte_1/comparacion_y_gifs_parte1.py</code>.</em>
               </div>
             </div>
           </div>
@@ -751,10 +924,10 @@
         <div id="p1-resultados">
           <h3>1.5 Comparación General de Resultados</h3>
           <p>
-            A partir de 30 corridas independientes por algoritmo, función y dimensión (480 corridas en total), bajo el umbral de éxito estricto $|f(\mathbf{x}) - f^*| \le 10^{-3}$, se consolidó la <strong>Tabla 12</strong>:
+            A partir de 30 corridas independientes por algoritmo, función y dimensión (480 ejecuciones en total), bajo el umbral de éxito estricto $|f(\mathbf{x}) - f^*| \le 10^{-3}$, se consolidó la <strong>Tabla 3</strong>, cuyas métricas se representan visualmente en las <strong>Figuras 4, 5 y 6</strong>.
           </p>
 
-          <!-- Tabla 12 Oficial -->
+          <div class="table-title">Tabla 3: Comparación General de Resultados en 30 Corridas Independientes (480 ejecuciones)</div>
           <div class="table-container">
             <table>
               <thead>
@@ -762,8 +935,8 @@
                   <th>Función</th>
                   <th>Dim</th>
                   <th>Algoritmo</th>
-                  <th>Media $f(x^*)$</th>
-                  <th>Mediana $f(x^*)$</th>
+                  <th>Media $f(\mathbf{x}^*)$</th>
+                  <th>Mediana $f(\mathbf{x}^*)$</th>
                   <th>Desv. Estándar</th>
                   <th>Mejor</th>
                   <th>Peor</th>
@@ -856,12 +1029,15 @@
               </tbody>
             </table>
           </div>
+          <div class="table-source" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">
+            <em>Fuente: Elaboración propia a partir de <code>parte_1/comparacion_y_gifs_parte1.py</code>.</em>
+          </div>
 
           <!-- Figuras 4, 5, 6 -->
           <div class="figure-box">
             <img src="assets/img/figura4_tasa_exito.png" alt="Comparación de Tasa de Éxito">
             <div class="figure-caption">
-              <strong>Figura 4</strong> — Comparación de la tasa de éxito de los cuatro algoritmos en los cuatro problemas de prueba.
+              <strong>Figura 4</strong> — Comparación de la tasa de éxito de los cuatro algoritmos en los cuatro problemas de prueba. <em>Fuente: Elaboración propia a partir de la Tabla 3 mediante <code>generar_graficas.py</code>.</em>
             </div>
           </div>
 
@@ -869,38 +1045,90 @@
             <div class="figure-box">
               <img src="assets/img/figura5_mediana_valor_final.png" alt="Mediana del valor final en escala logarítmica">
               <div class="figure-caption">
-                <strong>Figura 5</strong> — Comparación de la mediana del valor final (escala logarítmica).
+                <strong>Figura 5</strong> — Comparación de la mediana del valor final (escala logarítmica). <em>Fuente: Elaboración propia a partir de la Tabla 3 mediante <code>generar_graficas.py</code>.</em>
               </div>
             </div>
             <div class="figure-box">
               <img src="assets/img/figura6_costo_computacional.png" alt="Evaluaciones promedio de la función">
               <div class="figure-caption">
-                <strong>Figura 6</strong> — Comparación del costo computacional (evaluaciones de $f$).
+                <strong>Figura 6</strong> — Comparación del costo computacional (evaluaciones de $f$). <em>Fuente: Elaboración propia a partir de la Tabla 3 mediante <code>generar_graficas.py</code>.</em>
               </div>
             </div>
           </div>
         </div>
 
         <div id="p1-analisis">
-          <h3>1.6 Análisis Crítico y Rectificación de Discrepancias</h3>
+          <h3>1.6 Análisis Crítico, Costo Esperado por Éxito y Rectificación</h3>
           
           <div class="callout danger">
             <div class="callout-header">🚨 Rectificación de la Alucinación Detectada en el Texto Original</div>
             <p>
-              En borradores preliminares del informe (e.g. pág. 21 del documento original), se había deslizado un párrafo generado por LLM que afirmaba: <em>"PSO obtuvo una tasa de éxito del 86,67% en Rastrigin, mientras que evolución diferencial alcanzó el 96,67% en Rosenbrock 3D"</em>.
+              En borradores preliminares del informe se había deslizado un párrafo generado por LLM que afirmaba: <em>"PSO obtuvo una tasa de éxito del 86,67% en Rastrigin, mientras que evolución diferencial alcanzó el 96,67% en Rosenbrock 3D"</em>.
             </p>
             <p>
-              <strong>La verdad empírica comprobada:</strong> Al auditar los datos experimentales (Tabla 12 y Tabla 7), <strong>PSO en Rastrigin 3D alcanzó el 93,33% (28 de 30 corridas exitosas)</strong> con mediana 0,000, mientras que en <strong>Rosenbrock 3D la Evolución Diferencial obtuvo una tasa de éxito estricta del 26,67% (8 de 30 corridas)</strong>. Este caso ejemplifica el peligro de confiar ciegamente en redactores automáticos de IA sin contrastar rigurosamente con los archivos de salida CSV/JSON del experimento.
+              <strong>La verdad empírica comprobada:</strong> Al auditar los registros de salida de la <strong>Tabla 3</strong>, <strong>PSO en Rastrigin 3D alcanzó el 93,33% (28 de 30 corridas exitosas)</strong> con mediana 0,000, mientras que en <strong>Rosenbrock 3D la Evolución Diferencial obtuvo una tasa de éxito estricta del 26,67% (8 de 30 corridas)</strong>; el 96,67% correspondía en realidad a DE en Rastrigin 3D (29/30).
             </p>
           </div>
 
+          <h4>1.6.1 Multimodalidad vs. información local (Rastrigin)</h4>
           <p>
-            <strong>Conclusiones de la Parte 1:</strong>
+            Con $\alpha = 0{,}002$ y curvatura local $\lambda \approx 396{,}8$, GD contrae con $\rho \approx 0{,}21$ en apenas 33–34 pasos, pero queda atrapado en la cuenca del punto inicial (Nocedal &amp; Wright, 2006). La cuenca del mínimo global cubre aproximadamente $(-0{,}5,\, 0{,}5)^n$, de modo que la probabilidad de caer en ella con inicialización uniforme es $(1/10{,}24)^n$ ($\approx 0{,}95\%$ en 2D y $0{,}09\%$ en 3D), congruente con 0/30 éxitos; su valor final esperado teórico $n(D^2/3 + 1/12) \approx 17{,}6$ (2D) y $26{,}5$ (3D) concuerda con las medias observadas (15,82 y 24,48). Por el contrario, PSO (100% en 2D; 93,33% en 3D) y DE (100%; 96,67%) preservan diversidad espacial mediante la inercia $w=0{,}7$ y los vectores diferencia $F(\mathbf{x}_{r_2}-\mathbf{x}_{r_3})$ (Eberhart &amp; Kennedy, 1995; Storn &amp; Price, 1997). El Algoritmo Evolutivo cae del 70% al 16,67% porque su mutación adaptativa $\sigma_j = \text{std}(X_{:,j})$ colapsa junto con el elitismo del 15% cuando la población se concentra en una cuenca (Eiben &amp; Smith, 2015).
           </p>
+
+          <h4>1.6.2 Valle mal condicionado (Rosenbrock)</h4>
+          <p>
+            En 2D, GD converge el 100% de las veces a costa de 2.227 pasos ($\rho \approx 0{,}9996$); en 3D, el límite de estabilidad se estrecha a $2/\lambda_{\max} \approx 0{,}0014$ y 3 de 30 corridas divergen (90% de éxito). PSO alcanza mediana $4{,}01 \times 10^{-21}$ en 2D, pero en 3D requiere más iteraciones para recorrer el valle (76,67%). En EA, el cruce por corte de coordenadas rompe el acoplamiento no lineal $x_{i+1} \approx x_i^2$ y expulsa a los hijos del valle (40% y 3,33%), mientras que las diferencias $\mathbf{x}_{r_2} - \mathbf{x}_{r_3}$ de DE se alinean tangencialmente con el fondo en 2D (100%), aunque 100 generaciones resultan insuficientes en 3D (26,67%).
+          </p>
+
+          <h4>1.6.3 Evaluaciones equivalentes y costo esperado por éxito</h4>
+          <p>
+            La <strong>Tabla 4</strong> convierte los conteos de la Tabla 3 a la métrica justa $E_{\text{equiv}} = E_f + 2n\,E_{\nabla}$ e incorpora el <strong>costo esperado por éxito</strong> $E_{\text{equiv}}/\hat{p}$, que mide cuántas evaluaciones equivalentes se requieren en promedio al reiniciar independientemente hasta obtener un éxito.
+          </p>
+
+          <div class="table-title">Tabla 4: Evaluaciones Equivalentes ($E_{\text{equiv}} = E_f + 2n\,E_{\nabla}$) y Costo Esperado por Éxito</div>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Función</th>
+                  <th>Dim</th>
+                  <th>Algoritmo</th>
+                  <th>$E_f$</th>
+                  <th>$E_{\nabla}$</th>
+                  <th>$E_{\text{equiv}}$</th>
+                  <th>Tasa de Éxito ($\hat{p}$)</th>
+                  <th>Costo por Éxito ($E_{\text{equiv}}/\hat{p}$)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Rastrigin</td><td>2D</td><td>Descenso por gradiente</td><td>33</td><td>33</td><td>165</td><td>0,0%</td><td>—</td></tr>
+                <tr><td>Rastrigin</td><td>2D</td><td>PSO</td><td>15.030</td><td>0</td><td>15.030</td><td>100,0%</td><td>15.030</td></tr>
+                <tr><td>Rastrigin</td><td>2D</td><td>Algoritmo evolutivo</td><td>4.250</td><td>0</td><td>4.250</td><td>70,0%</td><td>6.071</td></tr>
+                <tr><td>Rastrigin</td><td>2D</td><td>Evolución diferencial</td><td>4.040</td><td>0</td><td>4.040</td><td>100,0%</td><td><strong>4.040</strong></td></tr>
+                <tr style="border-top: 2px solid var(--border);"><td>Rastrigin</td><td>3D</td><td>Descenso por gradiente</td><td>34</td><td>34</td><td>238</td><td>0,0%</td><td>—</td></tr>
+                <tr><td>Rastrigin</td><td>3D</td><td>PSO</td><td>15.030</td><td>0</td><td>15.030</td><td>93,33%</td><td>16.104</td></tr>
+                <tr><td>Rastrigin</td><td>3D</td><td>Algoritmo evolutivo</td><td>4.250</td><td>0</td><td>4.250</td><td>16,67%</td><td>25.500</td></tr>
+                <tr><td>Rastrigin</td><td>3D</td><td>Evolución diferencial</td><td>4.040</td><td>0</td><td>4.040</td><td>96,67%</td><td><strong>4.179</strong></td></tr>
+                <tr style="border-top: 2px solid var(--border);"><td>Rosenbrock</td><td>2D</td><td>Descenso por gradiente</td><td>2.227</td><td>2.226</td><td>11.131</td><td>100,0%</td><td>11.131</td></tr>
+                <tr><td>Rosenbrock</td><td>2D</td><td>PSO</td><td>15.030</td><td>0</td><td>15.030</td><td>100,0%</td><td>15.030</td></tr>
+                <tr><td>Rosenbrock</td><td>2D</td><td>Algoritmo evolutivo</td><td>4.250</td><td>0</td><td>4.250</td><td>40,0%</td><td>10.625</td></tr>
+                <tr><td>Rosenbrock</td><td>2D</td><td>Evolución diferencial</td><td>4.040</td><td>0</td><td>4.040</td><td>100,0%</td><td><strong>4.040</strong></td></tr>
+                <tr style="border-top: 2px solid var(--border);"><td>Rosenbrock</td><td>3D</td><td>Descenso por gradiente</td><td>339</td><td>338</td><td>2.367</td><td>90,0%</td><td><strong>2.630</strong></td></tr>
+                <tr><td>Rosenbrock</td><td>3D</td><td>PSO</td><td>15.030</td><td>0</td><td>15.030</td><td>76,67%</td><td>19.604</td></tr>
+                <tr><td>Rosenbrock</td><td>3D</td><td>Algoritmo evolutivo</td><td>4.250</td><td>0</td><td>4.250</td><td>3,33%</td><td>127.500</td></tr>
+                <tr><td>Rosenbrock</td><td>3D</td><td>Evolución diferencial</td><td>4.040</td><td>0</td><td>4.040</td><td>26,67%</td><td>15.150</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="table-source" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">
+            <em>Fuente: Elaboración propia a partir de la Tabla 3 y Nocedal y Wright (2006). "—" indica ausencia de corridas exitosas.</em>
+          </div>
+
+          <h4>1.6.4 Efecto de dimensión y limitaciones</h4>
           <ul>
-            <li><strong>Incapacidad de GD en multimodalidad:</strong> El Descenso por Gradiente obtuvo <strong>0% de éxito en Rastrigin (2D y 3D)</strong>, quedando atrapado en mínimos locales con normas de gradiente menores a $10^{-8}$.</li>
-            <li><strong>Supremacía de DE y PSO en Rastrigin:</strong> Lograron entre 93% y 100% de éxito, demostrando que la diversidad poblacional y la inercia son indispensables para sortear pozos potenciales.</li>
-            <li><strong>Efecto del valle en Rosenbrock:</strong> En 2D, GD navega el lecho si $\alpha$ es suficientemente pequeño (0,001), pero requiere miles de evaluaciones equivalentes ($> 2.200 \times 4 = 8.800$ evals equiv). En 3D, el gradiente sufrió 3 divergencias por inestabilidad numérica.</li>
+            <li><strong>Eficiencia relativa:</strong> DE domina en costo esperado por éxito en Rastrigin 2D/3D (4.040–4.179) y Rosenbrock 2D (4.040), mientras PSO parte con un presupuesto $3{,}7\times$ mayor (15.030 vs. 4.040). GD resulta el más eficiente en Rosenbrock 3D (2.630 bajo regla $2n$; 677 si cada $\nabla f$ analítico cuenta como 1 evaluación).</li>
+            <li><strong>Efecto de dimensión ($n=2 \to 3$):</strong> Todas las tasas de éxito caen al aumentar $n$; la degradación es moderada en Rastrigin para PSO/DE pese a multiplicarse los mínimos locales ($\approx 121 \to 1.331$), pero severa en Rosenbrock por el acoplamiento del valle.</li>
+            <li><strong>Limitaciones:</strong> El estudio evalúa dimensiones bajas ($n \in \{2,3\}$), hiperparámetros fijos por algoritmo (Tabla 2), presupuestos asimétricos y muestras de $N=30$ corridas donde diferencias de 1–2 éxitos (3–7 puntos porcentuales) no son estadísticamente concluyentes.</li>
           </ul>
         </div>
       </section>
@@ -910,151 +1138,370 @@
         <h2>2. Parte 2: Optimización Combinatoria (TSP 47 Capitales)</h2>
 
         <div id="p2-problema">
-          <h3>2.1 Formulación del Problema</h3>
+          <h3>2.1 Formulación Formal del Problema (ATSP Peninsular)</h3>
           <p>
-            Un vendedor debe visitar las <strong>47 capitales de provincia de la España peninsular</strong> en un recorrido cerrado que inicia y finaliza en la misma ciudad. Se excluyen las islas (Baleares, Canarias) y las ciudades autónomas de Ceuta y Melilla por no ser accesibles por vía terrestre continua.
+            Sea $V = \{1, 2, \dots, n\}$ el conjunto de las $n = 47$ capitales de provincia de la España peninsular geocodificadas mediante el Instituto Geográfico Nacional (IGN, 2026), excluyendo islas y ciudades autónomas por continuidad terrestre, y sea $A \subseteq \{(i,j) \in V \times V : i \ne j\}$ el conjunto de 2.162 arcos dirigidos de la red viaria. La matriz es estrictamente <strong>asimétrica</strong> ($T_{ij} \ne T_{ji}$, $D_{ij} \ne D_{ji}$, $P_{ij} \ne P_{ji}$) y se extrajo mediante la API de rutas de Geoapify (2026) con respaldo abierto de OSRM sobre OpenStreetMap (Luxen &amp; Vetter, 2011). Para cada arco $(i,j) \in A$, el costo monetario tripartito es:
+          </p>
+          $$C_{ij} = h\,T_{ij} + P_{ij} + \kappa\,D_{ij}, \qquad \kappa = c \cdot p, \qquad C : V \times V \to \mathbb{R}_{\ge 0} \cup \{+\infty\},$$
+          <p>
+            donde $T_{ij} &gt; 0$ es el tiempo de conducción [h], $D_{ij} &gt; 0$ la distancia [km], $P_{ij} \ge 0$ el peaje oficial [€], $h$ el valor horario del conductor [€/h], $c$ el consumo [L/km] y $p$ el precio del combustible [€/L] (las conexiones inexistentes toman $C_{ij} = +\infty$ y la diagonal se fija en $0$).
           </p>
           <p>
-            A diferencia de un TSP tradicional basado exclusivamente en distancia euclidiana, el costo dirigido del trayecto entre la ciudad $i$ y la ciudad $j$ responde a un <strong>modelo económico tripartito real</strong>:
+            Sobre el espacio $\Pi_n$ de ciclos hamiltonianos dirigidos (permutaciones cíclicas de $V$), el problema consiste en hallar:
           </p>
-          $$\text{Costo}_{ij} = \left(\text{ValorHora} \times T_{ij}\right) + \text{Peajes}_{ij} + \text{Combustible}_{ij}$$
+          $$\min_{\pi \in \Pi_n} Z(\pi) = \sum_{k=1}^{n} C_{\pi(k),\,\pi(k+1)} = h\,T(\pi) + P(\pi) + \kappa\,D(\pi), \qquad \pi(n+1) \equiv \pi(1).$$
+          <p>
+            Por la asimetría de $C$, la cardinalidad del espacio factible asciende a $|\Pi_n| = (n - 1)! = 46! \approx 5{,}5 \times 10^{57}$ recorridos distintos. Como modelo exacto de referencia, el Problema del Vendedor Viajero Asimétrico (ATSP) se expresa mediante variables binarias $x_{ij} \in \{0,1\}$:
+          </p>
+          $$\min \sum_{(i,j)\in A} C_{ij}\,x_{ij} \qquad \text{s.a.} \quad \sum_{j:(i,j)\in A} x_{ij} = 1 \;\; (\forall i \in V), \quad \sum_{i:(i,j)\in A} x_{ij} = 1 \;\; (\forall j \in V),$$
+          <p>
+            junto con las desigualdades de eliminación de subtours de Dantzig–Fulkerson–Johnson (Dantzig et al., 1954), $\sum_{i \in S}\sum_{j \in S, j \ne i} x_{ij} \le |S| - 1$ ($\forall S \subset V,\; 2 \le |S| \le n-1$, que generan $2^n - n - 2 \approx 1{,}4 \times 10^{14}$ restricciones para $n=47$), o la formulación polinomial compacta de Miller–Tucker–Zemlin (Miller et al., 1960) con variables de orden $u_i$:
+          </p>
+          $$u_i - u_j + n\,x_{ij} \le n - 1 \quad \forall i \ne j,\; i,j \in \{2,\dots,n\}, \qquad 1 \le u_i \le n - 1,$$
+          <p>
+            que consta de 2.162 variables binarias, 94 restricciones de asignación y 2.070 restricciones de orden. Los valores reportados por ACO y GA constituyen cotas superiores obtenidas mediante metaheurísticas sobre dicho modelo.
+          </p>
         </div>
 
         <div id="p2-costos">
-          <h3>2.2 Parámetros Operativos y Fuentes Oficiales</h3>
-          <ul>
-            <li><strong>Valor de la Hora del Vendedor:</strong> Fijado por el <strong>Real Decreto 126/2026, de 18 de febrero</strong> (BOE núm. 44). El salario mínimo interprofesional (SMI) se fija en 40,70 €/día. Considerando una jornada continua legal de 8 horas:
-              $$\text{ValorHora} = \frac{40,70 \text{ \euro/d\ía}}{8 \text{ h}} \approx 5,0875 \implies \mathbf{5,09\text{ \euro/h}}$$
-            </li>
-            <li><strong>Consumo de Combustible:</strong> Vehículo oficial modelo <strong>Toyota Corolla 140H e-CVT 1.8</strong> (híbrido autorrecargable a gasolina). Consumo medio homologado WLTP de <strong>4,5 L / 100 km</strong>. Con Gasolina 95 E5 a 1,785 €/L (Geoportal MITECO), el gasto asciende a $0,080325\text{ \euro/km}$. Autonomía calculada de ~956 km por depósito (43 L).</li>
-            <li><strong>Peajes de Autopista:</strong> Evaluados a través de las matrices y la red estatal (BOE y SEITT). En el recorrido óptimo resultante, el algoritmo selecciona sistemáticamente la <strong>red gratuita de autovías de alta capacidad (A-1, A-2, A-7, A-66)</strong>, resultando en un costo de peaje de <strong>0,00 €</strong>.</li>
-          </ul>
+          <h3>2.2 Parámetros Operativos, Peajes Oficiales 2026 y Algoritmos Combinatorios</h3>
+          <p>
+            La parametrización económica, vehicular y jurídica se consolida en la <strong>Tabla 5</strong>. El salario horario del vendedor ($h = 5{,}09$ €/h) proviene del <strong>Real Decreto 126/2026</strong>, que fija el SMI en 40,70 €/día para una jornada de 8 horas ($40{,}70 / 8 = 5{,}0875 \approx 5{,}09$ €/h; España. Ministerio de Trabajo y Economía Social, 2026). El vehículo de referencia es un <strong>Toyota Corolla 140H e-CVT 1.8</strong> —modelo representativo entre los turismos más vendidos en España según Anfac (2026)— con consumo homologado WLTP de 4,5 L/100 km y depósito de 43 L ($\approx 956$ km de autonomía; Toyota España, 2026; Km77, 2023). Con Gasolina 95 E5 a 1,785 €/L (MITECO, 2026), el costo kilométrico es $\kappa = 0{,}045 \times 1{,}785 = 0{,}080325$ €/km.
+          </p>
+
+          <div class="table-title">Tabla 5: Parámetros Económicos, Técnicos y Jurídicos del Modelo de Costo Peninsular</div>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Parámetro</th>
+                  <th>Símbolo</th>
+                  <th>Valor</th>
+                  <th>Unidad</th>
+                  <th>Referencia / Justificación</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Valor de la hora del vendedor (SMI 2026)</td>
+                  <td>$h$</td>
+                  <td><strong>5,09</strong></td>
+                  <td>€/h</td>
+                  <td>España. Ministerio de Trabajo y Economía Social (2026): $40{,}70 \div 8$</td>
+                </tr>
+                <tr>
+                  <td>Consumo homologado WLTP (Toyota Corolla 140H)</td>
+                  <td>$c$</td>
+                  <td>4,5 (0,045)</td>
+                  <td>L/100 km (L/km)</td>
+                  <td>Toyota España (2026); Km77 (2023); Anfac (2026)</td>
+                </tr>
+                <tr>
+                  <td>Precio oficial Gasolina 95 E5 (09/10/2026)</td>
+                  <td>$p$</td>
+                  <td>1,785</td>
+                  <td>€/L</td>
+                  <td>MITECO (2026)</td>
+                </tr>
+                <tr>
+                  <td>Costo variable de combustible por kilómetro</td>
+                  <td>$\kappa = c \cdot p$</td>
+                  <td>0,080325</td>
+                  <td>€/km</td>
+                  <td>Cálculo directo ($0{,}045 \times 1{,}785$)</td>
+                </tr>
+                <tr>
+                  <td>Capacidad del depósito / autonomía estimada</td>
+                  <td>—</td>
+                  <td>43 L / $\approx 956$ km</td>
+                  <td>—</td>
+                  <td>Km77 (2023); Toyota España (2026)</td>
+                </tr>
+                <tr>
+                  <td>Peajes de la ruta base ($h = 5{,}09$ €/h)</td>
+                  <td>$P(\pi^*)$</td>
+                  <td><strong>16,28</strong></td>
+                  <td>€</td>
+                  <td>Matriz 47×47: 872 arcos con peaje oficial, 1.290 libres, 0 provisionales (MITMA, 2026)</td>
+                </tr>
+                <tr>
+                  <td>Semilla pseudoaleatoria canónica</td>
+                  <td>—</td>
+                  <td>42</td>
+                  <td>—</td>
+                  <td>Configuración experimental (<code>configuracion.json</code>)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="table-source" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">
+            <em>Fuente: Elaboración propia a partir de España, Ministerio de Trabajo y Economía Social (2026), Toyota España (2026), Km77 (2023), MITECO (2026), Geoapify (2026) y MITMA (2026), en <code>parte_2/datos_rutas/fuentes.csv</code>.</em>
+          </div>
+
+          <p>
+            Para erradicar cualquier peaje provisional en 0 €, se inspeccionaron por pasos (<code>details=route_details,tolls</code>) los 2.162 arcos dirigidos en la API gratuita de Geoapify (2026) con respaldo de OSRM (Luxen &amp; Vetter, 2011), y cada segmento marcado con <code>toll=True</code> se valoró con las tarifas oficiales vigentes en 2026 para turismos ligeros (IVA incluido) de MITMA (2026), SEITT (España. Ministerio de la Presidencia, Justicia y Relaciones con las Cortes, 2025) y las respectivas concesionarias, resumidas en la <strong>Tabla 6</strong>. Así, 872 arcos incorporan peaje oficial valorado, 1.290 están verificados sin peaje y <strong>0 arcos quedan en estado provisional</strong>.
+          </p>
+
+          <div class="table-title">Tabla 6: Inventario Resumen de Tarifas Oficiales de Peaje Vigentes y Tramos Liberados en España Peninsular (2026)</div>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Vía / Corredor</th>
+                  <th>Tramo de Concesión / Eje</th>
+                  <th>Concesionaria / Ente</th>
+                  <th>Tarifa / Tope 2026 (Ligeros)</th>
+                  <th>Estado 2026</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td><code>AP-6</code> / <code>AP-51</code> / <code>AP-61</code></td><td>Villalba–Adanero, Villacastín–Ávila, San Rafael–Segovia</td><td>Castellana (Autopistas)</td><td>0,2450 €/km (tope 15,70 €) / 1,75 € / 3,05 €</td><td>Vigente</td></tr>
+                <tr><td><code>AP-66</code></td><td>Campomanes–León (Autopista del Huerna)</td><td>Aucalsa</td><td>0,2082 €/km (tope 16,20 €)</td><td>Vigente</td></tr>
+                <tr><td><code>AP-71</code></td><td>León–Astorga</td><td>Aulesa</td><td>0,1645 €/km (tope diurno 6,20 €)</td><td>Vigente</td></tr>
+                <tr><td><code>AP-9</code> / <code>AP-53</code></td><td>Ferrol–Tui / Santiago–Alto de Santo Domingo</td><td>Audasa / Acega</td><td>0,1450 €/km (A Coruña–Pontevedra 16,35 €; máx. 28,10 €) / 7,25 €</td><td>Vigente</td></tr>
+                <tr><td><code>AP-8</code> / <code>AP-1_PV</code> / <code>AP-68</code> foral</td><td>Bilbao–Behobia, Vitoria–Eibar y tramo foral Bizkaia/Álava</td><td>Bidegi / Interbiak / Arabat</td><td>0,1315–0,1350 €/km (máx. 13,81 € / 11,31 € / 7,60 €)</td><td>Vigente</td></tr>
+                <tr><td><code>AP-15</code></td><td>Tudela–Pamplona–Irurtzun</td><td>Audenasa</td><td>0,1253 €/km (Irurtzun–Pamplona 2,65 €; máx. 14,05 €)</td><td>Vigente</td></tr>
+                <tr><td><code>R-2..R-5</code>, <code>M-12</code>, <code>AP-36</code>, <code>AP-41</code>, <code>AP-7</code></td><td>Radiales Madrid, Ocaña–La Roda, Madrid–Toledo, Cartagena–Vera</td><td>SEITT (BOE-A-2025-25961)</td><td>0,0946 €/km (00:00–06:00 h gratuita en radiales)</td><td>Vigente</td></tr>
+                <tr><td><code>AP-7</code> (Ausur/Ausol), <code>AP-46</code>, <code>C-16</code>, <code>C-32 Sur</code></td><td>Alicante–Cartagena, Málaga–Guadiaro, Pedrizas, Cataluña</td><td>Ausur / Ausol / Autema / Autopistas</td><td>5,70 € / 12,00 € / 4,35 € / 7,24 € (+14,56 € Cadí) / 8,42 €</td><td>Vigente</td></tr>
+                <tr><td><code>AP-1</code>, <code>AP-2</code>, <code>AP-4</code>, <code>AP-7</code> (tramos), <code>C-32 Norte</code>, <code>AP-68</code> Rioja–Aragón</td><td>Burgos–Armiñón, Zaragoza–El Vendrell, Sevilla–Cádiz, Jonquera–Alicante, Maresme, Haro–Zaragoza</td><td>Estado / MITMA / SEITT / Generalitat</td><td>0,00 € (AP-68 Rioja–Aragón liberada desde 11/11/2026)</td><td>Liberada</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="table-source" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">
+            <em>Fuente: Elaboración propia a partir de MITMA (2026), España, Ministerio de la Presidencia (2025), Audasa (2026), Aucalsa (2026), Aulesa (2026), Autopistas (2026), Audenasa (2026) y Bidegi e Interbiak (2026), en <code>parte_2/datos_rutas/tabla_peajes_2026.csv</code> [consultado el 25 de noviembre de 2026].</em>
+          </div>
+
+          <h4>Formulación de ACO + Or-opt y Algoritmo Genético (DEAP)</h4>
+          <p>
+            En <strong>ACO</strong> (Dorigo &amp; Stützle, 2004), cada una de las $m$ hormigas situadas en la ciudad $i$ selecciona la siguiente ciudad no visitada $j \in \mathcal{N}_i^k$ con probabilidad y actualización de feromonas (sobre arcos dirigidos, con refuerzo elitista del mejor recorrido global $\pi^*$):
+          </p>
+          $$p_{ij}^k = \frac{[\tau_{ij}]^{\alpha}\,[\eta_{ij}]^{\beta}}{\displaystyle\sum_{l \in \mathcal{N}_i^k} [\tau_{il}]^{\alpha}\,[\eta_{il}]^{\beta}}, \quad \eta_{ij} = \frac{1}{C_{ij}}, \qquad \tau_{ij} \leftarrow (1 - \rho)\,\tau_{ij} + \sum_{k=1}^{m} \Delta\tau_{ij}^k + \Delta\tau_{ij}^*,$$
+          <p>
+            donde $\Delta\tau_{ij}^k = Q / Z(\pi_k)$ si $(i,j) \in \pi_k$ ($0$ en otro caso), $\Delta\tau_{ij}^* = Q / Z(\pi^*)$ si $(i,j) \in \pi^*$ y $Q = \bar{C}_{\text{iter}}$ es el costo medio de la iteración, con complejidad constructiva $\mathcal{O}(m\,n^2)$. Al finalizar cada iteración, la búsqueda local <strong>Or-opt</strong> (Or, 1976) refina el mejor tour de la iteración reubicando segmentos de longitud $s \in \{1, 2, 3\}$ ciudades consecutivas $(a_1, \dots, a_s)$ entre dos nodos $(u, v)$ sin invertir su orientación (preservando la validez en grafos asimétricos) siempre que:
+          </p>
+          $$\Delta = \bigl[C_{p,q} + C_{u,a_1} + C_{a_s,v}\bigr] - \bigl[C_{p,a_1} + C_{a_s,q} + C_{u,v}\bigr] &lt; 0,$$
+          <p>
+            siendo $p$ y $q$ el predecesor y sucesor originales del segmento. Por su parte, el <strong>Algoritmo Genético</strong> implementado en DEAP (Fortin et al., 2012) representa cada individuo como permutación $\pi \in \Pi_n$, aplica cruce ordenado $OX$ (Davis, 1985) para preservar subsecuencias sin duplicados, mutación <code>mutShuffleIndexes</code> ($p_m = 0{,}2$, <code>indpb = 0,05</code>, con $47 \times 0{,}05 = 2{,}35$ intercambios esperados por mutante) y selección por torneo de tamaño $k = 3$. La configuración completa de ambos solucionadores se recoge en la <strong>Tabla 7</strong>.
+          </p>
+
+          <div class="table-title">Tabla 7: Hiperparámetros y Dominios Admisibles de ACO + Or-opt y Algoritmo Genético (DEAP)</div>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Algoritmo</th>
+                  <th>Parámetro</th>
+                  <th>Valor empleado</th>
+                  <th>Dominio admisible</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>ACO</td><td>Número de hormigas $m$</td><td>20</td><td>$\mathbb{N}$</td></tr>
+                <tr><td>ACO</td><td>Exponentes $\alpha$ / $\beta$</td><td>1,0 / 3,0</td><td>$\mathbb{R}_{\ge 0}$</td></tr>
+                <tr><td>ACO</td><td>Tasa de evaporación $\rho$</td><td>0,4</td><td>$(0, 1]$</td></tr>
+                <tr><td>ACO</td><td>Constante de depósito $Q$</td><td>$\bar{C}_{\text{iter}}$ (con refuerzo elitista sobre $\pi^*$)</td><td>$\mathbb{R}_{&gt;0}$</td></tr>
+                <tr><td>ACO</td><td>Iteraciones</td><td>150</td><td>$\mathbb{N}$</td></tr>
+                <tr><td>ACO + Or-opt</td><td>Longitud de segmento $s$ / aplicación</td><td>$s \in \{1, 2, 3\}$ (sobre mejor tour por iteración; origen fijo)</td><td>$s \in \{1, 2, 3\}$</td></tr>
+                <tr><td>GA (DEAP)</td><td>Población $N$ / Generaciones</td><td>100 / 1.000</td><td>$\mathbb{N}$</td></tr>
+                <tr><td>GA (DEAP)</td><td>Cruce $OX$ / Probabilidad $p_c$</td><td><code>cxOrdered</code> / 0,8</td><td>$[0, 1]$</td></tr>
+                <tr><td>GA (DEAP)</td><td>Mutación / $p_m$ / <code>indpb</code></td><td><code>mutShuffleIndexes</code> / 0,2 / 0,05</td><td>$[0, 1]$</td></tr>
+                <tr><td>GA (DEAP)</td><td>Torneo $k$</td><td>3</td><td>$\mathbb{N},\; k \ge 2$</td></tr>
+                <tr><td>Ambos</td><td>Semilla pseudoaleatoria</td><td>42</td><td>$\mathbb{N}_0$</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="table-source" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">
+            <em>Fuente: Elaboración propia a partir de <code>configuracion.json</code>, <code>parte_2/colonia_hormigas.py</code> y <code>parte_2/algoritmo_genetico.py</code>; dominios según Dorigo y Stützle (2004), Or (1976), Davis (1985) y Fortin et al. (2012).</em>
+          </div>
         </div>
 
         <div id="p2-aco">
-          <h3>2.3 Colonia de Hormigas (ACO) y Búsqueda Local Or-opt</h3>
+          <h3>2.3 Colonia de Hormigas (ACO), Or-opt y Desglose de Peajes</h3>
           <p>
-            Se implementó un algoritmo de Colonia de Hormigas (ACO) con 20 hormigas, 150 iteraciones, $\alpha = 1,0$, $\beta = 3,0$, evaporación $\rho = 0,4$ y semilla fija 42. Para potenciar la intensificación en un grafo dirigido, se integró la búsqueda local <strong>Or-opt</strong> (Or, 1976), que reubica sistemáticamente bloques de 3, 2 y 1 ciudades sin invertir el sentido de circulación.
+            Al evaluar la configuración oficial de la Tabla 7 bajo el salario base $h = 5{,}09$ €/h (<strong>Tabla 8</strong> y <strong>Figura 7</strong>), ACO con búsqueda local Or-opt alcanza un recorrido de <strong>879,35 €</strong> frente a 901,24 € de ACO sin Or-opt y 910,96 € de ACO sin Or-opt con alto presupuesto ($50\text{ h} \times 300\text{ it}$). Or-opt aporta un ahorro neto de <strong>21,89 € (-2,43%)</strong>, reduciendo 42,26 km de distancia, 3,43 € en combustible y, de forma determinante, <strong>21,70 € solo en peajes</strong> (16,28 € frente a 37,98 €), convergiendo en la iteración 30 frente a la 115 (3,8 veces más rápido).
           </p>
 
-          <!-- Tabla 14 -->
+          <div class="table-title">Tabla 8: Comparación Cuantitativa ACO Con Or-opt vs ACO sin Or-opt ($h = 5{,}09$ €/h)</div>
           <div class="table-container">
             <table>
               <thead>
                 <tr>
                   <th>Métrica de Rendimiento</th>
-                  <th>ACO con Or-opt</th>
-                  <th>ACO sin Or-opt</th>
+                  <th>ACO con Or-opt (20h $\times$ 150it)</th>
+                  <th>ACO sin Or-opt (20h $\times$ 150it)</th>
                   <th>ACO sin Or-opt (Alto Presupuesto: 50h $\times$ 300it)</th>
-                  <th>Ahorro / Impacto con Or-opt</th>
+                  <th>Diferencia / Impacto (Con vs Sin)</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td><strong>Costo Total (€)</strong></td>
-                  <td><strong>845,09 €</strong></td>
-                  <td>875,41 €</td>
-                  <td>867,51 €</td>
-                  <td><span class="badge-success">-30,32 € (-3,46%)</span></td>
+                  <td><strong>879,35 €</strong></td>
+                  <td>901,24 €</td>
+                  <td>910,96 €</td>
+                  <td><span class="badge-success">-21,89 € (-2,43%)</span></td>
                 </tr>
                 <tr>
                   <td><strong>Distancia Conducida</strong></td>
-                  <td><strong>6.307,79 km</strong></td>
-                  <td>6.517,53 km</td>
-                  <td>6.499,57 km</td>
-                  <td><span class="badge-success">-209,74 km ahorrados</span></td>
+                  <td><strong>6.452,60 km</strong></td>
+                  <td>6.494,85 km</td>
+                  <td>6.488,14 km</td>
+                  <td><span class="badge-success">-42,26 km</span></td>
                 </tr>
                 <tr>
                   <td><strong>Tiempo de Viaje</strong></td>
-                  <td><strong>66,49 h</strong> (66h 29m)</td>
-                  <td>69,13 h (69h 08m)</td>
-                  <td>67,86 h (67h 51m)</td>
-                  <td><span class="badge-success">-2h 39m al volante</span></td>
+                  <td><strong>67,73 h</strong> (67 h 44 m)</td>
+                  <td>67,10 h (67 h 06 m)</td>
+                  <td>67,51 h (67 h 31 m)</td>
+                  <td>+0,64 h (+38 min)</td>
                 </tr>
                 <tr>
-                  <td><strong>Costo Tiempo Laboral (€)</strong></td>
-                  <td><strong>338,42 €</strong></td>
-                  <td>351,89 €</td>
-                  <td>345,40 €</td>
-                  <td>-13,47 € en nómina</td>
+                  <td><strong>Costo Laboral (€)</strong></td>
+                  <td><strong>344,76 €</strong></td>
+                  <td>341,52 €</td>
+                  <td>343,64 €</td>
+                  <td>+3,24 €</td>
                 </tr>
                 <tr>
-                  <td><strong>Costo Combustible (€)</strong></td>
-                  <td><strong>506,67 €</strong></td>
-                  <td>523,52 €</td>
-                  <td>522,11 €</td>
-                  <td>-16,85 € en gasolina 95</td>
+                  <td><strong>Combustible (€)</strong></td>
+                  <td><strong>518,31 €</strong></td>
+                  <td>521,74 €</td>
+                  <td>521,20 €</td>
+                  <td><span class="badge-success">-3,43 €</span></td>
                 </tr>
                 <tr>
                   <td><strong>Peajes (€)</strong></td>
-                  <td><strong>0,00 €</strong></td>
-                  <td>0,00 €</td>
-                  <td>0,00 €</td>
-                  <td>Red libre de alta capacidad</td>
+                  <td><strong>16,28 €</strong></td>
+                  <td>37,98 €</td>
+                  <td>46,12 €</td>
+                  <td><span class="badge-success">-21,70 € en peajes</span></td>
                 </tr>
                 <tr>
                   <td><strong>Iteración de Convergencia</strong></td>
-                  <td><strong>Iteración 20</strong></td>
-                  <td>Iteración 85</td>
-                  <td>Iteración 31</td>
-                  <td><strong>4x más rápida</strong></td>
+                  <td><strong>Iteración 30</strong></td>
+                  <td>Iteración 115</td>
+                  <td>Iteración 18</td>
+                  <td><strong>Convergencia 3,8x más rápida</strong></td>
                 </tr>
                 <tr>
                   <td><strong>Tiempo de Cómputo (s)</strong></td>
-                  <td><strong>4,77 s</strong></td>
-                  <td>3,97 s</td>
-                  <td>19,81 s</td>
+                  <td><strong>4,19 s</strong></td>
+                  <td>3,50 s</td>
+                  <td>17,79 s</td>
                   <td>Óptimo balance calidad/tiempo</td>
                 </tr>
               </tbody>
             </table>
           </div>
+          <div class="table-source" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">
+            <em>Fuente: Elaboración propia a partir de <code>parte_2/resultados/comparacion_oropt.json</code>.</em>
+          </div>
 
           <div class="figure-box">
             <img src="assets/img/figura7_convergencia_aco.png" alt="Curva de Convergencia ACO">
             <div class="figure-caption">
-              <strong>Figura 7</strong> — Curvas de convergencia comparativa: ACO con Or-opt (verde, 845,09 €) vs ACO sin Or-opt (rojo discontinua, 875,41 €) y ACO de alto presupuesto (naranja puntos, 867,51 €).
+              <strong>Figura 7</strong> — Curvas de convergencia comparativa: ACO con Or-opt (879,35 €) vs ACO sin Or-opt (901,24 €) y ACO de alto presupuesto (910,96 €). <em>Fuente: Elaboración propia a partir de <code>parte_2/resultados/comparacion_oropt.json</code> mediante <code>generar_graficas.py</code>.</em>
             </div>
           </div>
 
-          <h4>Ruta Óptima Peninsular Descubierta (845,09 €)</h4>
-          <pre><code>Logroño -> Soria -> Zaragoza -> Huesca -> Lleida -> Girona -> Barcelona -> 
-Tarragona -> Castellón de la Plana -> Valencia -> Teruel -> Cuenca -> 
-Guadalajara -> Madrid -> Toledo -> Ciudad Real -> Albacete -> Alicante -> 
-Murcia -> Almería -> Granada -> Jaén -> Córdoba -> Málaga -> Cádiz -> 
-Sevilla -> Huelva -> Badajoz -> Cáceres -> Salamanca -> Ávila -> Segovia -> 
-Valladolid -> Palencia -> Burgos -> León -> Zamora -> Ourense -> Pontevedra -> 
-Lugo -> A Coruña -> Oviedo -> Santander -> Bilbao -> Vitoria-Gasteiz -> 
-San Sebastián -> Pamplona -> (retorno a Logroño)</code></pre>
+          <div class="callout tip">
+            <div class="callout-header">🛣️ Equilibrio Selectivo de Peajes en el Recorrido Óptimo (16,28 €)</div>
+            <p>
+              Lejos de arrojar 0,00 € de peaje, la ruta óptima de <strong>879,35 €</strong> ($344{,}76\text{ € laborales} + 16{,}28\text{ € de peajes} + 518{,}31\text{ € de combustible}$) logra un <strong>equilibrio económico selectivo</strong>: el algoritmo evita sistemáticamente los grandes peajes troncales donde existe autovía libre competitiva —bordea el túnel del Huerna <code>AP-66</code> (16,20 €) entrando a Galicia por la <code>A-8</code> (<code>Santander → Oviedo → A Coruña</code>) y saliendo por <code>Ourense → León</code>; evita el eje completo <code>AP-9</code> A Coruña–Pontevedra (16,35 €) y la <code>AP-53</code> (7,25 €) mediante <code>A Coruña → Lugo → Pontevedra → Ourense</code>; sortea el túnel de Guadarrama <code>AP-6</code> (15,70 €) vía <code>Toledo → Ciudad Real → Ávila</code>; esquiva la <code>C-32 Sur</code> (7,29 €) entrando a Barcelona desde Girona por la <code>AP-7</code> liberada; y evita el tramo foral de <code>AP-68</code> entre Bilbao y Vitoria (4,09 €) recorriendo <code>Burgos → Vitoria → Logroño → Pamplona</code> por la <code>AP-1</code> liberada y la <code>A-12</code>—. Sin embargo, sí abona <strong>16,28 €</strong> en los cuatro enlaces de la <strong>Tabla 9</strong>, donde la orografía cantábrico-pirenaica o los accesos directos hacen más costoso el rodeo en tiempo y combustible.
+            </p>
+          </div>
+
+          <div class="table-title">Tabla 9: Desglose de los Cuatro Tramos con Peaje en el Mejor Recorrido Peninsular ($h = 5{,}09$ €/h)</div>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Paso</th>
+                  <th>Tramo Dirigido</th>
+                  <th>Autopista</th>
+                  <th>Distancia (km)</th>
+                  <th>Tiempo (h)</th>
+                  <th>Peaje (€)</th>
+                  <th>Combustible (€)</th>
+                  <th>Costo Total Arco (€)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>10</td><td><code>Ávila → Segovia</code></td><td><code>AP-51</code></td><td>72,96</td><td>0,88</td><td><strong>1,75 €</strong></td><td>5,86 €</td><td>12,07 €</td></tr>
+                <tr><td>17</td><td><code>Pamplona → San Sebastián</code></td><td><code>AP-15</code></td><td>83,13</td><td>0,89</td><td><strong>2,65 €</strong></td><td>6,68 €</td><td>13,84 €</td></tr>
+                <tr><td>18</td><td><code>San Sebastián → Bilbao</code></td><td><code>AP-8</code></td><td>101,99</td><td>1,04</td><td><strong>9,94 €</strong></td><td>8,19 €</td><td>23,44 €</td></tr>
+                <tr><td>22</td><td><code>A Coruña → Lugo</code></td><td><code>AP-9</code></td><td>96,53</td><td>0,93</td><td><strong>1,94 €</strong></td><td>7,75 €</td><td>14,45 €</td></tr>
+                <tr style="border-top: 2px solid var(--border); font-weight: 600;">
+                  <td colspan="3">Total 4 arcos con peaje (43 arcos restantes a 0,00 €)</td>
+                  <td>354,60</td><td>3,74</td><td><strong>16,28 €</strong></td><td>28,48 €</td><td>63,80 €</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="table-source" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">
+            <em>Fuente: Elaboración propia a partir de <code>parte_2/resultados/mejor_ruta_aco.csv</code> y <code>parte_2/datos_rutas/rutas_costes.csv</code>.</em>
+          </div>
+
+          <h4>Ruta Óptima Peninsular Descubierta (879,35 €)</h4>
+          <pre><code>Barcelona -> Lleida -> Huesca -> Zaragoza -> Soria -> Guadalajara -> Madrid -> 
+Toledo -> Ciudad Real -> Ávila -> Segovia -> Valladolid -> Palencia -> Burgos -> 
+Vitoria-Gasteiz -> Logroño -> Pamplona -> San Sebastián -> Bilbao -> Santander -> 
+Oviedo -> A Coruña -> Lugo -> Pontevedra -> Ourense -> León -> Zamora -> Salamanca -> 
+Cáceres -> Badajoz -> Huelva -> Sevilla -> Cádiz -> Córdoba -> Jaén -> Granada -> 
+Málaga -> Almería -> Murcia -> Alicante -> Albacete -> Cuenca -> Teruel -> Valencia -> 
+Castellón de la Plana -> Tarragona -> Girona -> (retorno a Barcelona)</code></pre>
         </div>
 
         <div id="p2-ga">
-          <h3>2.4 Algoritmo Genético (DEAP) para el TSP</h3>
+          <h3>2.4 Algoritmo Genético (DEAP) frente a ACO + Or-opt</h3>
           <p>
-            Se implementó un solucionador genético utilizando el framework DEAP con representación permutacional, operador de cruce $OX$ (<em>Order Crossover</em>), mutación $mutShuffleIndexes$ ($indpb=0,05$) y selección por torneo ($tournsize=3$).
+            El Algoritmo Genético en DEAP (Fortin et al., 2012) alcanza un costo final de <strong>977,79 €</strong> tras 1.000 generaciones, frente a los <strong>879,35 €</strong> obtenidos por ACO + Or-opt en 150 iteraciones (<strong>Tabla 10</strong>). El recorrido del GA resulta un 11,19% más costoso (+98,44 €), con +688,80 km adicionales, +6,58 h más de conducción y +9,58 € extra en peajes (25,86 € frente a 16,28 €), porque el cruce $OX$ (Davis, 1985) y <code>mutShuffleIndexes</code> operan a ciegas respecto a la matriz asimétrica de costos viales mientras ACO explota la heurística $\eta_{ij} = 1/C_{ij}$ y el refinamiento Or-opt (Or, 1976).
           </p>
-          <p>
-            El algoritmo genético logró un costo final de <strong>1.024,28 €</strong> tras 1.000 generaciones (o 1.897,90 € con 500 generaciones rápidas). Si bien reorganiza sustancialmente las conexiones caóticas iniciales (2.479,36 €), el cruce de permutaciones conserva sub-rutas sin considerar la geometría direccional vial con la agilidad constructiva de las hormigas, lo que resalta la superioridad de ACO para problemas de ruteo vehicular.
-          </p>
+
+          <div class="table-title">Tabla 10: Comparación Directa Algoritmo Genético (DEAP) vs ACO + Or-opt ($h = 5{,}09$ €/h)</div>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Métrica</th>
+                  <th>Algoritmo Genético (DEAP, 100p $\times$ 1.000g)</th>
+                  <th>Colonia de Hormigas (ACO + Or-opt, 20h $\times$ 150it)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td><strong>Fotogramas del GIF</strong></td><td>41 (<code>cada = 25</code>)</td><td>75 (<code>cada = 2</code>)</td></tr>
+                <tr><td><strong>Costo Inicial (€)</strong></td><td>2.935,08 € (gen. 0)</td><td>1.006,79 € (iter. 0 tras Or-opt)</td></tr>
+                <tr><td><strong>Mejor Costo Final (€)</strong></td><td><strong>977,79 €</strong></td><td><strong>879,35 €</strong></td></tr>
+                <tr><td><strong>Distancia Total (km)</strong></td><td>7.141,40 km</td><td>6.452,60 km</td></tr>
+                <tr><td><strong>Tiempo Total (h)</strong></td><td>74,31 h</td><td>67,73 h</td></tr>
+                <tr><td><strong>Peajes Totales (€)</strong></td><td><strong>25,86 €</strong></td><td><strong>16,28 €</strong></td></tr>
+                <tr><td><strong>Combustible Total (€)</strong></td><td>573,67 €</td><td>518,31 €</td></tr>
+                <tr><td><strong>Tiempo de Cómputo (s)</strong></td><td>4,31 s</td><td>4,22 s</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="table-source" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">
+            <em>Fuente: Elaboración propia a partir de <code>parte_2/resultados/resumen_ga.json</code> y <code>parte_2/resultados/resumen_aco.json</code>.</em>
+          </div>
         </div>
 
         <div id="p2-animaciones">
           <h3>2.5 Animaciones y Mapas de Rutas en España</h3>
           <p>
-            A continuación se presentan las animaciones completas generadas que muestran la evolución del recorrido proyectado sobre el mapa peninsular y su curva de costos en tiempo de ejecución:
+            La evolución iterativa de ambos enfoques se visualiza en las <strong>Figuras 8 y 9</strong>, y los recorridos geográficos definitivos proyectados sobre la península se presentan en las <strong>Figuras 10 y 11</strong>.
           </p>
 
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 1.5rem; margin: 1.5rem 0;">
             <div class="figure-box">
               <img src="assets/img/evolucion_aco_con_oropt.gif" alt="GIF ACO con Or-opt">
               <div class="figure-caption">
-                <strong>Figura 8</strong> — Animación de la evolución de la mejor ruta encontrada por la Colonia de Hormigas con Or-opt (costo inicial 2.479,36 € $\to$ final <strong>845,09 €</strong> en 150 iteraciones).
+                <strong>Figura 8</strong> — Animación de la evolución de la mejor ruta encontrada por ACO + Or-opt (75 fotogramas, costo inicial 1.006,79 € $\to$ final <strong>879,35 €</strong>). <em>Fuente: Elaboración propia a partir de <code>parte_2/generar_gif.py</code>.</em>
               </div>
             </div>
             <div class="figure-box">
               <img src="assets/img/evolucion_ga.gif" alt="GIF Algoritmo Genético">
               <div class="figure-caption">
-                <strong>Figura 9</strong> — Animación de la evolución del Algoritmo Genético en DEAP (costo inicial 2.479,36 € $\to$ final <strong>1.024,28 €</strong> a lo largo de las generaciones).
+                <strong>Figura 9</strong> — Animación de la evolución del Algoritmo Genético en DEAP (41 fotogramas, costo inicial 2.935,08 € $\to$ final <strong>977,79 €</strong>). <em>Fuente: Elaboración propia a partir de <code>parte_2/generar_gif.py</code>.</em>
               </div>
             </div>
           </div>
@@ -1062,11 +1509,15 @@ San Sebastián -> Pamplona -> (retorno a Logroño)</code></pre>
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 1.5rem;">
             <div class="figure-box">
               <img src="assets/img/mapa_aco_con_oropt.png" alt="Mapa Final ACO con Or-opt">
-              <div class="figure-caption"><strong>Mapa Final ACO con Or-opt (845,09 €)</strong></div>
+              <div class="figure-caption">
+                <strong>Figura 10</strong> — Mapa geográfico de la ruta final encontrada por ACO con Or-opt (<strong>879,35 €</strong>; 6.452,60 km; 16,28 € en peajes). <em>Fuente: Elaboración propia a partir de <code>parte_2/generar_gif.py</code> y coordenadas del IGN (2026).</em>
+              </div>
             </div>
             <div class="figure-box">
               <img src="assets/img/mapa_ga.png" alt="Mapa Final GA">
-              <div class="figure-caption"><strong>Mapa Final Algoritmo Genético</strong></div>
+              <div class="figure-caption">
+                <strong>Figura 11</strong> — Mapa geográfico de la ruta final encontrada por el Algoritmo Genético en DEAP (<strong>977,79 €</strong>; 7.141,40 km; 25,86 € en peajes). <em>Fuente: Elaboración propia a partir de <code>parte_2/generar_gif.py</code> y coordenadas del IGN (2026).</em>
+              </div>
             </div>
           </div>
         </div>
@@ -1074,71 +1525,55 @@ San Sebastián -> Pamplona -> (retorno a Logroño)</code></pre>
         <div id="p2-sensibilidad">
           <h3>2.6 Estudio de Sensibilidad del Valor de la Hora del Vendedor</h3>
           <p>
-            Se ejecutó un barrido del parámetro $\text{ValorHora} \in [0, 100]$ €/h para resolver la pregunta de investigación: <em>¿Cambia la ruta óptima al variar el costo de la hora? ¿A partir de qué valor ocurre la transición?</em>
+            Al escribir $Z(\pi) = h\,T(\pi) + K(\pi)$ con $K(\pi) = P(\pi) + \kappa\,D(\pi)$ independiente de $h$, la función de valor óptimo paramétrico es:
+          </p>
+          $$Z^*(h) = \min_{\pi \in \Pi_n} \bigl[\, h\,T(\pi) + K(\pi) \,\bigr], \qquad h \in [0, \infty).$$
+          <p>
+            Al ser el mínimo puntual de una familia finita de funciones afines en $h$, $Z^*(h)$ es necesariamente <strong>cóncava, lineal por tramos y no decreciente</strong>. Además, si $\pi_1$ es óptimo en $h_1$ y $\pi_2$ en $h_2 &gt; h_1$, sumar $h_1 T_1 + K_1 \le h_1 T_2 + K_2$ y $h_2 T_2 + K_2 \le h_2 T_1 + K_1$ arroja $(h_2 - h_1)(T_2 - T_1) \le 0$: el tiempo óptimo $T^*(h)$ es <strong>no creciente</strong> en $h$ y el costo directo $K^*(h) = P^*(h) + \kappa D^*(h)$ es <strong>no decreciente</strong>, cambiando de tramo en los puntos de quiebre $h_{ab} = (K_b - K_a)/(T_a - T_b)$.
           </p>
 
+          <div class="table-title">Tabla 11: Sensibilidad del Mejor Recorrido y Peajes al Valor de la Hora ($h \in [0, 100]$ €/h)</div>
           <div class="table-container">
             <table>
               <thead>
                 <tr>
                   <th>Valor Hora (€/h)</th>
                   <th>Costo Total (€)</th>
-                  <th>Distancia Total (km)</th>
-                  <th>Tiempo Conducción (h)</th>
+                  <th>Distancia (km)</th>
+                  <th>Tiempo (h)</th>
+                  <th>Peajes (€)</th>
                   <th>Combustible (€)</th>
-                  <th>¿Idéntica a Base (5,09 €/h)?</th>
+                  <th>Costo Laboral (€)</th>
+                  <th>¿Idéntica a Base?</th>
                   <th>Régimen Operativo Predominante</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td><strong>0,00 €/h</strong></td>
-                  <td>507,06 €</td><td>6.312,50 km</td><td>67,27 h</td><td>507,06 €</td>
-                  <td><span class="badge-fail">No</span></td>
-                  <td>Mínima Distancia / Combustible puro</td>
-                </tr>
-                <tr>
-                  <td><strong>2,00 €/h</strong></td>
-                  <td>644,40 €</td><td>6.348,07 km</td><td>67,25 h</td><td>509,91 €</td>
-                  <td><span class="badge-fail">No</span></td>
-                  <td>Transición temprana</td>
-                </tr>
-                <tr>
-                  <td><strong>5,09 €/h (SMI)</strong></td>
-                  <td><strong>845,09 €</strong></td><td><strong>6.307,79 km</strong></td><td><strong>66,49 h</strong></td><td><strong>506,67 €</strong></td>
-                  <td><span class="badge-success">Sí (Ruta Base)</span></td>
-                  <td><strong>Equilibrio Económico Laboral</strong></td>
-                </tr>
-                <tr>
-                  <td><strong>10,00 €/h</strong></td>
-                  <td>1.171,54 €</td><td>6.307,79 km</td><td>66,49 h</td><td>506,67 €</td>
-                  <td><span class="badge-success">Sí (Idéntica)</span></td>
-                  <td>Equilibrio Económico Laboral</td>
-                </tr>
-                <tr>
-                  <td><strong>20,00 €/h</strong></td>
-                  <td>1.834,79 €</td><td>6.292,41 km</td><td>65,65 h</td><td>505,44 €</td>
-                  <td><span class="badge-fail">No</span></td>
-                  <td>Reducción Temporal (Alta Velocidad)</td>
-                </tr>
-                <tr>
-                  <td><strong>50,00 €/h</strong></td>
-                  <td>3.815,92 €</td><td>6.236,88 km</td><td>65,82 h</td><td>500,98 €</td>
-                  <td><span class="badge-fail">No</span></td>
-                  <td>Dominancia severa del tiempo laboral</td>
-                </tr>
-                <tr>
-                  <td><strong>100,00 €/h</strong></td>
-                  <td>7.124,84 €</td><td>6.294,22 km</td><td>66,03 h</td><td>505,58 €</td>
-                  <td><span class="badge-fail">No</span></td>
-                  <td>Saturación de penalización horaria</td>
-                </tr>
+                <tr><td><strong>0,00 €/h</strong></td><td>530,24 €</td><td>6.398,48 km</td><td>67,68 h</td><td><strong>16,28 €</strong></td><td>513,96 €</td><td>0,00 €</td><td><span class="badge-fail">No</span></td><td>Mínimo costo directo (combustible + peajes)</td></tr>
+                <tr><td><strong>2,00 €/h</strong></td><td>670,05 €</td><td>6.452,60 km</td><td>67,73 h</td><td><strong>16,28 €</strong></td><td>518,31 €</td><td>135,46 €</td><td><span class="badge-success">Sí (Idéntica)</span></td><td>Equilibrio económico-laboral (bajo peaje)</td></tr>
+                <tr><td><strong>5,09 €/h (SMI)</strong></td><td><strong>879,35 €</strong></td><td><strong>6.452,60 km</strong></td><td><strong>67,73 h</strong></td><td><strong>16,28 €</strong></td><td><strong>518,31 €</strong></td><td><strong>344,76 €</strong></td><td><span class="badge-success">Sí (Ruta Base)</span></td><td><strong>Equilibrio económico-laboral (base SMI)</strong></td></tr>
+                <tr><td><strong>10,00 €/h</strong></td><td>1.208,56 €</td><td>6.350,18 km</td><td>66,73 h</td><td><strong>31,20 €</strong></td><td>510,09 €</td><td>667,27 €</td><td><span class="badge-fail">No</span></td><td>Transición a autopistas de peaje intermedias</td></tr>
+                <tr><td><strong>15,00 €/h</strong></td><td>1.548,58 €</td><td>6.358,16 km</td><td>67,47 h</td><td><strong>25,86 €</strong></td><td>510,74 €</td><td>1.011,98 €</td><td><span class="badge-fail">No</span></td><td>Reducción temporal intermedia</td></tr>
+                <tr><td><strong>20,00 €/h</strong></td><td>1.892,54 €</td><td>6.407,43 km</td><td>67,05 h</td><td><strong>36,89 €</strong></td><td>514,67 €</td><td>1.340,98 €</td><td><span class="badge-fail">No</span></td><td>Reducción temporal con mayor uso de peaje</td></tr>
+                <tr><td><strong>35,00 €/h</strong></td><td>2.879,95 €</td><td>6.265,92 km</td><td>65,93 h</td><td><strong>69,10 €</strong></td><td>503,35 €</td><td>2.307,50 €</td><td><span class="badge-fail">No</span></td><td>Alta velocidad por corredores de peaje</td></tr>
+                <tr><td><strong>50,00 €/h</strong></td><td>3.879,26 €</td><td>6.323,07 km</td><td>66,21 h</td><td><strong>61,04 €</strong></td><td>507,89 €</td><td>3.310,33 €</td><td><span class="badge-fail">No</span></td><td>Dominancia severa del tiempo laboral</td></tr>
+                <tr><td><strong>100,00 €/h</strong></td><td>7.149,79 €</td><td>6.279,57 km</td><td>65,91 h</td><td><strong>54,84 €</strong></td><td>504,39 €</td><td>6.590,56 €</td><td><span class="badge-fail">No</span></td><td>Saturación horaria (mínimo tiempo)</td></tr>
               </tbody>
             </table>
           </div>
+          <div class="table-source" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">
+            <em>Fuente: Elaboración propia a partir de <code>parte_2/resultados/sensibilidad_valor_hora.csv</code>.</em>
+          </div>
 
           <p>
-            <strong>Hallazgo Teórico:</strong> La ruta óptima es <strong>invariante entre 4,5 €/h y 12 €/h</strong>. El umbral crítico de transición ocurre entre <strong>15 y 20 €/h</strong>, donde el costo laboral sobrepasa el 70% del total y la colonia reorganiza los enlaces para priorizar tramos de autovía de mayor velocidad crucero (120 km/h), ahorrando <strong>50 minutos de conducción</strong> (65,65 h vs 66,49 h) a cambio de una ligera variación en combustible.
+            La <strong>Tabla 11</strong> muestra una clara transición económica: en el barrido estocástico (semilla 42), la ruta base de 16,28 € en peajes permanece invariante para $h \in [2{,}00,\, 5{,}09]$ €/h y cambia desde $h \ge 6{,}00\text{–}10{,}00$ €/h. Al construir la envolvente inferior exacta $Z^*(h) = \min_{\pi}(hT + K)$ sobre los recorridos hallados, emergen <strong>dos puntos de quiebre analíticos exactos</strong>:
+          </p>
+          <ul>
+            <li><strong>Primer quiebre ($h_1^* = 11{,}55$ €/h):</strong> Transición desde el tour de mínimo costo directo ($T = 67{,}68\text{ h}$, $K = 530{,}24\text{ €}$, peajes $16{,}28\text{ €}$) hacia el tour intermedio de $h=10{,}00$ €/h ($T = 66{,}73\text{ h}$, $K = 541{,}29\text{ €}$, peajes <strong>31,20 €</strong>).</li>
+            <li><strong>Segundo quiebre ($h_2^* = 21{,}85$ €/h):</strong> Salto al régimen de alta velocidad ($T = 65{,}91\text{ h}$, $K = 559{,}23\text{ €}$, peajes <strong>54,84 €</strong>, alcanzando hasta <strong>69,10 €</strong> en $h=35$ €/h), donde el vendedor asume mayores peajes para ahorrar casi <strong>2 horas de conducción</strong> ($67{,}73\text{ h} \to 65{,}91\text{ h}$).</li>
+          </ul>
+          <p>
+            Al contabilizar $K = P + G$ con la matriz oficial de peajes, se verifica la consistencia teórica: $K$ asciende progresivamente de 530,24 € a 559,23–572,45 € mientras $T$ desciende de 67,73 h a 65,91 h, observándose únicamente ligeras oscilaciones locales de la metaheurística (como entre 15 y 20 €/h o entre 35 y 50 €/h) propias de una búsqueda estocástica sin certificado de optimalidad global.
           </p>
         </div>
       </section>
@@ -1147,7 +1582,7 @@ San Sebastián -> Pamplona -> (retorno a Logroño)</code></pre>
       <section id="ia">
         <h2>3. Uso de Inteligencia Artificial y Cacería de la Alucinación</h2>
         <p>
-          Siguiendo el protocolo ético y académico de transparencia, se documentan las interacciones con modelos de lenguaje generativo (Opencode Muse / Gemini / ChatGPT) durante las etapas de desarrollo:
+          Siguiendo el protocolo ético y académico de transparencia, se documentan las interacciones con modelos de lenguaje generativo durante las etapas de desarrollo:
         </p>
 
         <h3>3.1 Prompts Principales Empleados</h3>
@@ -1155,7 +1590,7 @@ San Sebastián -> Pamplona -> (retorno a Logroño)</code></pre>
           <div class="callout-header">💬 Primer Prompt: Automatización de Peticiones y Estructuración de Matrices</div>
           <p><em>“Necesito tomar la api de geoapify y realizar requests automáticas para obtener los datos de la matriz”</em></p>
           <p>
-            <strong>Respuesta & Utilidad:</strong> El modelo interpretó la documentación técnica de Geoapify Routing API para diseñar un script que desacopló los metadatos de distancias y tiempos de la geometría espacial de las rutas.
+            <strong>Respuesta &amp; Utilidad:</strong> El modelo interpretó la documentación técnica de Geoapify Routing API para diseñar un script que desacopló los metadatos de distancias y tiempos de la geometría espacial de las rutas.
           </p>
           <p>
             <strong>Impacto en el Resultado:</strong> Se separaron estrictamente las matrices numéricas dirigidas (47x47) de la representación visual del mapa, eliminando sobrecarga en las consultas recurrentes de ACO y GA.
@@ -1166,7 +1601,7 @@ San Sebastián -> Pamplona -> (retorno a Logroño)</code></pre>
           <div class="callout-header">💬 Segundo Prompt: Soporte en Redacción y Visualización de Métricas</div>
           <p><em>“Ayúdame a realizar la documentación de los GIF y la comparación de los algoritmos de optimización.”</em></p>
           <p>
-            <strong>Respuesta & Utilidad:</strong> Propuso una estructura narrativa para documentar las animaciones e integrar gráficas de barras con tasa de éxito, mediana en escala logarítmica y número promedio de evaluaciones.
+            <strong>Respuesta &amp; Utilidad:</strong> Propuso una estructura narrativa para documentar las animaciones e integrar gráficas de barras con tasa de éxito, mediana en escala logarítmica y número promedio de evaluaciones.
           </p>
           <p>
             <strong>Impacto en el Resultado:</strong> Agilizó la articulación entre los integrantes del grupo, requiriendo validación cruzada para evitar incorporar conclusiones estadísticas no verificadas.
@@ -1190,21 +1625,21 @@ San Sebastián -> Pamplona -> (retorno a Logroño)</code></pre>
             <div class="callout-header">🚨 Alucinación 2: Coordenadas Inventadas en Geofabrik / OSRM</div>
             <p><strong>Prompt:</strong> <em>“¿Cómo hago para conseguir una matriz con los datos usando geofabrik?”</em></p>
             <p><strong>Alucinación:</strong> La IA generó un diccionario en Python con supuestas coordenadas geográficas de ciudades españolas con valores completamente falsos e inventados sin base topográfica real.</p>
-            <p><strong>Corrección:</strong> Se rechazaron las coordenadas alucinadas y se construyó <code>datos_rutas/ciudades.csv</code> a partir de coordenadas validadas por el Instituto Geográfico Nacional (IGN) y Geoapify.</p>
+            <p><strong>Corrección:</strong> Se rechazaron las coordenadas alucinadas y se construyó <code>datos_rutas/ciudades.csv</code> a partir de coordenadas validadas por el Instituto Geográfico Nacional (IGN, 2026) y Geoapify (2026).</p>
           </div>
 
           <div class="callout danger">
-            <div class="callout-header">🚨 Alucinación 3: Re-consumo Redundante de API de Peajes Ignorando Datos Existentes</div>
+            <div class="callout-header">🚨 Alucinación 3: TollGuru Desactualizado y Peajes Provisionales en 0 €</div>
             <p><strong>Prompt:</strong> <em>“Implementemos la opción A y usemos la api de tollguru para obtener los datos de peaje”</em></p>
-            <p><strong>Alucinación:</strong> La IA alegó erróneamente que no se disponía de la geometría de las carreteras y propuso volver a consultar masivamente la API de Geoapify para alimentar TollGuru, agotando la cuota de peticiones gratuitas.</p>
-            <p><strong>Corrección:</strong> Se constató que las conexiones ya estaban consolidadas y se tabularon las tarifas oficiales vigentes de autopistas (AP-6, AP-51, AP-66, AP-9) en <code>tabla_peajes_2026.csv</code>.</p>
+            <p><strong>Alucinación:</strong> La IA propuso depender de TollGuru (que en pruebas locales cobraba 13,45 € sobre la AP-2/A-2 liberada desde 2021) y luego dejó tramos marcados como peaje posible provisional en 0 €, induciendo la falsa conclusión de un tour de 0,00 € en peajes.</p>
+            <p><strong>Corrección:</strong> Se extrajeron los tramos reales <code>toll=True</code> en los 2.162 pares mediante Geoapify/OSRM y se cruzaron al 100% con <code>tabla_peajes_2026.csv</code> (MITMA, BOE y concesionarias), logrando 872 arcos valorados, 0 provisionales y la ruta óptima real de 879,35 € con 16,28 € en peajes.</p>
           </div>
 
           <div class="callout danger">
             <div class="callout-header">🚨 Alucinación 4: Invención de Estadísticas de Convergencia (86,67% y 96,67%)</div>
             <p><strong>Prompt:</strong> <em>“Ayúdame a comparar los cuatro algoritmos de optimización según sus resultados...”</em></p>
             <p><strong>Alucinación:</strong> La IA respondió textualmente que <em>"PSO obtuvo una tasa de éxito del 86,67% en Rastrigin, mientras que evolución diferencial alcanzó el 96,67% en Rosenbrock 3D"</em>, cifras inventadas que no correspondían a los experimentos reales.</p>
-            <p><strong>Corrección:</strong> Se rectificaron los valores contra los CSV de salida: PSO en Rastrigin 3D obtuvo <strong>93,33% (28/30)</strong> y DE en Rosenbrock 3D obtuvo <strong>26,67% (8/30)</strong>, purgando la alucinación del informe final.</p>
+            <p><strong>Corrección:</strong> Se rectificaron los valores contra la <strong>Tabla 3</strong> y los archivos de salida: PSO en Rastrigin 3D obtuvo <strong>93,33% (28/30)</strong> y DE en Rosenbrock 3D obtuvo <strong>26,67% (8/30)</strong>, purgando la alucinación del informe final.</p>
           </div>
         </div>
       </section>
@@ -1228,7 +1663,6 @@ San Sebastián -> Pamplona -> (retorno a Logroño)</code></pre>
           <div class="video-card">
             <div class="video-card-header">
               <h4>Alejandro Agudelo Anaya</h4>
-              <span class="video-author-cc">CC: 1017271139</span>
             </div>
             <div class="video-responsive-wrapper">
               <iframe src="https://www.youtube-nocookie.com/embed/0caV8OajlQM" title="Video de Contribución - Alejandro Agudelo Anaya" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
@@ -1245,7 +1679,6 @@ San Sebastián -> Pamplona -> (retorno a Logroño)</code></pre>
           <div class="video-card">
             <div class="video-card-header">
               <h4>David Agudelo Arboleda</h4>
-              <span class="video-author-cc">CC: 1000899797</span>
             </div>
             <div class="video-responsive-wrapper">
               <iframe src="https://www.youtube-nocookie.com/embed/xvnyp074I1E" title="Video de Contribución - David Agudelo Arboleda" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
@@ -1262,7 +1695,6 @@ San Sebastián -> Pamplona -> (retorno a Logroño)</code></pre>
           <div class="video-card">
             <div class="video-card-header">
               <h4>Santiago Álvarez Martínez</h4>
-              <span class="video-author-cc">CC: 1022142463</span>
             </div>
             <div class="video-responsive-wrapper">
               <iframe src="https://www.youtube-nocookie.com/embed/QNHQFw3YrUI" title="Video de Contribución - Santiago Álvarez Martínez" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
@@ -1279,7 +1711,6 @@ San Sebastián -> Pamplona -> (retorno a Logroño)</code></pre>
           <div class="video-card">
             <div class="video-card-header">
               <h4>Daniel Felipe López Zapata</h4>
-              <span class="video-author-cc">CC: 1045046468</span>
             </div>
             <div class="video-responsive-wrapper">
               <iframe src="https://www.youtube-nocookie.com/embed/_6JfD148hN4" title="Video de Contribución - Daniel Felipe López Zapata" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
@@ -1296,7 +1727,6 @@ San Sebastián -> Pamplona -> (retorno a Logroño)</code></pre>
           <div class="video-card">
             <div class="video-card-header">
               <h4>Sara Osorio Piñerez</h4>
-              <span class="video-author-cc">CC: 1001370113</span>
             </div>
             <div class="video-responsive-wrapper">
               <iframe src="https://www.youtube-nocookie.com/embed/W_dBpcZ_9g4" title="Video de Contribución - Sara Osorio Piñerez" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
@@ -1343,18 +1773,35 @@ San Sebastián -> Pamplona -> (retorno a Logroño)</code></pre>
       <!-- Referencias -->
       <section id="referencias">
         <h2>6. Referencias Bibliográficas (APA 7.ª Edición)</h2>
-        <ul style="font-size: 0.9rem; line-height: 1.6;">
-          <li>Anfac. (s. f.). <em>Matriculaciones turismos y todoterreno</em>. <a href="https://anfac.com/cifras-clave/matriculaciones-turismos-y-todoterreno/" target="_blank">https://anfac.com/cifras-clave/matriculaciones-turismos-y-todoterreno/</a></li>
-          <li>Dorigo, M., &amp; Stützle, T. (2004). <em>Ant colony optimization</em>. MIT Press. <a href="https://doi.org/10.7551/mitpress/1290.001.0001" target="_blank">https://doi.org/10.7551/mitpress/1290.001.0001</a></li>
-          <li>Eberhart, R., &amp; Kennedy, J. (1995). A new optimizer using particle swarm theory. En <em>MHS'95. Proceedings of the Sixth International Symposium on Micro Machine and Human Science</em> (pp. 39–43). IEEE. <a href="https://doi.org/10.1109/MHS.1995.494215" target="_blank">https://doi.org/10.1109/MHS.1995.494215</a></li>
-          <li>España. Ministerio de Trabajo y Economía Social. (2026). Real Decreto 126/2026, de 18 de febrero, por el que se fija el salario mínimo interprofesional para 2026. <em>Boletín Oficial del Estado</em>, 44, de 19 de febrero de 2026, páginas 21104 a 21108. <a href="https://www.boe.es/eli/es/rd/2026/02/18/126" target="_blank">https://www.boe.es/eli/es/rd/2026/02/18/126</a></li>
-          <li>España. Ministerio de Transportes y Movilidad Sostenible. (s. f.). <em>Peajes dependientes de la AGE</em>. <a href="https://www.transportes.gob.es/carreteras/nuestra-red/autopistas-peaje/peajes-dependientes-de-la-age" target="_blank">https://www.transportes.gob.es/</a></li>
+        <ul style="font-size: 0.9rem; line-height: 1.65;">
+          <li>Anfac. (2026). <em>Matriculaciones turismos y todoterreno</em>. Consultado el 9 de octubre de 2026 en <a href="https://anfac.com/cifras-clave/matriculaciones-turismos-y-todoterreno/" target="_blank" rel="noopener">https://anfac.com/cifras-clave/matriculaciones-turismos-y-todoterreno/</a></li>
+          <li>Aucalsa. (2026). <em>Autopista del Huerna AP-66: Tarifas y descuentos vigentes 2026</em>. Consultado el 25 de noviembre de 2026 en <a href="https://www.aucalsa.com/la-autopista/tarifas-y-descuentos/" target="_blank" rel="noopener">https://www.aucalsa.com/la-autopista/tarifas-y-descuentos/</a></li>
+          <li>Audasa. (2026). <em>Autopista del Atlántico AP-9: Tarifas de peaje vigentes desde el 1 de enero de 2026</em>. Consultado el 25 de noviembre de 2026 en <a href="https://www.audasa.es/wp-content/uploads/pdf/tarifas/2026/Tarifas-20260101.pdf" target="_blank" rel="noopener">https://www.audasa.es/wp-content/uploads/pdf/tarifas/2026/Tarifas-20260101.pdf</a></li>
+          <li>Audenasa. (2026). <em>Autopista de Navarra AP-15: Tarifas vigentes 2026</em>. Consultado el 25 de noviembre de 2026 en <a href="https://www.audenasa.es" target="_blank" rel="noopener">https://www.audenasa.es</a></li>
+          <li>Aulesa. (2026). <em>Autopista León–Astorga AP-71: Tarifas vigentes 2026</em>. Consultado el 25 de noviembre de 2026 en <a href="https://www.aulesa.es" target="_blank" rel="noopener">https://www.aulesa.es</a></li>
+          <li>Autopistas. (2026). <em>Tarifas 2026: AP-6 Villalba–Adanero, AP-51 Villacastín–Ávila, AP-61 San Rafael–Segovia y C-32 Sur</em>. Consultado el 25 de noviembre de 2026 en <a href="https://www.autopistas.com/wp-content/uploads/2025/12/26_004-Castellana-AP6_AP51_AP61-T26.pdf" target="_blank" rel="noopener">https://www.autopistas.com/wp-content/uploads/2025/12/26_004-Castellana-AP6_AP51_AP61-T26.pdf</a></li>
+          <li>Bidegi e Interbiak. (2026). <em>Tarifas oficiales de peaje 2026 en Gipuzkoa y Bizkaia (AP-8, AP-1 y tramo foral AP-68)</em>. Consultado el 25 de noviembre de 2026 en <a href="https://www.bidegi.eus" target="_blank" rel="noopener">https://www.bidegi.eus</a></li>
+          <li>Dantzig, G., Fulkerson, R., &amp; Johnson, S. (1954). Solution of a large-scale traveling-salesman problem. <em>Journal of the Operations Research Society of America</em>, 2(4), 393–410. <a href="https://doi.org/10.1287/opre.2.4.393" target="_blank" rel="noopener">https://doi.org/10.1287/opre.2.4.393</a></li>
+          <li>Davis, L. (1985). Applying adaptive algorithms to epistatic domains. En <em>Proceedings of the 9th International Joint Conference on Artificial Intelligence (IJCAI-85)</em> (Vol. 1, pp. 162–164). Morgan Kaufmann.</li>
+          <li>Dorigo, M., &amp; Stützle, T. (2004). <em>Ant colony optimization</em>. MIT Press. <a href="https://doi.org/10.7551/mitpress/1290.001.0001" target="_blank" rel="noopener">https://doi.org/10.7551/mitpress/1290.001.0001</a></li>
+          <li>Eberhart, R., &amp; Kennedy, J. (1995). A new optimizer using particle swarm theory. En <em>MHS'95. Proceedings of the Sixth International Symposium on Micro Machine and Human Science</em> (pp. 39–43). IEEE. <a href="https://doi.org/10.1109/MHS.1995.494215" target="_blank" rel="noopener">https://doi.org/10.1109/MHS.1995.494215</a></li>
+          <li>Eiben, A. E., &amp; Smith, J. E. (2015). <em>Introduction to evolutionary computing</em> (2.ª ed.). Springer. <a href="https://doi.org/10.1007/978-3-662-44874-8" target="_blank" rel="noopener">https://doi.org/10.1007/978-3-662-44874-8</a></li>
+          <li>España. Ministerio de la Presidencia, Justicia y Relaciones con las Cortes. (2025). Acuerdo por el que se actualizan los peajes de las autopistas bajo gestión de SEITT para 2026 (BOE-A-2025-25961). <em>Boletín Oficial del Estado</em>, 303, de 18 de diciembre de 2025. Consultado el 25 de noviembre de 2026 en <a href="https://www.boe.es/buscar/doc.php?id=BOE-A-2025-25961" target="_blank" rel="noopener">https://www.boe.es/buscar/doc.php?id=BOE-A-2025-25961</a></li>
+          <li>España. Ministerio de Trabajo y Economía Social. (2026). Real Decreto 126/2026, de 18 de febrero, por el que se fija el salario mínimo interprofesional para 2026. <em>Boletín Oficial del Estado</em>, 44, de 19 de febrero de 2026, 21104–21108. Consultado el 9 de octubre de 2026 en <a href="https://www.boe.es/eli/es/rd/2026/02/18/126" target="_blank" rel="noopener">https://www.boe.es/eli/es/rd/2026/02/18/126</a></li>
+          <li>España. Ministerio de Transportes y Movilidad Sostenible [MITMA]. (2026). <em>Autopistas de peaje en concesión y peajes dependientes de la Administración General del Estado</em>. Consultado el 25 de noviembre de 2026 en <a href="https://www.transportes.gob.es/carreteras/nuestra-red/autopistas-peaje" target="_blank" rel="noopener">https://www.transportes.gob.es/carreteras/nuestra-red/autopistas-peaje</a></li>
+          <li>España. Ministerio para la Transición Ecológica y el Reto Demográfico [MITECO]. (2026). <em>Geoportal de Hidrocarburos: Sistema de Información para la Geolocalización de Estaciones de Servicio y Precios de Carburantes</em>. Consultado el 9 de octubre de 2026 en <a href="https://geoportalgasolineras.es/geoportal-instalaciones/Inicio" target="_blank" rel="noopener">https://geoportalgasolineras.es/geoportal-instalaciones/Inicio</a></li>
           <li>Fortin, F.-A., De Rainville, F.-M., Gardner, M.-A., Parizeau, M., &amp; Gagné, C. (2012). DEAP: Evolutionary algorithms made easy. <em>Journal of Machine Learning Research</em>, 13(70), 2171–2175.</li>
-          <li>Km77. (s. f.). <em>Toyota Corolla 140H Style Plus (2023): Datos técnicos y equipamiento</em>. <a href="https://www.km77.com/coches/toyota/corolla/2023/5-puertas/estandar/corolla-140h-style-plus/datos" target="_blank">https://www.km77.com/</a></li>
-          <li>Ministerio para la Transición Ecológica y el Reto Demográfico. (s. f.). <em>Sistema de Información para la Geolocalización de Estaciones de Servicio y Precios de Carburantes</em>. <a href="https://energia.serviciosmin.gob.es/shpCarburantes/" target="_blank">https://energia.serviciosmin.gob.es/shpCarburantes/</a></li>
-          <li>Nocedal, J., &amp; Wright, S. J. (2006). <em>Numerical optimization</em> (2.ª ed.). Springer. <a href="https://doi.org/10.1007/978-0-387-40065-5" target="_blank">https://doi.org/10.1007/978-0-387-40065-5</a></li>
+          <li>Geoapify. (2026). <em>Routing API &amp; Route Matrix documentation (route_details and toll tags)</em>. Consultado el 25 de noviembre de 2026 en <a href="https://www.geoapify.com/" target="_blank" rel="noopener">https://www.geoapify.com/</a></li>
+          <li>Instituto Geográfico Nacional [IGN]. (2026). <em>Nomenclátor Geográfico de Municipios y Entidades de Población</em>. Consultado el 25 de noviembre de 2026 en <a href="https://www.ign.es" target="_blank" rel="noopener">https://www.ign.es</a></li>
+          <li>Km77. (2023). <em>Toyota Corolla 140H Style Plus (2023): Datos técnicos y equipamiento</em>. Consultado el 9 de octubre de 2026 en <a href="https://www.km77.com/coches/toyota/corolla/2023/5-puertas/estandar/corolla-140h-style-plus/datos" target="_blank" rel="noopener">https://www.km77.com/coches/toyota/corolla/2023/5-puertas/estandar/corolla-140h-style-plus/datos</a></li>
+          <li>Luxen, D., &amp; Vetter, C. (2011). Real-time routing with OpenStreetMap data [OSRM]. En <em>Proceedings of the 19th ACM SIGSPATIAL International Conference on Advances in Geographic Information Systems</em> (pp. 513–516). ACM. <a href="https://doi.org/10.1145/2093973.2094062" target="_blank" rel="noopener">https://doi.org/10.1145/2093973.2094062</a></li>
+          <li>Miller, C. E., Tucker, A. W., &amp; Zemlin, R. A. (1960). Integer programming formulations and traveling salesman problems. <em>Journal of the ACM</em>, 7(4), 326–329. <a href="https://doi.org/10.1145/321043.321046" target="_blank" rel="noopener">https://doi.org/10.1145/321043.321046</a></li>
+          <li>Nocedal, J., &amp; Wright, S. J. (2006). <em>Numerical optimization</em> (2.ª ed.). Springer. <a href="https://doi.org/10.1007/978-0-387-40065-5" target="_blank" rel="noopener">https://doi.org/10.1007/978-0-387-40065-5</a></li>
           <li>Or, I. (1976). <em>Traveling salesman-type combinatorial problems and their relation to the car pooling problem</em> [Tesis doctoral, Northwestern University]. ProQuest Dissertations Publishing.</li>
-          <li>Storn, R., &amp; Price, K. (1997). Differential evolution–a simple and efficient heuristic for global optimization over continuous spaces. <em>Journal of Global Optimization</em>, 11(4), 341–359. <a href="https://doi.org/10.1023/A:1008202821328" target="_blank">https://doi.org/10.1023/A:1008202821328</a></li>
+          <li>Rastrigin, L. A. (1974). <em>Systems of extremal control</em> [Sistemy ekstremalnogo upravleniya]. Nauka.</li>
+          <li>Rosenbrock, H. H. (1960). An automatic method for finding the greatest or least value of a function. <em>The Computer Journal</em>, 3(3), 175–184. <a href="https://doi.org/10.1093/comjnl/3.3.175" target="_blank" rel="noopener">https://doi.org/10.1093/comjnl/3.3.175</a></li>
+          <li>Storn, R., &amp; Price, K. (1997). Differential evolution–a simple and efficient heuristic for global optimization over continuous spaces. <em>Journal of Global Optimization</em>, 11(4), 341–359. <a href="https://doi.org/10.1023/A:1008202821328" target="_blank" rel="noopener">https://doi.org/10.1023/A:1008202821328</a></li>
+          <li>Toyota España. (2026). <em>Catálogo técnico y especificaciones WLTP: Toyota Corolla 140H e-CVT 1.8</em>. Consultado el 9 de octubre de 2026 en <a href="https://www.toyota.es/content/dam/toyota/nmsc/spain/cross-model/new-cars/catalogos-precios/pdf/14737_COR_HB_52_ES_WEB_S.pdf" target="_blank" rel="noopener">https://www.toyota.es/content/dam/toyota/nmsc/spain/cross-model/new-cars/catalogos-precios/pdf/14737_COR_HB_52_ES_WEB_S.pdf</a></li>
         </ul>
       </section>
 

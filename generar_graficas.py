@@ -253,29 +253,64 @@ def generar_figura7_convergencia_aco():
     print("Generando Figura 7: Convergencia ACO...")
     f_con = P2_RES / "evolucion_aco_con_oropt.csv"
     f_sin = P2_RES / "evolucion_aco_sin_oropt.csv"
+    f_comp = P2_RES / "comparacion_oropt.json"
+
+    comp = {}
+    if f_comp.exists():
+        with open(f_comp, encoding="utf-8") as f:
+            comp = json.load(f)
+
+    vh = float(comp.get("valor_hora_eur", 5.09))
+    semilla = int(comp.get("semilla", 42))
 
     fig, ax = plt.subplots(figsize=(10, 6))
+    y_vals = []
 
     if f_con.exists():
         df_con = pd.read_csv(f_con)
+        coste_con = comp.get("con_or_opt", {}).get("coste_eur")
+        if coste_con is None and len(df_con) > 0:
+            coste_con = float(df_con["mejor_coste_eur"].iloc[-1])
+        lbl_con = (
+            f"ACO con Or-opt (coste={float(coste_con):.2f} EUR)"
+            if coste_con is not None else "ACO con Or-opt"
+        )
         ax.plot(df_con["iteracion"], df_con["mejor_coste_eur"],
-                label="ACO con Or-opt (coste=845.09 EUR)", color="#2ca02c", linewidth=2.2)
+                label=lbl_con, color="#2ca02c", linewidth=2.2)
+        y_vals.extend(df_con["mejor_coste_eur"].astype(float).tolist())
 
     if f_sin.exists():
         df_sin = pd.read_csv(f_sin)
+        coste_sin = comp.get("sin_or_opt", {}).get("coste_eur")
+        if coste_sin is None and len(df_sin) > 0:
+            coste_sin = float(df_sin["mejor_coste_eur"].iloc[-1])
+        lbl_sin = (
+            f"ACO sin Or-opt (coste={float(coste_sin):.2f} EUR)"
+            if coste_sin is not None else "ACO sin Or-opt"
+        )
         ax.plot(df_sin["iteracion"], df_sin["mejor_coste_eur"],
-                label="ACO sin Or-opt (coste=875.41 EUR)", color="#d62728", linestyle="--", linewidth=1.8)
+                label=lbl_sin, color="#d62728", linestyle="--", linewidth=1.8)
+        y_vals.extend(df_sin["mejor_coste_eur"].astype(float).tolist())
 
-    # Simular o interpolar alto presupuesto si no está el archivo individual
-    ax.axhline(867.51, color="#ff7f0e", linestyle=":", linewidth=1.6,
-               label="ACO sin Or-opt + alto pres. (coste=867.51 EUR)")
+    alto_pres = comp.get("sin_or_opt_alto_presupuesto")
+    if isinstance(alto_pres, dict) and "coste_eur" in alto_pres:
+        coste_alto = float(alto_pres["coste_eur"])
+        ax.axhline(coste_alto, color="#ff7f0e", linestyle=":", linewidth=1.6,
+                   label=f"ACO sin Or-opt + alto pres. (coste={coste_alto:.2f} EUR)")
+        y_vals.append(coste_alto)
 
-    ax.set_title("Figura 7 - Convergencia ACO: Con Or-opt vs Sin Or-opt\n(47 capitales, valor_hora=5.09 EUR/h, semilla=42)",
-                 fontsize=12, fontweight="bold")
+    ax.set_title(
+        f"Figura 7 - Convergencia ACO: Con Or-opt vs Sin Or-opt\n"
+        f"(47 capitales, valor_hora={vh:.2f} EUR/h, semilla={semilla})",
+        fontsize=12, fontweight="bold",
+    )
     ax.set_xlabel("Iteracion", fontsize=11)
     ax.set_ylabel("Mejor Coste Acumulado (EUR)", fontsize=11)
     ax.grid(True, linestyle=":", alpha=0.6)
-    ax.set_ylim(820, 1250)
+    if y_vals:
+        y_min, y_max = min(y_vals), max(y_vals)
+        pad = max(20.0, 0.06 * (y_max - y_min))
+        ax.set_ylim(y_min - pad, y_max + pad)
     ax.legend(fontsize=10, loc="upper right")
 
     plt.tight_layout()

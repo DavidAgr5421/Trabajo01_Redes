@@ -38,6 +38,7 @@
     "ciudades_total": 47,
     "valor_hora": 5.09,
     "valor_hora_fuente": "SMI 2026 = 40,70 EUR/dia (Real Decreto 126/2026, art. 1) / jornada laboral continua de 8 h/dia = 5.0875 EUR/h (~5.09 EUR/h)",
+    "valores_hora_sensibilidad": [0.0, 2.0, 5.09, 10.0, 15.0, 20.0, 35.0, 50.0, 100.0],
     "semilla": 42,
     "vehiculo": {
       "modelo": "Toyota Corolla 140H e-CVT 1.8",
@@ -89,6 +90,7 @@
     },
     "parte_2": {
       "valor_hora": 5.09,
+      "valores_hora_sensibilidad": [0.0, 5.09, 20.0, 50.0],
       "aco": {
         "hormigas": 10,
         "iteraciones": 30,

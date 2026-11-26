@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import shutil
 import sys
 import time
 from pathlib import Path
@@ -29,6 +30,15 @@ from algoritmo_genetico import ejecutar_ga
 
 DIR_RESULTADOS = DIR_PARTE2 / "resultados"
 DIR_RESULTADOS.mkdir(parents=True, exist_ok=True)
+ASSETS_DIR = BASE_DIR.parent / "assets" / "img"
+
+
+def _sincronizar_asset(ruta_origen: Path) -> None:
+    """Copia un recurso generado en parte_2/resultados/ hacia assets/img/."""
+    ASSETS_DIR.mkdir(parents=True, exist_ok=True)
+    destino = ASSETS_DIR / ruta_origen.name
+    shutil.copy2(ruta_origen, destino)
+    print(f"[Assets] Sincronizado: {destino}")
 
 
 def correr_aco_individual(datos, M, cfg, vh: float, usar_or_opt: bool, hacer_gif: bool):
@@ -88,6 +98,9 @@ def correr_aco_individual(datos, M, cfg, vh: float, usar_or_opt: bool, hacer_gif
         plt.close(fig)
         print(f"[ACO {sufijo}] GIF: {out_gif}")
         print(f"[ACO {sufijo}] Mapa: {out_png}")
+        if usar_or_opt:
+            _sincronizar_asset(out_gif)
+            _sincronizar_asset(out_png)
 
     return resumen
 
@@ -112,6 +125,8 @@ def correr_ga_individual(datos, M, cfg, vh: float, hacer_gif: bool = True):
     desglose = datos.desglose_tour(res["tour"], vh)
     dt = time.time() - t0
     print(f"[GA] Finalizado en {dt:.2f}s | Coste: {desglose['coste_eur']:.2f} EUR | Distancia: {desglose['distancia_km']:.1f} km")
+    print(f"[GA] Desglose: Tiempo={desglose['tiempo_h']:.2f} h, "
+          f"Peajes={desglose['tax_eur']:.2f} EUR, Gasolina={desglose['gas_eur']:.2f} EUR")
 
     resumen_ga = {
         "algoritmo": "ga",
@@ -121,6 +136,8 @@ def correr_ga_individual(datos, M, cfg, vh: float, hacer_gif: bool = True):
         "coste_total_eur": round(desglose["coste_eur"], 2),
         "distancia_total_km": round(desglose["distancia_km"], 1),
         "tiempo_total_h": round(desglose["tiempo_h"], 2),
+        "peajes_total_eur": round(desglose["tax_eur"], 2),
+        "combustible_total_eur": round(desglose["gas_eur"], 2),
         "tiempo_ejecucion_s": round(dt, 2),
         "historia_mejor": res["historia_mejor"],
         "orden_ciudades": datos.tour_a_nombres(res["tour"]),
@@ -156,6 +173,8 @@ def correr_ga_individual(datos, M, cfg, vh: float, hacer_gif: bool = True):
         plt.close(fig)
         print(f"[GA] GIF: {out_gif}")
         print(f"[GA] Mapa: {out_png}")
+        _sincronizar_asset(out_gif)
+        _sincronizar_asset(out_png)
 
     return resumen_ga
 

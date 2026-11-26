@@ -417,8 +417,10 @@ def main():
           f"en {mejor_corrida.tiempo_ejecucion_s:.2f} s")
     print("=" * 70)
 
-    # 5. Comparativa con y sin Or-opt
-    comparacion, res_con, res_sin = comparar_con_y_sin_oropt(M, datos, vh, config_ganadora)
+    # 5. Comparativa con y sin Or-opt usando la configuracion oficial de configuracion.json
+    from config import cargar_config
+    cfg_oficial = cargar_config().get("aco", config_ganadora)
+    comparacion, res_con, res_sin = comparar_con_y_sin_oropt(M, datos, vh, cfg_oficial)
 
     # Guardar resultados y ranking
     guardar_resultados_barrido(corridas, mejor_corrida, config_ganadora, vh)

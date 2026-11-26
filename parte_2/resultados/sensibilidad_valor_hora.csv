@@ -1,5 +1,10 @@
-﻿Valor_Hora_EUR_h,Coste_Total_EUR,Distancia_km,Tiempo_h,Coste_Combustible_EUR,Coste_Tiempo_EUR,Ruta_Identica_a_Base,Regimen_Operativo,Tiempo_Calculo_s
-0.0,517.18,6438.57,68.54,517.18,0.0,No,Minima distancia / Combustible puro,0.59
-5.09,863.23,6446.57,67.86,517.83,345.4,Si,Equilibrio Economico Laboral (Base),0.6
-20.0,1848.94,6288.33,66.38,505.09,1327.5,No,Reduccion Temporal (Mayor velocidad media),0.58
-50.0,3871.11,6414.92,66.55,515.27,3327.64,No,Dominancia Severa del Tiempo Laboral,0.62
+﻿valor_hora_eur,coste_eur,distancia_km,tiempo_h,tax_eur,gas_eur,costo_tiempo_eur,ruta_identica_a_base,regimen_operativo,tiempo_calculo_s
+0.0,530.24,6398.48,67.6831,16.28,513.96,0.0,No,Minima distancia / Coste directo (combustible + peajes),4.39
+2.0,670.05,6452.6,67.7322,16.28,518.31,135.46,Si,Equilibrio Economico Laboral (Base),4.35
+5.09,879.35,6452.6,67.7322,16.28,518.31,344.76,Si,Equilibrio Economico Laboral (Base),4.26
+10.0,1208.56,6350.18,66.7267,31.2,510.09,667.27,No,Equilibrio Economico Laboral (Base),4.29
+15.0,1548.58,6358.16,67.4656,25.86,510.74,1011.98,No,Reduccion Temporal (Mayor velocidad media),4.47
+20.0,1892.54,6407.43,67.0492,36.89,514.67,1340.98,No,Reduccion Temporal (Mayor velocidad media),4.5
+35.0,2879.95,6265.92,65.9286,69.1,503.35,2307.5,No,Reduccion Temporal (Mayor velocidad media),4.45
+50.0,3879.26,6323.07,66.2067,61.04,507.89,3310.33,No,Dominancia Severa del Tiempo Laboral,4.4
+100.0,7149.79,6279.57,65.9056,54.84,504.39,6590.56,No,Dominancia Severa del Tiempo Laboral,4.35

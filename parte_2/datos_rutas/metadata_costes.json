@@ -1,0 +1,47 @@
+{
+  "fecha_generacion_utc": "2026-11-26T00:09:42.074923+00:00",
+  "metodo": "geoapify_osrm_official_2026",
+  "vehiculo": "Toyota Corolla 140H e-CVT 1.8",
+  "combustible": "Gasolina 95 E5",
+  "consumo_L_100km": 4.5,
+  "precio_litro_eur": 1.785,
+  "precio_fecha": "2026-10-09",
+  "precio_fuente": "MITECO Geoportal (media nacional G95 09/10/2026)",
+  "fecha_corte_peajes": "2026-11-25",
+  "pares_totales": 2162,
+  "pares_con_peaje_valorado": 872,
+  "pares_sin_peaje_verificado": 1290,
+  "pares_peaje_posible_no_valorado": 0,
+  "frecuencia_vias_peaje": {
+    "AP-6": 346,
+    "AP-68_FORAL": 129,
+    "AP-15": 122,
+    "AP-8": 102,
+    "AP-9": 92,
+    "AP-66": 74,
+    "AP-71": 60,
+    "R-2": 59,
+    "AP-51": 53,
+    "AP-1_PV": 50,
+    "AP-61": 47,
+    "C-32_SUR": 34,
+    "R-3": 29,
+    "R-4": 11,
+    "AP-53": 2,
+    "AP-7_AUSOL": 2
+  },
+  "formula_gas": "distance_km * 4.5/100 * 1.785",
+  "formula_coste": "C = valor_hora*time_h + tax_eur + gas_eur",
+  "entradas": [
+    "rutas.csv",
+    "tramos_peaje_rutas.json",
+    "tabla_peajes_2026.csv",
+    "fuentes.csv"
+  ],
+  "salidas": [
+    "rutas_costes.csv",
+    "rutas.csv",
+    "Optimizacion_Combinatoria/Base_de_Datos/rutas.csv",
+    "Optimizacion_Combinatoria/Base_de_Datos/rutas_costes.csv"
+  ]
+}
