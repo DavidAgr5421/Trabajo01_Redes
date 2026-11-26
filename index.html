@@ -485,15 +485,6 @@
       color: var(--text);
       margin: 0;
     }
-    .video-author-cc {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      font-family: var(--font-mono);
-      background: var(--bg-card);
-      padding: 0.15rem 0.45rem;
-      border-radius: 4px;
-      border: 1px solid var(--border);
-    }
     .video-responsive-wrapper {
       position: relative;
       padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
@@ -633,7 +624,7 @@
             <li><a href="#p1-justa">1.3 Regla de Comparación Justa</a></li>
             <li><a href="#p1-animaciones">1.4 Animaciones GIF 2D</a></li>
             <li><a href="#p1-resultados">1.5 Resultados Estadísticos</a></li>
-            <li><a href="#p1-analisis">1.6 Análisis Crítico & Rectificación</a></li>
+            <li><a href="#p1-analisis">1.6 Análisis Crítico y Costo Esperado</a></li>
           </ul>
         </li>
         <li>
@@ -667,7 +658,7 @@
           En la <strong>Parte 1</strong>, se contrasta el rendimiento del método determinista de primer orden Descenso por Gradiente (GD; Nocedal &amp; Wright, 2006) frente a tres metaheurísticas poblacionales —Optimización por Enjambre de Partículas (PSO; Eberhart &amp; Kennedy, 1995), Algoritmo Evolutivo Continuo (EA; Eiben &amp; Smith, 2015) y Evolución Diferencial (DE; Storn &amp; Price, 1997)— sobre las funciones de Rosenbrock (1960) y Rastrigin (1974) en 2D y 3D. Se aplica una regla de comparación computacionalmente justa donde aproximar el gradiente en dimensión $n$ equivale a $2n$ evaluaciones por diferencias finitas centrales ($E_{\text{equiv}} = E_f + 2n\,E_{\nabla}$).
         </p>
         <p>
-          En la <strong>Parte 2</strong>, se formula el TSP cerrado peninsular con costos monetarios reales: valor horario laboral derivado del Salario Mínimo Interprofesional fijado por el <strong>Real Decreto 126/2026 (5,09 €/h</strong>; España. Ministerio de Trabajo y Economía Social, 2026), consumo homologado WLTP de un <strong>Toyota Corolla 140H (4,5 L/100 km</strong>; Toyota España, 2026; Km77, 2023), precio oficial de Gasolina 95 E5 (<strong>1,785 €/L</strong>; MITECO, 2026) y peajes oficiales vigentes en 2026 sobre la totalidad de los 2.162 arcos dirigidos (872 arcos con peaje valorado y 0 valores provisionales). La Colonia de Hormigas (ACO; Dorigo &amp; Stützle, 2004) acoplada con búsqueda local <strong>Or-opt</strong> (Or, 1976) alcanza un recorrido de <strong>879,35 €</strong> (<strong>6.452,60 km</strong>, <strong>67,73 h</strong>, <strong>16,28 €</strong> en cuatro tramos de peaje y <strong>518,31 €</strong> en combustible), ahorrando un 2,43% total y <strong>21,70 € en peajes</strong> frente a ACO sin Or-opt (901,24 €), y superando al Algoritmo Genético implementado en DEAP (977,79 €; Fortin et al., 2012).
+          En la <strong>Parte 2</strong>, se formula el TSP cerrado peninsular con costos monetarios reales: valor horario laboral derivado del Salario Mínimo Interprofesional fijado por el <strong>Real Decreto 126/2026 (5,09 €/h</strong>; España. Ministerio de Trabajo y Economía Social, 2026), consumo homologado WLTP de un <strong>Toyota Corolla 140H (4,5 L/100 km</strong>; Toyota España, 2026; Km77, 2023), precio oficial de Gasolina 95 E5 (<strong>1,785 €/L</strong>; MITECO, 2026) y peajes oficiales vigentes en 2026 sobre la totalidad de los 2.162 arcos dirigidos (872 arcos con peaje oficial valorado y 1.290 sin peaje). La Colonia de Hormigas (ACO; Dorigo &amp; Stützle, 2004) acoplada con búsqueda local <strong>Or-opt</strong> (Or, 1976) alcanza un recorrido de <strong>879,35 €</strong> (<strong>6.452,60 km</strong>, <strong>67,73 h</strong>, <strong>16,28 €</strong> en cuatro tramos de peaje y <strong>518,31 €</strong> en combustible), ahorrando un 2,43% total y <strong>21,70 € en peajes</strong> frente a ACO sin Or-opt (901,24 €), y superando al Algoritmo Genético implementado en DEAP (977,79 €; Fortin et al., 2012).
         </p>
       </section>
 
@@ -1058,17 +1049,7 @@
         </div>
 
         <div id="p1-analisis">
-          <h3>1.6 Análisis Crítico, Costo Esperado por Éxito y Rectificación</h3>
-          
-          <div class="callout danger">
-            <div class="callout-header">🚨 Rectificación de la Alucinación Detectada en el Texto Original</div>
-            <p>
-              En borradores preliminares del informe se había deslizado un párrafo generado por LLM que afirmaba: <em>"PSO obtuvo una tasa de éxito del 86,67% en Rastrigin, mientras que evolución diferencial alcanzó el 96,67% en Rosenbrock 3D"</em>.
-            </p>
-            <p>
-              <strong>La verdad empírica comprobada:</strong> Al auditar los registros de salida de la <strong>Tabla 3</strong>, <strong>PSO en Rastrigin 3D alcanzó el 93,33% (28 de 30 corridas exitosas)</strong> con mediana 0,000, mientras que en <strong>Rosenbrock 3D la Evolución Diferencial obtuvo una tasa de éxito estricta del 26,67% (8 de 30 corridas)</strong>; el 96,67% correspondía en realidad a DE en Rastrigin 3D (29/30).
-            </p>
-          </div>
+          <h3>1.6 Análisis Crítico y Costo Esperado por Éxito</h3>
 
           <h4>1.6.1 Multimodalidad vs. información local (Rastrigin)</h4>
           <p>
@@ -1166,7 +1147,7 @@
         <div id="p2-costos">
           <h3>2.2 Parámetros Operativos, Peajes Oficiales 2026 y Algoritmos Combinatorios</h3>
           <p>
-            La parametrización económica, vehicular y jurídica se consolida en la <strong>Tabla 5</strong>. El salario horario del vendedor ($h = 5{,}09$ €/h) proviene del <strong>Real Decreto 126/2026</strong>, que fija el SMI en 40,70 €/día para una jornada de 8 horas ($40{,}70 / 8 = 5{,}0875 \approx 5{,}09$ €/h; España. Ministerio de Trabajo y Economía Social, 2026). El vehículo de referencia es un <strong>Toyota Corolla 140H e-CVT 1.8</strong> —modelo representativo entre los turismos más vendidos en España según Anfac (2026)— con consumo homologado WLTP de 4,5 L/100 km y depósito de 43 L ($\approx 956$ km de autonomía; Toyota España, 2026; Km77, 2023). Con Gasolina 95 E5 a 1,785 €/L (MITECO, 2026), el costo kilométrico es $\kappa = 0{,}045 \times 1{,}785 = 0{,}080325$ €/km.
+            La parametrización económica, vehicular y jurídica se consolida en la <strong>Tabla 5</strong>. El salario horario del vendedor ($h = 5{,}09$ €/h) proviene del <strong>Real Decreto 126/2026</strong>, que fija el SMI en 40,70 €/día para una jornada de 8 horas ($40{,}70 / 8 = 5{,}0875 \approx 5{,}09$ €/h; España. Ministerio de Trabajo y Economía Social, 2026). El vehículo de referencia es un <strong>Toyota Corolla 140H e-CVT 1.8</strong> —modelo representativo entre los turismos más vendidos en España según Anfac (2026)— con consumo homologado WLTP de 4,5 L/100 km y depósito de 43 L ($\approx 956$ km de autonomía; Toyota España, 2026; Km77, 2023). Con Gasolina 95 E5 a 1,785 €/L según el Geoportal de Hidrocarburos del Ministerio para la Transición Ecológica y el Reto Demográfico (MITECO, 2026), el costo kilométrico es $\kappa = 0{,}045 \times 1{,}785 = 0{,}080325$ €/km.
           </p>
 
           <div class="table-title">Tabla 5: Parámetros Económicos, Técnicos y Jurídicos del Modelo de Costo Peninsular</div>
@@ -1222,7 +1203,7 @@
                   <td>$P(\pi^*)$</td>
                   <td><strong>16,28</strong></td>
                   <td>€</td>
-                  <td>Matriz 47×47: 872 arcos con peaje oficial, 1.290 libres, 0 provisionales (MITMA, 2026)</td>
+                  <td>Matriz 47×47: 872 arcos con peaje oficial y 1.290 libres (MITMA, 2026)</td>
                 </tr>
                 <tr>
                   <td>Semilla pseudoaleatoria canónica</td>
@@ -1239,7 +1220,7 @@
           </div>
 
           <p>
-            Para erradicar cualquier peaje provisional en 0 €, se inspeccionaron por pasos (<code>details=route_details,tolls</code>) los 2.162 arcos dirigidos en la API gratuita de Geoapify (2026) con respaldo de OSRM (Luxen &amp; Vetter, 2011), y cada segmento marcado con <code>toll=True</code> se valoró con las tarifas oficiales vigentes en 2026 para turismos ligeros (IVA incluido) de MITMA (2026), SEITT (España. Ministerio de la Presidencia, Justicia y Relaciones con las Cortes, 2025) y las respectivas concesionarias, resumidas en la <strong>Tabla 6</strong>. Así, 872 arcos incorporan peaje oficial valorado, 1.290 están verificados sin peaje y <strong>0 arcos quedan en estado provisional</strong>.
+            Para construir una matriz completa y trazable de peajes oficiales vigentes en 2026, se inspeccionaron por pasos (<code>details=route_details,tolls</code>) los 2.162 arcos dirigidos en la API gratuita de Geoapify (2026) con respaldo abierto de OSRM (Luxen &amp; Vetter, 2011), y cada segmento marcado con <code>toll=True</code> se valoró con las tarifas oficiales vigentes en 2026 para turismos ligeros (IVA incluido) del Ministerio de Transportes y Movilidad Sostenible (MITMA, 2026), SEITT (España. Ministerio de la Presidencia, Justicia y Relaciones con las Cortes, 2025) y las concesionarias estatales, autonómicas y forales: <strong>Autopistas</strong> (2026) para <code>AP-6</code>, <code>AP-51</code>, <code>AP-61</code> y <code>C-32 Sur</code>; <strong>Aucalsa</strong> (2026) para <code>AP-66</code>; <strong>Aulesa</strong> (2026) para <code>AP-71</code>; <strong>Audasa</strong> (2026) para <code>AP-9</code>; <strong>Audenasa</strong> (2026) para <code>AP-15</code>; y <strong>Bidegi e Interbiak</strong> (2026) junto con Arabat para <code>AP-8</code>, <code>AP-1</code> y el tramo foral de <code>AP-68</code> en País Vasco, resumidas en la <strong>Tabla 6</strong>. Así, 872 arcos incorporan peaje oficial valorado y 1.290 están verificados sin peaje.
           </p>
 
           <div class="table-title">Tabla 6: Inventario Resumen de Tarifas Oficiales de Peaje Vigentes y Tramos Liberados en España Peninsular (2026)</div>
@@ -1268,7 +1249,7 @@
             </table>
           </div>
           <div class="table-source" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">
-            <em>Fuente: Elaboración propia a partir de MITMA (2026), España, Ministerio de la Presidencia (2025), Audasa (2026), Aucalsa (2026), Aulesa (2026), Autopistas (2026), Audenasa (2026) y Bidegi e Interbiak (2026), en <code>parte_2/datos_rutas/tabla_peajes_2026.csv</code> [consultado el 25 de noviembre de 2026].</em>
+            <em>Fuente: Elaboración propia a partir de MITMA (2026), España. Ministerio de la Presidencia, Justicia y Relaciones con las Cortes (2025), Audasa (2026), Aucalsa (2026), Aulesa (2026), Autopistas (2026), Audenasa (2026) y Bidegi e Interbiak (2026), en <code>parte_2/datos_rutas/tabla_peajes_2026.csv</code> [consultado el 25 de noviembre de 2026].</em>
           </div>
 
           <h4>Formulación de ACO + Or-opt y Algoritmo Genético (DEAP)</h4>
@@ -1407,7 +1388,7 @@
           <div class="callout tip">
             <div class="callout-header">🛣️ Equilibrio Selectivo de Peajes en el Recorrido Óptimo (16,28 €)</div>
             <p>
-              Lejos de arrojar 0,00 € de peaje, la ruta óptima de <strong>879,35 €</strong> ($344{,}76\text{ € laborales} + 16{,}28\text{ € de peajes} + 518{,}31\text{ € de combustible}$) logra un <strong>equilibrio económico selectivo</strong>: el algoritmo evita sistemáticamente los grandes peajes troncales donde existe autovía libre competitiva —bordea el túnel del Huerna <code>AP-66</code> (16,20 €) entrando a Galicia por la <code>A-8</code> (<code>Santander → Oviedo → A Coruña</code>) y saliendo por <code>Ourense → León</code>; evita el eje completo <code>AP-9</code> A Coruña–Pontevedra (16,35 €) y la <code>AP-53</code> (7,25 €) mediante <code>A Coruña → Lugo → Pontevedra → Ourense</code>; sortea el túnel de Guadarrama <code>AP-6</code> (15,70 €) vía <code>Toledo → Ciudad Real → Ávila</code>; esquiva la <code>C-32 Sur</code> (7,29 €) entrando a Barcelona desde Girona por la <code>AP-7</code> liberada; y evita el tramo foral de <code>AP-68</code> entre Bilbao y Vitoria (4,09 €) recorriendo <code>Burgos → Vitoria → Logroño → Pamplona</code> por la <code>AP-1</code> liberada y la <code>A-12</code>—. Sin embargo, sí abona <strong>16,28 €</strong> en los cuatro enlaces de la <strong>Tabla 9</strong>, donde la orografía cantábrico-pirenaica o los accesos directos hacen más costoso el rodeo en tiempo y combustible.
+              La ruta óptima de <strong>879,35 €</strong> ($344{,}76\text{ € laborales} + 16{,}28\text{ € de peajes} + 518{,}31\text{ € de combustible}$) logra un <strong>equilibrio económico selectivo</strong>: el algoritmo evita sistemáticamente los grandes peajes troncales donde existe autovía libre competitiva —bordea el túnel del Huerna <code>AP-66</code> (16,20 €) entrando a Galicia por la <code>A-8</code> (<code>Santander → Oviedo → A Coruña</code>) y saliendo por <code>Ourense → León</code>; evita el eje completo <code>AP-9</code> A Coruña–Pontevedra (16,35 €) y la <code>AP-53</code> (7,25 €) mediante <code>A Coruña → Lugo → Pontevedra → Ourense</code>; sortea el túnel de Guadarrama <code>AP-6</code> (15,70 €) vía <code>Toledo → Ciudad Real → Ávila</code>; esquiva la <code>C-32 Sur</code> (7,29 €) entrando a Barcelona desde Girona por la <code>AP-7</code> liberada; y evita el tramo foral de <code>AP-68</code> entre Bilbao y Vitoria (4,09 €) recorriendo <code>Burgos → Vitoria → Logroño → Pamplona</code> por la <code>AP-1</code> liberada y la <code>A-12</code>—. Sin embargo, sí abona <strong>16,28 €</strong> en los cuatro enlaces de la <strong>Tabla 9</strong>, donde la orografía cantábrico-pirenaica o los accesos directos hacen más costoso el rodeo en tiempo y combustible.
             </p>
           </div>
 
@@ -1433,7 +1414,7 @@
                 <tr><td>22</td><td><code>A Coruña → Lugo</code></td><td><code>AP-9</code></td><td>96,53</td><td>0,93</td><td><strong>1,94 €</strong></td><td>7,75 €</td><td>14,45 €</td></tr>
                 <tr style="border-top: 2px solid var(--border); font-weight: 600;">
                   <td colspan="3">Total 4 arcos con peaje (43 arcos restantes a 0,00 €)</td>
-                  <td>354,60</td><td>3,74</td><td><strong>16,28 €</strong></td><td>28,48 €</td><td>63,80 €</td>
+                  <td>354,61</td><td>3,74</td><td><strong>16,28 €</strong></td><td>28,48 €</td><td>63,80 €</td>
                 </tr>
               </tbody>
             </table>
@@ -1611,35 +1592,54 @@ Castellón de la Plana -> Tarragona -> Girona -> (retorno a Barcelona)</code></p
         <div id="alucinaciones">
           <h3>3.2 Cacería de la Alucinación</h3>
           <p>
-            Se documentan cuatro alucinaciones críticas detectadas durante la asistencia de la IA, con su respectiva refutación técnica:
+            Durante el desarrollo del proyecto se auditó cada salida generada con asistencia de inteligencia artificial y se documentaron cuatro hallazgos genuinos en tres categorías (<strong>Código</strong>, <strong>Datos del mundo real</strong> y <strong>Conceptos / Resultados</strong>), junto con las verificaciones sistemáticas aplicadas sobre el conjunto del trabajo.
           </p>
 
           <div class="callout danger">
-            <div class="callout-header">🚨 Alucinación 1: Asunción Arbitraria de Rutas de Archivos con Pathlib</div>
-            <p><strong>Prompt:</strong> <em>“Si mi archivo se llama rutas_costes.csv y está en una subcarpeta, ¿cómo lo hago?...”</em></p>
-            <p><strong>Alucinación:</strong> La IA generó código asumiendo nombres de carpetas inexistentes (<code>/datos/rutas_costes.csv</code>) e inventó la estructura de directorios, provocando errores de importación <code>FileNotFoundError</code>.</p>
-            <p><strong>Corrección:</strong> Se implementó <code>Path(__file__).resolve().parent</code> anclado al directorio base real del repositorio.</p>
+            <div class="callout-header">🚨 Hallazgo 1 — Rutas de archivos asumidas con <code>Pathlib</code> (Categoría: Código)</div>
+            <p><strong>1. Prompt utilizado (literal):</strong> <em>“Si mi archivo se llama rutas_costes.csv y está en una subcarpeta, ¿cómo lo hago para leerlo desde Python en el proyecto?”</em></p>
+            <p><strong>2. Parte relevante de la respuesta de la IA:</strong> Propuso cargar la matriz mediante una ruta fija inventada (<code>Path("/datos/rutas_costes.csv")</code>) sin anclaje al módulo en ejecución.</p>
+            <p><strong>3. Cómo se sospechó del error:</strong> Al revisar la estructura real del repositorio y ejecutar el script desde distintos directorios de trabajo, la carga falló con <code>FileNotFoundError</code>.</p>
+            <p><strong>4. Evidencia que lo demuestra:</strong> La matriz oficial del TSP reside en <code>parte_2/datos_rutas/rutas_costes.csv</code> (y su espejo en <code>parte_2/Optimizacion_Combinatoria/Base_de_Datos/rutas_costes.csv</code>), no en <code>/datos/</code>.</p>
+            <p><strong>5. Corrección aplicada:</strong> Se implementó resolución dinámica de rutas anclada a la ubicación real del archivo fuente mediante <code>Path(__file__).resolve().parent</code> en <code>parte_2/costes_comunes.py</code>.</p>
+            <p><strong>6. Lección aprendida:</strong> Nunca aceptar rutas de disco generadas por un modelo sin comprobar el árbol real de directorios del repositorio y probar la ejecución desde la raíz del proyecto.</p>
           </div>
 
           <div class="callout danger">
-            <div class="callout-header">🚨 Alucinación 2: Coordenadas Inventadas en Geofabrik / OSRM</div>
-            <p><strong>Prompt:</strong> <em>“¿Cómo hago para conseguir una matriz con los datos usando geofabrik?”</em></p>
-            <p><strong>Alucinación:</strong> La IA generó un diccionario en Python con supuestas coordenadas geográficas de ciudades españolas con valores completamente falsos e inventados sin base topográfica real.</p>
-            <p><strong>Corrección:</strong> Se rechazaron las coordenadas alucinadas y se construyó <code>datos_rutas/ciudades.csv</code> a partir de coordenadas validadas por el Instituto Geográfico Nacional (IGN, 2026) y Geoapify (2026).</p>
+            <div class="callout-header">🚨 Hallazgo 2 — Coordenadas geográficas inventadas para OSRM (Categoría: Datos del mundo real)</div>
+            <p><strong>1. Prompt utilizado (literal):</strong> <em>“¿Cómo hago para conseguir una matriz con los datos usando geofabrik?”</em></p>
+            <p><strong>2. Parte relevante de la respuesta de la IA:</strong> Generó un diccionario en Python con pares <code>(latitud, longitud)</code> supuestamente correspondientes a capitales españolas para consultar un servidor OSRM (Luxen &amp; Vetter, 2011).</p>
+            <p><strong>3. Cómo se sospechó del error:</strong> Al inspeccionar los valores numéricos de varias capitales peninsulares se detectaron desplazamientos geográficos incompatibles con la posición real de las ciudades en la península ibérica.</p>
+            <p><strong>4. Evidencia que lo demuestra:</strong> Al contrastar con el Nomenclátor Geográfico de Municipios y Entidades de Población del Instituto Geográfico Nacional (IGN, 2026) y con la geocodificación de Geoapify (2026), los valores sugeridos no coincidían con los centros urbanos reales.</p>
+            <p><strong>5. Corrección aplicada:</strong> Se descartó el diccionario generado y se consolidó <code>parte_2/datos_rutas/ciudades.csv</code> con coordenadas validadas frente al IGN (2026) y Geoapify (2026).</p>
+            <p><strong>6. Lección aprendida:</strong> Todo dato geográfico propuesto en código por un modelo de lenguaje debe contrastarse con una fuente cartográfica primaria y validarse visualmente sobre el mapa antes de calcular distancias.</p>
           </div>
 
           <div class="callout danger">
-            <div class="callout-header">🚨 Alucinación 3: TollGuru Desactualizado y Peajes Provisionales en 0 €</div>
-            <p><strong>Prompt:</strong> <em>“Implementemos la opción A y usemos la api de tollguru para obtener los datos de peaje”</em></p>
-            <p><strong>Alucinación:</strong> La IA propuso depender de TollGuru (que en pruebas locales cobraba 13,45 € sobre la AP-2/A-2 liberada desde 2021) y luego dejó tramos marcados como peaje posible provisional en 0 €, induciendo la falsa conclusión de un tour de 0,00 € en peajes.</p>
-            <p><strong>Corrección:</strong> Se extrajeron los tramos reales <code>toll=True</code> en los 2.162 pares mediante Geoapify/OSRM y se cruzaron al 100% con <code>tabla_peajes_2026.csv</code> (MITMA, BOE y concesionarias), logrando 872 arcos valorados, 0 provisionales y la ruta óptima real de 879,35 € con 16,28 € en peajes.</p>
+            <div class="callout-header">🚨 Hallazgo 3 — Peajes obsoletos en <code>AP-2</code> y tramos sin valorar en 0,00 € (Categoría: Datos del mundo real / Conceptos)</div>
+            <p><strong>1. Prompt utilizado (literal):</strong> <em>“Implementemos la opción A y usemos la api de tollguru para obtener los datos de peaje”</em></p>
+            <p><strong>2. Parte relevante de la respuesta de la IA:</strong> Recomendó usar TollGuru como fuente directa de peajes y, en una primera integración sin tarifas externas, sugirió dejar en <code>0,00 €</code> provisional los arcos marcados como posibles peajes sin tarifa asignada.</p>
+            <p><strong>3. Cómo se sospechó del error:</strong> Una prueba local frente a TollGuru (<code>tollguru_prueba_3.json</code>, documentada en <code>parte_2/datos_rutas/fuentes.csv</code>) cobraba <strong>13,45 €</strong> en un trayecto <code>A-2</code>/<code>AP-2</code> pese a que esa autopista es gratuita desde 2021; a su vez, los arcos marcados con tarifa provisional <code>0,00 €</code> producían artificialmente una ruta óptima sin ningún gasto en peajes.</p>
+            <p><strong>4. Evidencia que lo demuestra:</strong> El inventario oficial del Ministerio de Transportes y Movilidad Sostenible (MITMA, 2026) confirma la reversión gratuita de la <code>AP-2</code> (Zaragoza–El Vendrell) en septiembre de 2021 y de la <code>AP-68</code> en La Rioja y Aragón el 11 de noviembre de 2026, mientras que los boletines tarifarios vigentes (España. Ministerio de la Presidencia, Justicia y Relaciones con las Cortes, 2025; Autopistas, 2026; Aucalsa, 2026; Aulesa, 2026; Audasa, 2026; Audenasa, 2026; Bidegi e Interbiak, 2026) acreditan el cobro efectivo en vías como <code>AP-6</code>, <code>AP-66</code>, <code>AP-9</code>, <code>AP-8</code>, <code>AP-15</code> y <code>AP-51</code>.</p>
+            <p><strong>5. Corrección aplicada:</strong> Se construyó un extractor reproducible (<code>parte_2/datos_rutas/scripts_preparacion/extraer_peajes_rutas.py</code>) sobre los detalles <code>route_details,tolls</code> de Geoapify (2026) con respaldo OSRM (Luxen &amp; Vetter, 2011) y se cruzó cada segmento contra <code>parte_2/datos_rutas/tabla_peajes_2026.csv</code>, obteniendo <strong>872 arcos con peaje valorado</strong> y <strong>1.290 sin peaje</strong> (<code>parte_2/datos_rutas/metadata_costes.json</code>), con un peaje real en la ruta base de <strong>16,28 €</strong> (<strong>Tabla 9</strong>).</p>
+            <p><strong>6. Lección aprendida:</strong> En infraestructura regulada (peajes, impuestos y salarios), los servicios comerciales agregados pueden estar desactualizados y un <code>0,00 €</code> por ausencia de dato dista de ser un dato verificado; es indispensable auditar contra la fuente oficial vigente y exigir cobertura completa de arcos.</p>
           </div>
 
           <div class="callout danger">
-            <div class="callout-header">🚨 Alucinación 4: Invención de Estadísticas de Convergencia (86,67% y 96,67%)</div>
-            <p><strong>Prompt:</strong> <em>“Ayúdame a comparar los cuatro algoritmos de optimización según sus resultados...”</em></p>
-            <p><strong>Alucinación:</strong> La IA respondió textualmente que <em>"PSO obtuvo una tasa de éxito del 86,67% en Rastrigin, mientras que evolución diferencial alcanzó el 96,67% en Rosenbrock 3D"</em>, cifras inventadas que no correspondían a los experimentos reales.</p>
-            <p><strong>Corrección:</strong> Se rectificaron los valores contra la <strong>Tabla 3</strong> y los archivos de salida: PSO en Rastrigin 3D obtuvo <strong>93,33% (28/30)</strong> y DE en Rosenbrock 3D obtuvo <strong>26,67% (8/30)</strong>, purgando la alucinación del informe final.</p>
+            <div class="callout-header">🚨 Hallazgo 4 — Estadísticas de convergencia ficticias en el análisis comparativo (Categoría: Conceptos / Resultados)</div>
+            <p><strong>1. Prompt utilizado (literal):</strong> <em>“Ayúdame a comparar los cuatro algoritmos de optimización según sus resultados...”</em></p>
+            <p><strong>2. Parte relevante de la respuesta de la IA:</strong> Redactó un párrafo de síntesis afirmando literalmente que <em>“PSO obtuvo una tasa de éxito del 86,67 % en Rastrigin, mientras que la evolución diferencial alcanzó el 96,67 % en Rosenbrock”</em>.</p>
+            <p><strong>3. Cómo se sospechó del error:</strong> Al contrastar la redacción frente a la salida tabular de las 30 corridas independientes de cada escenario, las tasas de éxito y el comportamiento conocido de Evolución Diferencial en el valle de Rosenbrock 3D no concordaban con la afirmación.</p>
+            <p><strong>4. Evidencia que lo demuestra:</strong> La <strong>Tabla 3</strong> (generada a partir de <code>parte_1/comparacion_y_gifs_parte1.py</code> con 30 corridas independientes bajo el criterio $|f(\mathbf{x}) - f^*| \le 10^{-3}$) registra que <strong>PSO en Rastrigin 3D alcanzó 28/30 éxitos (93,33%)</strong>, <strong>DE en Rastrigin 3D alcanzó 29/30 (96,67%)</strong> y <strong>DE en Rosenbrock 3D alcanzó 8/30 (26,67%)</strong>.</p>
+            <p><strong>5. Corrección aplicada:</strong> Se descartó el párrafo generado y se redactó el análisis comparativo de la Sección 1.6 directamente a partir de las cifras verificadas en las <strong>Tablas 3 y 4</strong>.</p>
+            <p><strong>6. Lección aprendida:</strong> Toda cifra numérica, porcentaje o comparación redactada por un asistente de IA debe cotejarse línea por línea contra las tablas y archivos experimentales generados por el código.</p>
+          </div>
+
+          <div class="callout tip">
+            <div class="callout-header">✅ Verificación sistemática adicional</div>
+            <p>
+              En complemento a los cuatro hallazgos anteriores, se ejecutaron tres auditorías integrales sobre el repositorio: (a) comprobación de las 28 referencias APA 7.ª ed., sus años, DOIs y enlaces oficiales; (b) verificación analítica de $f(\mathbf{x}^*) = 0$, $\nabla f(\mathbf{x}^*) = \mathbf{0}$, autovalores de la Hessiana y cotas de estabilidad $\alpha &lt; 2/\lambda_{\max}$ en Parte 1; y (c) validación topológica y aritmética de los 2.162 arcos dirigidos (<code>parte_2/validacion.py</code> y <code>metadata_costes.json</code>) junto con las salidas JSON/CSV de las <strong>Tablas 8, 9, 10 y 11</strong>.
+            </p>
           </div>
         </div>
       </section>
@@ -1775,33 +1775,33 @@ Castellón de la Plana -> Tarragona -> Girona -> (retorno a Barcelona)</code></p
         <h2>6. Referencias Bibliográficas (APA 7.ª Edición)</h2>
         <ul style="font-size: 0.9rem; line-height: 1.65;">
           <li>Anfac. (2026). <em>Matriculaciones turismos y todoterreno</em>. Consultado el 9 de octubre de 2026 en <a href="https://anfac.com/cifras-clave/matriculaciones-turismos-y-todoterreno/" target="_blank" rel="noopener">https://anfac.com/cifras-clave/matriculaciones-turismos-y-todoterreno/</a></li>
-          <li>Aucalsa. (2026). <em>Autopista del Huerna AP-66: Tarifas y descuentos vigentes 2026</em>. Consultado el 25 de noviembre de 2026 en <a href="https://www.aucalsa.com/la-autopista/tarifas-y-descuentos/" target="_blank" rel="noopener">https://www.aucalsa.com/la-autopista/tarifas-y-descuentos/</a></li>
-          <li>Audasa. (2026). <em>Autopista del Atlántico AP-9: Tarifas de peaje vigentes desde el 1 de enero de 2026</em>. Consultado el 25 de noviembre de 2026 en <a href="https://www.audasa.es/wp-content/uploads/pdf/tarifas/2026/Tarifas-20260101.pdf" target="_blank" rel="noopener">https://www.audasa.es/wp-content/uploads/pdf/tarifas/2026/Tarifas-20260101.pdf</a></li>
-          <li>Audenasa. (2026). <em>Autopista de Navarra AP-15: Tarifas vigentes 2026</em>. Consultado el 25 de noviembre de 2026 en <a href="https://www.audenasa.es" target="_blank" rel="noopener">https://www.audenasa.es</a></li>
-          <li>Aulesa. (2026). <em>Autopista León–Astorga AP-71: Tarifas vigentes 2026</em>. Consultado el 25 de noviembre de 2026 en <a href="https://www.aulesa.es" target="_blank" rel="noopener">https://www.aulesa.es</a></li>
-          <li>Autopistas. (2026). <em>Tarifas 2026: AP-6 Villalba–Adanero, AP-51 Villacastín–Ávila, AP-61 San Rafael–Segovia y C-32 Sur</em>. Consultado el 25 de noviembre de 2026 en <a href="https://www.autopistas.com/wp-content/uploads/2025/12/26_004-Castellana-AP6_AP51_AP61-T26.pdf" target="_blank" rel="noopener">https://www.autopistas.com/wp-content/uploads/2025/12/26_004-Castellana-AP6_AP51_AP61-T26.pdf</a></li>
-          <li>Bidegi e Interbiak. (2026). <em>Tarifas oficiales de peaje 2026 en Gipuzkoa y Bizkaia (AP-8, AP-1 y tramo foral AP-68)</em>. Consultado el 25 de noviembre de 2026 en <a href="https://www.bidegi.eus" target="_blank" rel="noopener">https://www.bidegi.eus</a></li>
+          <li>Aucalsa. (2026). <em>Tarifas y descuentos — Autopista AP-66 (Campomanes–León)</em>. Consultado el 25 de noviembre de 2026 en <a href="https://www.aucalsa.com/la-autopista/tarifas-y-descuentos/" target="_blank" rel="noopener">https://www.aucalsa.com/la-autopista/tarifas-y-descuentos/</a></li>
+          <li>Audasa. (2026). <em>Tarifas vigentes desde el 1 de enero de 2026 — Autopista AP-9</em>. Consultado el 25 de noviembre de 2026 en <a href="https://www.audasa.es/wp-content/uploads/pdf/tarifas/2026/Tarifas-20260101.pdf" target="_blank" rel="noopener">https://www.audasa.es/wp-content/uploads/pdf/tarifas/2026/Tarifas-20260101.pdf</a></li>
+          <li>Audenasa. (2026). <em>Tarifas vigentes 2026 — Autopista de Navarra (AP-15)</em>. Consultado el 25 de noviembre de 2026 en <a href="https://www.audenasa.es" target="_blank" rel="noopener">https://www.audenasa.es</a></li>
+          <li>Aulesa. (2026). <em>Tarifas vigentes 2026 — Autopista León–Astorga (AP-71)</em>. Consultado el 25 de noviembre de 2026 en <a href="https://www.aulesa.es" target="_blank" rel="noopener">https://www.aulesa.es</a></li>
+          <li>Autopistas. (2026). <em>Tarifas 2026: Autopistas AP-6, AP-51, AP-61 y C-32 Sur</em>. Consultado el 25 de noviembre de 2026 en <a href="https://www.autopistas.com/wp-content/uploads/2025/12/26_004-Castellana-AP6_AP51_AP61-T26.pdf" target="_blank" rel="noopener">https://www.autopistas.com/wp-content/uploads/2025/12/26_004-Castellana-AP6_AP51_AP61-T26.pdf</a></li>
+          <li>Bidegi e Interbiak. (2026). <em>Tarifas forales vigentes 2026 para las autopistas AP-8, AP-1 y AP-68 en Gipuzkoa y Bizkaia</em>. Consultado el 25 de noviembre de 2026 en <a href="https://www.bidegi.eus" target="_blank" rel="noopener">https://www.bidegi.eus</a></li>
           <li>Dantzig, G., Fulkerson, R., &amp; Johnson, S. (1954). Solution of a large-scale traveling-salesman problem. <em>Journal of the Operations Research Society of America</em>, 2(4), 393–410. <a href="https://doi.org/10.1287/opre.2.4.393" target="_blank" rel="noopener">https://doi.org/10.1287/opre.2.4.393</a></li>
-          <li>Davis, L. (1985). Applying adaptive algorithms to epistatic domains. En <em>Proceedings of the 9th International Joint Conference on Artificial Intelligence (IJCAI-85)</em> (Vol. 1, pp. 162–164). Morgan Kaufmann.</li>
+          <li>Davis, L. (1985). Applying adaptive algorithms to epistatic domains. En <em>Proceedings of the 9th International Joint Conference on Artificial Intelligence (IJCAI'85)</em> (Vol. 1, pp. 162–164). Morgan Kaufmann.</li>
           <li>Dorigo, M., &amp; Stützle, T. (2004). <em>Ant colony optimization</em>. MIT Press. <a href="https://doi.org/10.7551/mitpress/1290.001.0001" target="_blank" rel="noopener">https://doi.org/10.7551/mitpress/1290.001.0001</a></li>
           <li>Eberhart, R., &amp; Kennedy, J. (1995). A new optimizer using particle swarm theory. En <em>MHS'95. Proceedings of the Sixth International Symposium on Micro Machine and Human Science</em> (pp. 39–43). IEEE. <a href="https://doi.org/10.1109/MHS.1995.494215" target="_blank" rel="noopener">https://doi.org/10.1109/MHS.1995.494215</a></li>
           <li>Eiben, A. E., &amp; Smith, J. E. (2015). <em>Introduction to evolutionary computing</em> (2.ª ed.). Springer. <a href="https://doi.org/10.1007/978-3-662-44874-8" target="_blank" rel="noopener">https://doi.org/10.1007/978-3-662-44874-8</a></li>
-          <li>España. Ministerio de la Presidencia, Justicia y Relaciones con las Cortes. (2025). Acuerdo por el que se actualizan los peajes de las autopistas bajo gestión de SEITT para 2026 (BOE-A-2025-25961). <em>Boletín Oficial del Estado</em>, 303, de 18 de diciembre de 2025. Consultado el 25 de noviembre de 2026 en <a href="https://www.boe.es/buscar/doc.php?id=BOE-A-2025-25961" target="_blank" rel="noopener">https://www.boe.es/buscar/doc.php?id=BOE-A-2025-25961</a></li>
+          <li>España. Ministerio de la Presidencia, Justicia y Relaciones con las Cortes. (2025). Resolución de 10 de diciembre de 2025, de la Secretaría General de Transporte Terrestre, por la que se publica el Acuerdo del Consejo de Ministros de 9 de diciembre de 2025 por el que se modifican las tarifas aplicables en determinadas autopistas de peaje de la Red de Carreteras del Estado [BOE-A-2025-25961]. <em>Boletín Oficial del Estado</em>, 303, de 18 de diciembre de 2025. Consultado el 25 de noviembre de 2026 en <a href="https://www.boe.es/buscar/doc.php?id=BOE-A-2025-25961" target="_blank" rel="noopener">https://www.boe.es/buscar/doc.php?id=BOE-A-2025-25961</a></li>
           <li>España. Ministerio de Trabajo y Economía Social. (2026). Real Decreto 126/2026, de 18 de febrero, por el que se fija el salario mínimo interprofesional para 2026. <em>Boletín Oficial del Estado</em>, 44, de 19 de febrero de 2026, 21104–21108. Consultado el 9 de octubre de 2026 en <a href="https://www.boe.es/eli/es/rd/2026/02/18/126" target="_blank" rel="noopener">https://www.boe.es/eli/es/rd/2026/02/18/126</a></li>
-          <li>España. Ministerio de Transportes y Movilidad Sostenible [MITMA]. (2026). <em>Autopistas de peaje en concesión y peajes dependientes de la Administración General del Estado</em>. Consultado el 25 de noviembre de 2026 en <a href="https://www.transportes.gob.es/carreteras/nuestra-red/autopistas-peaje" target="_blank" rel="noopener">https://www.transportes.gob.es/carreteras/nuestra-red/autopistas-peaje</a></li>
+          <li>España. Ministerio de Transportes y Movilidad Sostenible [MITMA]. (2026). <em>Autopistas de peaje en concesión y tramos liberados de la Red de Carreteras del Estado</em>. Consultado el 25 de noviembre de 2026 en <a href="https://www.transportes.gob.es/carreteras/nuestra-red/autopistas-peaje" target="_blank" rel="noopener">https://www.transportes.gob.es/carreteras/nuestra-red/autopistas-peaje</a></li>
           <li>España. Ministerio para la Transición Ecológica y el Reto Demográfico [MITECO]. (2026). <em>Geoportal de Hidrocarburos: Sistema de Información para la Geolocalización de Estaciones de Servicio y Precios de Carburantes</em>. Consultado el 9 de octubre de 2026 en <a href="https://geoportalgasolineras.es/geoportal-instalaciones/Inicio" target="_blank" rel="noopener">https://geoportalgasolineras.es/geoportal-instalaciones/Inicio</a></li>
           <li>Fortin, F.-A., De Rainville, F.-M., Gardner, M.-A., Parizeau, M., &amp; Gagné, C. (2012). DEAP: Evolutionary algorithms made easy. <em>Journal of Machine Learning Research</em>, 13(70), 2171–2175.</li>
-          <li>Geoapify. (2026). <em>Routing API &amp; Route Matrix documentation (route_details and toll tags)</em>. Consultado el 25 de noviembre de 2026 en <a href="https://www.geoapify.com/" target="_blank" rel="noopener">https://www.geoapify.com/</a></li>
-          <li>Instituto Geográfico Nacional [IGN]. (2026). <em>Nomenclátor Geográfico de Municipios y Entidades de Población</em>. Consultado el 25 de noviembre de 2026 en <a href="https://www.ign.es" target="_blank" rel="noopener">https://www.ign.es</a></li>
+          <li>Geoapify. (2026). <em>Geoapify Routing &amp; Route Matrix API Documentation (free_flow, route_details, tolls)</em>. Consultado el 25 de noviembre de 2026 en <a href="https://www.geoapify.com/" target="_blank" rel="noopener">https://www.geoapify.com/</a></li>
+          <li>Instituto Geográfico Nacional [IGN]. (2026). <em>Nomenclátor Geográfico de Municipios y Entidades de Población (España)</em>. Consultado el 25 de noviembre de 2026 en <a href="https://www.ign.es" target="_blank" rel="noopener">https://www.ign.es</a></li>
           <li>Km77. (2023). <em>Toyota Corolla 140H Style Plus (2023): Datos técnicos y equipamiento</em>. Consultado el 9 de octubre de 2026 en <a href="https://www.km77.com/coches/toyota/corolla/2023/5-puertas/estandar/corolla-140h-style-plus/datos" target="_blank" rel="noopener">https://www.km77.com/coches/toyota/corolla/2023/5-puertas/estandar/corolla-140h-style-plus/datos</a></li>
-          <li>Luxen, D., &amp; Vetter, C. (2011). Real-time routing with OpenStreetMap data [OSRM]. En <em>Proceedings of the 19th ACM SIGSPATIAL International Conference on Advances in Geographic Information Systems</em> (pp. 513–516). ACM. <a href="https://doi.org/10.1145/2093973.2094062" target="_blank" rel="noopener">https://doi.org/10.1145/2093973.2094062</a></li>
+          <li>Luxen, D., &amp; Vetter, C. (2011). Real-time routing with OpenStreetMap data. En <em>Proceedings of the 19th ACM SIGSPATIAL International Conference on Advances in Geographic Information Systems (GIS '11)</em> (pp. 513–516). ACM. <a href="https://doi.org/10.1145/2093973.2094062" target="_blank" rel="noopener">https://doi.org/10.1145/2093973.2094062</a></li>
           <li>Miller, C. E., Tucker, A. W., &amp; Zemlin, R. A. (1960). Integer programming formulations and traveling salesman problems. <em>Journal of the ACM</em>, 7(4), 326–329. <a href="https://doi.org/10.1145/321043.321046" target="_blank" rel="noopener">https://doi.org/10.1145/321043.321046</a></li>
           <li>Nocedal, J., &amp; Wright, S. J. (2006). <em>Numerical optimization</em> (2.ª ed.). Springer. <a href="https://doi.org/10.1007/978-0-387-40065-5" target="_blank" rel="noopener">https://doi.org/10.1007/978-0-387-40065-5</a></li>
           <li>Or, I. (1976). <em>Traveling salesman-type combinatorial problems and their relation to the car pooling problem</em> [Tesis doctoral, Northwestern University]. ProQuest Dissertations Publishing.</li>
-          <li>Rastrigin, L. A. (1974). <em>Systems of extremal control</em> [Sistemy ekstremalnogo upravleniya]. Nauka.</li>
+          <li>Rastrigin, L. A. (1974). <em>Systems of extremal control</em> (<em>Sistemy ekstremalnogo upravleniya</em>). Nauka.</li>
           <li>Rosenbrock, H. H. (1960). An automatic method for finding the greatest or least value of a function. <em>The Computer Journal</em>, 3(3), 175–184. <a href="https://doi.org/10.1093/comjnl/3.3.175" target="_blank" rel="noopener">https://doi.org/10.1093/comjnl/3.3.175</a></li>
           <li>Storn, R., &amp; Price, K. (1997). Differential evolution–a simple and efficient heuristic for global optimization over continuous spaces. <em>Journal of Global Optimization</em>, 11(4), 341–359. <a href="https://doi.org/10.1023/A:1008202821328" target="_blank" rel="noopener">https://doi.org/10.1023/A:1008202821328</a></li>
-          <li>Toyota España. (2026). <em>Catálogo técnico y especificaciones WLTP: Toyota Corolla 140H e-CVT 1.8</em>. Consultado el 9 de octubre de 2026 en <a href="https://www.toyota.es/content/dam/toyota/nmsc/spain/cross-model/new-cars/catalogos-precios/pdf/14737_COR_HB_52_ES_WEB_S.pdf" target="_blank" rel="noopener">https://www.toyota.es/content/dam/toyota/nmsc/spain/cross-model/new-cars/catalogos-precios/pdf/14737_COR_HB_52_ES_WEB_S.pdf</a></li>
+          <li>Toyota España. (2026). <em>Catálogo oficial y ficha técnica WLTP Toyota Corolla 140H e-CVT 1.8</em>. Consultado el 9 de octubre de 2026 en <a href="https://www.toyota.es/content/dam/toyota/nmsc/spain/cross-model/new-cars/catalogos-precios/pdf/14737_COR_HB_52_ES_WEB_S.pdf" target="_blank" rel="noopener">https://www.toyota.es/content/dam/toyota/nmsc/spain/cross-model/new-cars/catalogos-precios/pdf/14737_COR_HB_52_ES_WEB_S.pdf</a></li>
         </ul>
       </section>
 
